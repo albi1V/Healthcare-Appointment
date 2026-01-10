@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+
+    <!-- ================= Backend : User Registration & Login ================= -->
+
+    <property
+        name="registerPatient"
+        value="Patient should be registered successfully"
+    />
+
+    <property
+        name="registerDoctor"
+        value="Doctor should be registered successfully"
+    />
+
+    <property
+        name="registerReceptionist"
+        value="Receptionist should be registered successfully"
+    />
+
+    <property
+        name="loginUser"
+        value="User should be able to login with valid credentials"
+    />
+
+    <property
+        name="loginInvalidUser"
+        value="Login should fail for invalid username or password"
+    />
+
+    <!-- ================= Backend : Patient APIs ================= -->
+
+    <property
+        name="patientGetDoctors"
+        value="Patient should be able to retrieve doctors list"
+    />
+
+    <property
+        name="patientScheduleAppointment"
+        value="Patient should be able to schedule an appointment"
+    />
+
+    <property
+        name="getAppointmentsByPatient"
+        value="Patient should be able to view appointments by patient ID"
+    />
+
+    <!-- ================= Backend : Doctor APIs ================= -->
+
+    <property
+        name="getAppointmentsByDoctor"
+        value="Doctor should be able to view appointments by doctor ID"
+    />
+
+    <property
+        name="manageDoctorAvailability"
+        value="Doctor should be able to update availability"
+    />
+
+    <!-- ================= Backend : Receptionist APIs ================= -->
+
+    <property
+        name="receptionistGetAllAppointments"
+        value="Receptionist should be able to retrieve all appointments"
+    />
+
+    <property
+        name="receptionistScheduleAppointment"
+        value="Receptionist should be able to schedule an appointment"
+    />
+
+    <property
+        name="receptionistRescheduleAppointment"
+        value="Receptionist should be able to reschedule an appointment"
+    />
+
+    <!-- ================= Backend : Security & Authorization ================= -->
+
+    <property
+        name="forbiddenPatientApi"
+        value="Receptionist and Doctor should not access patient APIs"
+    />
+
+    <property
+        name="forbiddenDoctorApi"
+        value="Receptionist and Patient should not access doctor APIs"
+    />
+
+    <property
+        name="forbiddenReceptionistApi"
+        value="Doctor and Patient should not access receptionist APIs"
+    />
+
+    <!-- ================= Frontend : DoctorAppointmentComponent ================= -->
+
+    <property
+        name="doctorAppointmentCreate"
+        value="DoctorAppointmentComponent should create"
+    />
+
+    <!-- ================= Frontend : DoctorAvailabilityComponent ================= -->
+
+    <property
+        name="doctorAvailabilityCreate"
+        value="DoctorAvailabilityComponent should create"
+    />
+
+    <!-- ================= Frontend : HttpService ================= -->
+
+    <property
+        name="httpServiceCreate"
+        value="HttpService should be created"
+    />
+
+    <property
+        name="httpRegisterPatient"
+        value="HttpService should register a patient"
+    />
+
+    <property
+        name="httpRegisterDoctor"
+        value="HttpService should register a doctor"
+    />
+
+    <property
+        name="httpRegisterReceptionist"
+        value="HttpService should register a receptionist"
+    />
+
+    <property
+        name="httpGetDoctors"
+        value="HttpService should retrieve doctors list"
+    />
+
+    <property
+        name="httpScheduleAppointment"
+        value="HttpService should schedule an appointment by patient"
+    />
+
+    <property
+        name="httpScheduleAppointmentByReceptionist"
+        value="HttpService should schedule an appointment by receptionist"
+    />
+
+    <property
+        name="httpRescheduleAppointment"
+        value="HttpService should reschedule an appointment"
+    />
+
+    <property
+        name="httpGetAllAppointments"
+        value="HttpService should retrieve all appointments"
+    />
+
+    <property
+        name="httpGetAppointmentsByDoctor"
+        value="HttpService should retrieve appointments by doctor"
+    />
+
+    <property
+        name="httpGetAppointmentsByPatient"
+        value="HttpService should retrieve appointments by patient"
+    />
+
+    <property
+        name="httpUpdateDoctorAvailability"
+        value="HttpService should update doctor availability"
+    />
+
+    <property
+        name="httpLoginUser"
+        value="HttpService should login user"
+    />
+
+    <!-- ================= PatientAppointmentComponent ================= -->
+
+    <property
+        name="patientAppointmentCreate"
+        value="PatientAppointmentComponent should create"
+    />
+
+    <!-- ================= ReceptionistAppointmentsComponent ================= -->
+
+    <property
+        name="receptionistAppointmentsCreate"
+        value="ReceptionistAppointmentsComponent should create"
+    />
+
+    <property
+        name="receptionistAppointmentsFormInvalid"
+        value="ReceptionistAppointmentsComponent form should be invalid when empty"
+    />
+
+    <property
+        name="receptionistAppointmentsFormValid"
+        value="ReceptionistAppointmentsComponent form should be valid when id and time are provided"
+    />
+
+    <!-- ================= ReceptionistScheduleAppointmentsComponent ================= -->
+
+    <property
+        name="receptionistScheduleAppointmentsCreate"
+        value="ReceptionistScheduleAppointmentsComponent should create"
+    />
+
+    <property
+        name="receptionistScheduleAppointmentsFormInvalid"
+        value="ReceptionistScheduleAppointmentsComponent form should be invalid when empty"
+    />
+
+    <property
+        name="receptionistScheduleAppointmentsFormValid"
+        value="ReceptionistScheduleAppointmentsComponent form should be valid when all fields are provided"
+    />
+
+    <!-- ================= RegistrationComponent ================= -->
+
+    <property
+        name="registrationFormInvalid"
+        value="RegistrationComponent form should be invalid when required fields are empty"
+    />
+
+    <property
+        name="registrationInvalidEmail"
+        value="RegistrationComponent should invalidate incorrect email format"
+    />
+
+    <property
+        name="registrationFormValid"
+        value="RegistrationComponent form should be valid when all fields are filled correctly"
+    />
+
+    <property
+        name="registrationDoctorValidators"
+        value="RegistrationComponent should apply specialty and availability validators for DOCTOR role"
+    />
+
+    <property
+        name="registrationNonDoctorValidators"
+        value="RegistrationComponent should clear specialty and availability validators for non-DOCTOR role"
+    />
+
+    <!-- ================= ScheduleAppointmentComponent ================= -->
+
+    <property
+        name="scheduleAppointmentCreate"
+        value="ScheduleAppointmentComponent should create"
+    />
+
+    <property
+        name="scheduleAppointmentFormInvalid"
+        value="ScheduleAppointmentComponent form should be invalid when empty"
+    />
+
+    <property
+        name="scheduleAppointmentPatientIdRequired"
+        value="ScheduleAppointmentComponent should validate patientId as required"
+    />
+
+    <property
+        name="scheduleAppointmentDoctorIdRequired"
+        value="ScheduleAppointmentComponent should validate doctorId as required"
+    />
+
+    <property
+        name="scheduleAppointmentTimeRequired"
+        value="ScheduleAppointmentComponent should validate time as required"
+    />
+
+    <property
+        name="scheduleAppointmentFormValid"
+        value="ScheduleAppointmentComponent form should be valid when all fields are filled"
+    />
+
+</properties>
