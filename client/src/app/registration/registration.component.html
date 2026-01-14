@@ -1,1 +1,115 @@
-//todo: complete missing code..
+
+<main class="login-page">
+  <section class="login-form-section">
+    <div class="background-animation-layer"></div>
+
+    <div class="login-card">
+      <div class="header-section">
+        <div class="logo">
+          <!-- SVG Logo -->
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" role="img" aria-label="ECG Heartbeat">
+            <circle cx="28" cy="28" r="26" stroke="currentColor" stroke-width="2" opacity="0.7"/>
+            <path d="M10 28h8l3-6 5 14 4-8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="43" cy="28" r="2" fill="currentColor" opacity="0.9"/>
+          </svg>
+        </div>
+        <h1>Create Your Account</h1>
+        <p>Join the Healthcare Appointment Management System</p>
+      </div>
+
+      <!-- Registration Form -->
+      <form [formGroup]="itemForm" (ngSubmit)="onRegister()" class="login-form" novalidate>
+        
+        <!-- Username -->
+        <div class="form-field" [ngClass]="{'has-error': itemForm.get('username')?.invalid && (itemForm.get('username')?.touched)}">
+          <input type="text" id="username" formControlName="username" placeholder=" " autocomplete="username" />
+          <label for="username">Username</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('username')?.invalid && (itemForm.get('username')?.touched)" class="error-message">
+            Username is required.
+          </span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-field" [ngClass]="{'has-error': itemForm.get('email')?.invalid && (itemForm.get('email')?.touched)}">
+          <input type="email" id="email" formControlName="email" placeholder=" " autocomplete="email" />
+          <label for="email">Email address</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('email')?.invalid && (itemForm.get('email')?.touched)" class="error-message">
+            <ng-container *ngIf="itemForm.get('email')?.errors?.['required']">Email is required.</ng-container>
+            <ng-container *ngIf="itemForm.get('email')?.errors?.['email']">Please enter a valid email.</ng-container>
+          </span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-field" [ngClass]="{'has-error': itemForm.get('password')?.invalid && (itemForm.get('password')?.touched)}">
+          <input type="password" id="password" formControlName="password" placeholder=" " autocomplete="new-password" />
+          <label for="password">Password</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('password')?.invalid && (itemForm.get('password')?.touched)" class="error-message">
+            Password is required.
+          </span>
+        </div>
+
+        <!-- Role Dropdown -->
+        <div class="form-field" [ngClass]="{'has-error': itemForm.get('role')?.invalid && (itemForm.get('role')?.touched)}">
+          <select id="role" formControlName="role" class="form-select">
+            <option value="">Select Role</option>
+            <option value="PATIENT">PATIENT</option>
+            <option value="DOCTOR">DOCTOR</option>
+            <option value="RECEPTIONIST">RECEPTIONIST</option>
+          </select>
+          <label for="role">Role</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('role')?.invalid && (itemForm.get('role')?.touched)" class="error-message">
+            Please select a role.
+          </span>
+        </div>
+
+        <!-- Specialty (Doctor only) -->
+        <div class="form-field" *ngIf="itemForm.get('role')?.value === 'DOCTOR'" [ngClass]="{'has-error': itemForm.get('specialty')?.invalid && (itemForm.get('specialty')?.touched)}">
+          <input type="text" id="specialty" formControlName="specialty" placeholder=" " />
+          <label for="specialty">Specialty</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('specialty')?.invalid && (itemForm.get('specialty')?.touched)" class="error-message">
+            Specialty is required for doctors.
+          </span>
+        </div>
+
+        <!-- Availability (Doctor only) -->
+        <div class="form-field" *ngIf="itemForm.get('role')?.value === 'DOCTOR'" [ngClass]="{'has-error': itemForm.get('availability')?.invalid && (itemForm.get('availability')?.touched)}">
+          <select id="availability" formControlName="availability" class="form-select">
+            <option value="">Select Availability</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+          <label for="availability">Availability</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('availability')?.invalid && (itemForm.get('availability')?.touched)" class="error-message">
+            Availability is required for doctors.
+          </span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-button" [disabled]="itemForm.invalid">
+          Register
+        </button>
+      </form>
+
+      <!-- Success Message -->
+      <div *ngIf="showMessage" class="server-success-alert">
+        {{ responseMessage }}
+      </div>
+
+      <!-- Login Link -->
+      <div class="signup-link-section">
+        <span>Already have an account? </span>
+        <a [routerLink]="['/login']" class="register-link">Go to Login</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="login-image-section">
+    <div class="image-overlay"></div>
+  </section>
+</main>

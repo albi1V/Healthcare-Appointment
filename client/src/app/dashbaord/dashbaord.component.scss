@@ -1,0 +1,81 @@
+.dashboard-container {
+  height: 100vh;
+  background: url('https://images.unsplash.com/photo-1576765607924-3f7b8410a787')
+    no-repeat center center / cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+ 
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+ 
+.dashboard-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  padding: 45px;
+  border-radius: 12px;
+  text-align: center;
+  width: 450px;
+  color: #fff;
+}
+ 
+.dashboard-card h1 {
+  font-size: 18px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+ 
+.dashboard-card h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #4db8ff;
+  margin-bottom: 15px;
+}
+ 
+.tagline {
+  font-size: 14px;
+  color: #ddd;
+  margin-bottom: 30px;
+}
+ 
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+ 
+button {
+  padding: 10px 25px;
+  font-size: 14px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+ 
+.login-btn {
+  background: #4db8ff;
+  color: #000;
+}
+ 
+.login-btn:hover {
+  background: #2fa4ff;
+}
+ 
+.register-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+ 
+.register-btn:hover {
+  background: #fff;
+  color: #000;
+}

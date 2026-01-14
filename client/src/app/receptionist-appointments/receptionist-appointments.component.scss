@@ -1,0 +1,236 @@
+
+/* -------------------------------
+   Theme tokens (tweak as needed)
+---------------------------------*/
+$primary: #0d6efd;
+$surface: #111827;
+$text: #e5e7eb;
+$text-muted: #9ca3af;
+$border: rgba(255, 255, 255, 0.12);
+$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
+$success: #10b981;
+$warning: #f59e0b;
+$error: #ef4444;
+
+/* -------------------------------
+   Container
+---------------------------------*/
+.patient-appointments-container {
+  width: min(1000px, 96%);
+  margin: 22px auto;
+  padding: clamp(12px, 2vw, 16px);
+  color: $text;
+
+  .page-title {
+    margin: 0 0 6px;
+    font-size: clamp(20px, 2.6vw, 26px);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  .page-subtitle {
+    margin: 0 0 14px;
+    color: $text-muted;
+    font-size: clamp(13px, 2.2vw, 14px);
+  }
+}
+
+/* -------------------------------
+   Empty state
+---------------------------------*/
+.empty-message {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid $border;
+  color: $text-muted;
+}
+
+/* -------------------------------
+   Table wrapper
+---------------------------------*/
+.table-responsive {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(17, 24, 39, 0.86) 100%);
+  border: 1px solid $border;
+  border-radius: 14px;
+  box-shadow: $shadow-soft;
+  overflow: hidden;
+}
+
+/* -------------------------------
+   Table
+---------------------------------*/
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: $text;
+
+  thead {
+    background: rgba(13, 110, 253, 0.18);
+
+    th {
+      text-align: left;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      border-bottom: 1px solid $border;
+      color: #dbeafe;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 140ms ease;
+
+      &:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      &:hover {
+        background: rgba(13, 110, 253, 0.08);
+      }
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid $border;
+      vertical-align: middle;
+      word-break: break-word;
+    }
+  }
+}
+
+/* -------------------------------
+   Doctor cell (avatar + meta)
+---------------------------------*/
+.doctor-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(13, 110, 253, 0.25);
+    color: #dbeafe;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    border: 1px solid $border;
+    flex: 0 0 auto;
+  }
+
+  .doctor-meta {
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    .muted {
+      color: $text-muted;
+      font-size: 12px;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+  }
+}
+
+/* -------------------------------
+   Date/Time block
+---------------------------------*/
+.dt {
+  display: flex;
+  flex-direction: column;
+
+  .date {
+    font-weight: 600;
+  }
+
+  .time {
+    margin-top: 2px;
+    font-size: 12px;
+    color: $text-muted;
+  }
+}
+
+/* -------------------------------
+   Status badges
+---------------------------------*/
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  line-height: 1;
+  border: 1px solid transparent;
+
+  &.bg-success {
+    background: rgba($success, 0.18);
+    color: #d1fae5;
+    border-color: rgba($success, 0.45);
+  }
+
+  &.bg-warning {
+    background: rgba($warning, 0.18);
+    color: #fef3c7;
+    border-color: rgba($warning, 0.45);
+  }
+
+  &.bg-danger {
+    background: rgba($error, 0.18);
+    color: #fecaca;
+    border-color: rgba($error, 0.45);
+  }
+
+  &.bg-secondary {
+    background: rgba(148, 163, 184, 0.22);
+    color: #e2e8f0;
+    border-color: rgba(148, 163, 184, 0.35);
+  }
+}
+
+/* -------------------------------
+   Responsive
+---------------------------------*/
+@media (max-width: 640px) {
+  .patient-appointments-container {
+    margin: 12px auto;
+    padding: 10px;
+  }
+
+  table thead th,
+  table tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .doctor-cell .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+/* -------------------------------
+   Accessibility & motion
+---------------------------------*/
+:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.45);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

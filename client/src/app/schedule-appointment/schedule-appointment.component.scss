@@ -1,0 +1,323 @@
+
+/* -------------------------------
+   Theme tokens
+---------------------------------*/
+$primary: #0d6efd;
+$primary-dark: #0b5ed7;
+$surface: #111827;
+$text: #e5e7eb;
+$text-muted: #9ca3af;
+$border: rgba(255, 255, 255, 0.12);
+$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
+$success: #10b981;
+$error: #ef4444;
+
+/* -------------------------------
+   Container + titles
+---------------------------------*/
+.schedule-appointment-container {
+  width: min(1100px, 96%);
+  margin: 22px auto;
+  padding: clamp(12px, 2vw, 16px);
+  color: $text;
+
+  .page-title {
+    margin: 0 0 6px;
+    font-size: clamp(20px, 2.6vw, 26px);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  .page-subtitle {
+    margin: 0 0 14px;
+    color: $text-muted;
+    font-size: clamp(13px, 2.2vw, 14px);
+  }
+}
+
+/* -------------------------------
+   Card
+---------------------------------*/
+.card {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.88) 100%);
+  border: 1px solid $border;
+  border-radius: 14px;
+  box-shadow: $shadow-soft;
+  overflow: hidden;
+  color: $text;
+
+  .card-header {
+    background: rgba(13, 110, 253, 0.18);
+    padding: 12px 16px;
+
+    h4 {
+      margin: 0;
+      color: #dbeafe;
+      font-weight: 700;
+    }
+  }
+
+  .card-body {
+    padding: 16px;
+  }
+
+  &.mt-3 {
+    margin-top: 16px;
+  }
+}
+
+/* -------------------------------
+   Empty message
+---------------------------------*/
+.empty-message {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid $border;
+  color: $text-muted;
+}
+
+/* -------------------------------
+   Table
+---------------------------------*/
+.table-responsive {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background: rgba(13, 110, 253, 0.18);
+
+    th {
+      text-align: left;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      border-bottom: 1px solid $border;
+      color: #dbeafe;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 140ms ease;
+
+      &:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      &:hover {
+        background: rgba(13, 110, 253, 0.08);
+      }
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid $border;
+      vertical-align: middle;
+      color: $text;
+    }
+  }
+}
+
+/* -------------------------------
+   Doctor cell
+---------------------------------*/
+.doctor-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(13, 110, 253, 0.25);
+    color: #dbeafe;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    border: 1px solid $border;
+    flex: 0 0 auto;
+  }
+
+  .doctor-meta {
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    .muted {
+      color: $text-muted;
+      font-size: 12px;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+  }
+}
+
+/* -------------------------------
+   Form
+---------------------------------*/
+.appointment-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    color: $text-muted;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid $border;
+    background: #0b1220;
+    color: $text;
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+
+    &:focus {
+      border-color: rgba(13, 110, 253, 0.75);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      background: #0a1322;
+    }
+  }
+
+  /* static display values */
+  .static-label {
+    font-size: 12px;
+    color: $text-muted;
+  }
+
+  .static-value {
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid $border;
+    background: #0b1220;
+    color: $text;
+  }
+
+  &.has-error {
+    .form-control {
+      border-color: rgba($error, 0.8);
+      box-shadow: 0 0 0 3px rgba($error, 0.2);
+    }
+    .error-message {
+      margin-top: -2px;
+      font-size: 12px;
+      color: $error;
+    }
+  }
+}
+
+/* -------------------------------
+   Submit button
+---------------------------------*/
+.submit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+  box-shadow: 0 8px 18px rgba(13, 110, 253, 0.35);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 160ms ease, filter 160ms ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.45);
+    filter: brightness(1.05);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    box-shadow: none;
+    filter: grayscale(0.2);
+  }
+}
+
+/* -------------------------------
+   Server alert
+---------------------------------*/
+.server-alert {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid $border;
+  background: rgba(255, 255, 255, 0.06);
+  color: $text;
+
+  &.success {
+    background: rgba($success, 0.12);
+    border-color: rgba($success, 0.35);
+    color: #d1fae5;
+  }
+
+  &.error {
+    background: rgba($error, 0.12);
+    border-color: rgba($error, 0.35);
+    color: #fecaca;
+  }
+}
+
+/* -------------------------------
+   Responsive
+---------------------------------*/
+@media (max-width: 640px) {
+  .schedule-appointment-container {
+    margin: 12px auto;
+    padding: 10px;
+  }
+
+  table thead th,
+  table tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .doctor-cell .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+/* -------------------------------
+   Accessibility & motion
+---------------------------------*/
+:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.45);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

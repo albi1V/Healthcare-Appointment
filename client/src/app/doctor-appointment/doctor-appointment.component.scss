@@ -1,0 +1,165 @@
+
+/* -------------------------------
+   Theme tokens (tweak as needed)
+---------------------------------*/
+$primary: #0d6efd;        // Primary blue
+$bg: #0e1420;             // Page background (if used globally)
+$card-bg: #111827;        // Card surface / table bg
+$text: #e5e7eb;           // Light text
+$text-muted: #9ca3af;     // Muted text
+$border: rgba(255, 255, 255, 0.12);
+$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
+$error: #ef4444;
+$success: #10b981;
+
+/* -------------------------------
+   Page container
+---------------------------------*/
+.doctor-appointments-container {
+  width: min(980px, 96%);
+  margin: 20px auto;
+  padding: clamp(12px, 2vw, 16px);
+  color: $text;
+
+  .page-title {
+    margin: 0 0 14px;
+    font-size: clamp(20px, 2.6vw, 26px);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: $text;
+  }
+}
+
+/* -------------------------------
+   Empty state
+---------------------------------*/
+.empty-message {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid $border;
+  color: $text-muted;
+}
+
+/* -------------------------------
+   Table styles
+---------------------------------*/
+.table-responsive {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(17, 24, 39, 0.86) 100%);
+  border: 1px solid $border;
+  border-radius: 14px;
+  box-shadow: $shadow-soft;
+  overflow: hidden; /* round corners apply to table contents */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: $text;
+
+  thead {
+    background: rgba(13, 110, 253, 0.18);
+
+    th {
+      text-align: left;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      border-bottom: 1px solid $border;
+      color: #dbeafe;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 140ms ease;
+
+      &:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      &:hover {
+        background: rgba(13, 110, 253, 0.08);
+      }
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid $border;
+      vertical-align: middle;
+
+      /* Make long names wrap nicely */
+      word-break: break-word;
+    }
+  }
+}
+
+/* -------------------------------
+   Status badge styles
+---------------------------------*/
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  line-height: 1;
+
+  &.bg-success {
+    background: rgba($success, 0.18);
+    color: #d1fae5;
+    border: 1px solid rgba($success, 0.45);
+  }
+
+  &.bg-danger {
+    background: rgba($error, 0.18);
+    color: #fecaca;
+    border: 1px solid rgba($error, 0.45);
+  }
+
+  &.bg-secondary {
+    background: rgba(148, 163, 184, 0.22);
+    color: #e2e8f0;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+  }
+}
+
+/* -------------------------------
+   Responsive tweaks
+---------------------------------*/
+@media (max-width: 640px) {
+  .doctor-appointments-container {
+    margin: 12px auto;
+    padding: 10px;
+
+    .page-title {
+      font-size: 20px;
+    }
+  }
+
+  table thead th,
+  table tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* -------------------------------
+   Focus visibility (accessibility)
+---------------------------------*/
+:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.45);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* -------------------------------
+   Reduce Motion Preference
+---------------------------------*/
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

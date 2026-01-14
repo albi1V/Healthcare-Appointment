@@ -1,34 +1,65 @@
 
+<div class="patient-appointments-container">
+  <h2 class="page-title">My Appointments</h2>
+  <p class="page-subtitle">Review your upcoming and past appointments</p>
 
+  <!-- Empty State -->
+  <div *ngIf="appointmentList.length === 0" class="empty-message">
+    You have no appointments yet.
+  </div>
 
-<div class="card mt-4">
-    <div class="card-header">
-        <h4>Appointments</h4>
-    </div>
-    <div class="card-body">
-        <table class="table table-boarderd">
-            <thead>
-                <th>Appointment Id</th>
-                <th>Appointment Time</th>
-                <th>Status</th>
-                <th>Doctor</th>
-                <th>Patient</th>
-               
-            </thead>
-            <tbody *ngFor="let val of appointmentList">
-                <tr >
-                    <td>{{val.id}}</td>
-                    <td>{{val.appointmentTime | date:'dd-MMM-yyyy hh:mm:a'}}</td>
-                    <td>{{val.status}}</td>
-                    <td><strong>{{val.doctor.username}}</strong><br>
-                        <small>{{val.doctor.email}}</small>
-                    </td>
-                    <td><strong>{{val.patient.username}}</strong><br>
-                        <small>{{val.patient.email}}</small>
-                    </td>
-                  
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <!-- Appointments Table -->
+  <div *ngIf="appointmentList.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Department</th>
+          <th>Date &amp; Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let appt of appointmentList">
+          <td>
+            <div class="doctor-cell">
+              <div class="avatar" aria-hidden="true">
+                {{ (appt.doctor?.name || 'D')[0] | uppercase }}
+              </div>
+              <div class="doctor-meta">
+                <div class="name">{{ appt.doctor?.name || 'Unknown Doctor' }}</div>
+                <small class="muted">ID: {{ appt.doctor?.id || '—' }}</small>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            {{ appt.doctor?.department || '—' }}
+          </td>
+
+          <td>
+            <div class="dt">
+              <div class="date">{{ appt.appointmentTime | date: 'dd MMM yyyy' }}</div>
+              <div class="time muted">{{ appt.appointmentTime | date: 'hh:mm a' }}</div>
+            </div>
+          </td>
+
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': appt.status === 'Scheduled',
+                'bg-warning': appt.status === 'Rescheduled',
+                'bg-danger': appt.status === 'Cancelled',
+                'bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Rescheduled' && appt.status !== 'Cancelled'
+              }"
+            >
+              {{ appt.status || 'N/A' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

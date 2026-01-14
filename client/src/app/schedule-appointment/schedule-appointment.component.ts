@@ -13,8 +13,11 @@ export class ScheduleAppointmentComponent implements OnInit {
 
   doctorList: any[] = [];
   itemForm: FormGroup;
-  responseMessage: any;
-  isAdded = false;
+
+  responseMessage: string = '';   // ✅ FIX: never null
+  isAdded: boolean = false;
+
+  patientId: number | null = null;
 
   constructor(
     public httpService: HttpService,
@@ -29,13 +32,21 @@ export class ScheduleAppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPatients();
+    // Read localStorage ONLY in TS
+    const userIdString = localStorage.getItem('userId');
+    this.patientId = userIdString ? parseInt(userIdString, 10) : null;
+
+    if (this.patientId !== null) {
+      this.itemForm.controls['patientId'].setValue(this.patientId);
+    }
+
+    this.getDoctors();
   }
 
-  getPatients(): void {
+  getDoctors(): void {
     this.httpService.getDoctors().subscribe(
       (data: any) => {
-        this.doctorList = data;
+        this.doctorList = data as any[]; // ✅ FIX: explicit cast
       },
       (err: any) => {
         console.error('Error fetching doctors', err);
@@ -44,11 +55,7 @@ export class ScheduleAppointmentComponent implements OnInit {
   }
 
   addAppointment(val: any): void {
-    const userIdString = localStorage.getItem('userId');
-    const userId = userIdString ? parseInt(userIdString, 10) : null;
-
     this.itemForm.controls['doctorId'].setValue(val.id);
-    this.itemForm.controls['patientId'].setValue(userId);
     this.isAdded = true;
   }
 
@@ -70,6 +77,11 @@ export class ScheduleAppointmentComponent implements OnInit {
         this.responseMessage = 'Appointment saved successfully';
         this.isAdded = false;
         this.itemForm.reset();
+
+        // Restore patientId after reset
+        if (this.patientId !== null) {
+          this.itemForm.controls['patientId'].setValue(this.patientId);
+        }
       },
       () => {
         this.responseMessage = 'Failed to save appointment';

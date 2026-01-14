@@ -1,1 +1,37 @@
-//todo: complete missing code..
+
+<div class="doctor-appointments-container">
+  <h2 class="page-title">My Appointments</h2>
+
+  <!-- If no appointments -->
+  <div *ngIf="appointmentList.length === 0" class="empty-message">
+    No appointments found.
+  </div>
+
+  <!-- Appointments Table -->
+  <div *ngIf="appointmentList.length > 0" class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Patient Name</th>
+          <th>Appointment Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let appt of appointmentList">
+          <td>{{ appt.patient?.name || 'Unknown' }}</td>
+          <td>{{ appt.appointmentTime | date: 'dd MMM yyyy, hh:mm a' }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge bg-success': appt.status === 'Scheduled',
+              'badge bg-danger': appt.status === 'Cancelled',
+              'badge bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Cancelled'
+            }">
+              {{ appt.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

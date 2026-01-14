@@ -1,1 +1,51 @@
-//todo: complete missing code..
+
+<main class="login-page">
+  <section class="login-form-section">
+    <div class="login-card">
+      <div class="header-section">
+        <h1>Login to Your Account</h1>
+        <p>Access the Healthcare Appointment Management System</p>
+      </div>
+
+      <!-- Login Form -->
+      <form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form" novalidate>
+        
+        <!-- Username -->
+        <div class="form-field" [ngClass]="{'has-error': itemForm.get('username')?.invalid && itemForm.get('username')?.touched}">
+          <input type="text" id="username" formControlName="username" placeholder=" " autocomplete="username" />
+          <label for="username">Username</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched" class="error-message">
+            Username is required.
+          </span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-field" [ngClass]="{'has-error': itemForm.get('password')?.invalid && itemForm.get('password')?.touched}">
+          <input type="password" id="password" formControlName="password" placeholder=" " autocomplete="current-password" />
+          <label for="password">Password</label>
+          <div class="field-underline"></div>
+          <span *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched" class="error-message">
+            Password is required.
+          </span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-button" [disabled]="itemForm.invalid">
+          Login
+        </button>
+      </form>
+
+      <!-- Error Message -->
+      <div *ngIf="showError" class="server-error-alert">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Registration Link -->
+      <div class="signup-link-section">
+        <span>Don't have an account? </span>
+        <a (click)="registration()" class="register-link">Create Account</a>
+      </div>
+    </div>
+  </section>
+</main>

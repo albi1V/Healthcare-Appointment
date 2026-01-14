@@ -1,1 +1,34 @@
-//todo: complete missing code..
+<div class="doctor-availability-container">
+  <h2 class="page-title">Update Availability</h2>
+  <p class="page-subtitle">Set your availability status</p>
+
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
+
+    <!-- Doctor ID (read-only display) -->
+    <div class="form-field">
+      <label class="static-label">Doctor ID</label>
+      <div class="static-value">
+        {{ doctorId ?? 'Not found' }}
+      </div>
+      <input type="hidden" formControlName="doctorId" />
+    </div>
+
+    <!-- Availability -->
+    <div class="form-field">
+      <label for="availability">Availability</label>
+      <select id="availability" formControlName="availability">
+        <option value="" disabled>Select availability</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="itemForm.invalid">
+      Update Availability
+    </button>
+  </form>
+
+  <div *ngIf="responseMessage">
+    {{ responseMessage }}
+  </div>
+</div>

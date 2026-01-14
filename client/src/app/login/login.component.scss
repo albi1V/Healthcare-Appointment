@@ -1,3 +1,241 @@
-a{
-    cursor: pointer;
+
+/* -------------------------------
+   Theme tokens (tweak as needed)
+---------------------------------*/
+$primary: #0d6efd;        // Primary blue
+$primary-dark: #0b5ed7;
+$bg: #0e1420;             // Page background
+$card-bg: #111827;        // Card surface
+$text: #e5e7eb;           // Light text
+$text-muted: #9ca3af;     // Muted text
+$error: #ef4444;          // Error red
+$border: rgba(255, 255, 255, 0.12);
+$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
+
+/* -------------------------------
+   Page layout
+---------------------------------*/
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(1200px 600px at 0% 0%, #0f172a 0%, #0b1220 45%, #09111f 100%);
+  color: $text;
+}
+
+/* -------------------------------
+   Form section wrapper
+---------------------------------*/
+.login-form-section {
+  width: min(720px, 96%);
+  padding: clamp(20px, 4vw, 32px);
+}
+
+/* -------------------------------
+   Card
+---------------------------------*/
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: clamp(24px, 4.5vw, 36px);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.88) 100%);
+  box-shadow: $shadow-soft;
+  border: 1px solid $border;
+  backdrop-filter: blur(6px);
+}
+
+/* -------------------------------
+   Header area
+---------------------------------*/
+.header-section {
+  margin-bottom: 18px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(22px, 3.2vw, 28px);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: $text;
+  }
+
+  p {
+    margin: 0;
+    color: $text-muted;
+    font-size: clamp(13px, 2.2vw, 14px);
+  }
+}
+
+/* -------------------------------
+   Form layout
+---------------------------------*/
+.login-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+/* Field wrapper & floating label pattern */
+.form-field {
+  position: relative;
+  display: grid;
+  gap: 6px;
+
+  input {
+    width: 100%;
+    padding: 14px 12px;
+    border-radius: 12px;
+    border: 1px solid $border;
+    background: #0b1220;
+    color: $text;
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+
+    /* Floating placeholder spacing */
+    &:placeholder-shown + label {
+      transform: translateY(16px) scale(1);
+      opacity: 0.7;
+    }
+
+    &:focus {
+      border-color: rgba(13, 110, 253, 0.75);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      background: #0a1322;
+    }
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px #0b1220 inset;
+      -webkit-text-fill-color: $text;
+      transition: background-color 99999s ease-in-out 0s;
+    }
+  }
+
+  label {
+    position: absolute;
+    left: 12px;
+    top: 6px;
+    padding: 0 4px;
+    font-size: 12px;
+    color: $text-muted;
+    background: transparent;
+    transform: translateY(0) scale(0.96);
+    transition: transform 160ms ease, opacity 160ms ease, color 160ms ease;
+    pointer-events: none;
+  }
+
+  .field-underline {
+    height: 2px;
+    background: linear-gradient(90deg, rgba(13, 110, 253, 0.35), rgba(16, 185, 129, 0.35));
+    border-radius: 999px;
+    opacity: 0.65;
+  }
+
+  /* Error state */
+  &.has-error {
+    input {
+      border-color: rgba($error, 0.8);
+      box-shadow: 0 0 0 3px rgba($error, 0.2);
+    }
+
+    label {
+      color: $error;
+    }
+
+    .error-message {
+      margin-top: -2px;
+      font-size: 12px;
+      color: $error;
+    }
+  }
+}
+
+/* -------------------------------
+   Submit button
+---------------------------------*/
+.login-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+  box-shadow: 0 8px 18px rgba(13, 110, 253, 0.35);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 160ms ease, filter 160ms ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.45);
+    filter: brightness(1.05);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    box-shadow: none;
+    filter: grayscale(0.2);
+  }
+}
+
+/* -------------------------------
+   Error message from server
+---------------------------------*/
+.server-error-alert {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba($error, 0.12);
+  color: #fecaca; // light red text
+  border: 1px solid rgba($error, 0.35);
+}
+
+/* -------------------------------
+   Registration link
+---------------------------------*/
+.signup-link-section {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: $text-muted;
+
+  .register-link {
+    color: $primary;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* -------------------------------
+   Focus visibility (accessibility)
+---------------------------------*/
+:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.45);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* -------------------------------
+   Reduce Motion Preference
+---------------------------------*/
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -10,9 +10,11 @@ import { HttpService } from '../../services/http.service';
 export class DoctorAvailabilityComponent implements OnInit {
 
   itemForm: FormGroup;
-  formModel: any = {};
   responseMessage: any;
-  isAdded: boolean = false;
+  isAdded = false;
+
+  // ✅ expose userId safely to template
+  doctorId: number | null = null;
 
   constructor(
     public httpService: HttpService,
@@ -25,32 +27,27 @@ export class DoctorAvailabilityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // intentionally empty as per problem statement
+    const userIdString = localStorage.getItem('userId');
+    this.doctorId = userIdString ? parseInt(userIdString, 10) : null;
+
+    if (this.doctorId !== null) {
+      this.itemForm.controls['doctorId'].setValue(this.doctorId);
+    }
   }
 
   onSubmit(): void {
-    if (this.itemForm.invalid) {
+    if (this.itemForm.invalid || this.doctorId === null) {
       return;
     }
 
-    const userIdString = localStorage.getItem('userId');
-    if (!userIdString) {
-      return;
-    }
+    const availability = this.itemForm.value.availability;
 
-    const doctorId = parseInt(userIdString, 10);
-
-    // set doctorId into form
-    this.itemForm.controls['doctorId'].setValue(doctorId);
-
-    const availability = this.itemForm.controls['availability'].value;
-
-    this.httpService.updateDoctorAvailability(doctorId, availability)
+    this.httpService.updateDoctorAvailability(this.doctorId, availability)
       .subscribe({
         next: () => {
           this.responseMessage = 'Availability updated successfully';
           this.isAdded = true;
-          this.itemForm.reset();
+          this.itemForm.reset({ doctorId: this.doctorId });
         },
         error: () => {
           this.responseMessage = 'Failed to update availability';

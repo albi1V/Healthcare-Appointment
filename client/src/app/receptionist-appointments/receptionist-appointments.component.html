@@ -1,1 +1,65 @@
-//todo: complete missing code..
+
+<div class="patient-appointments-container">
+  <h2 class="page-title">My Appointments</h2>
+  <p class="page-subtitle">Review your upcoming and past appointments</p>
+
+  <!-- Empty State -->
+  <div *ngIf="appointmentList.length === 0" class="empty-message">
+    You have no appointments yet.
+  </div>
+
+  <!-- Appointments Table -->
+  <div *ngIf="appointmentList.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Department</th>
+          <th>Date &amp; Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let appt of appointmentList">
+          <td>
+            <div class="doctor-cell">
+              <div class="avatar" aria-hidden="true">
+                {{ (appt.doctor?.name || 'D')[0] | uppercase }}
+              </div>
+              <div class="doctor-meta">
+                <div class="name">{{ appt.doctor?.name || 'Unknown Doctor' }}</div>
+                <small class="muted">ID: {{ appt.doctor?.id || '—' }}</small>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            {{ appt.doctor?.department || '—' }}
+          </td>
+
+          <td>
+            <div class="dt">
+              <div class="date">{{ appt.appointmentTime | date: 'dd MMM yyyy' }}</div>
+              <div class="time muted">{{ appt.appointmentTime | date: 'hh:mm a' }}</div>
+            </div>
+          </td>
+
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': appt.status === 'Scheduled',
+                'bg-warning': appt.status === 'Rescheduled',
+                'bg-danger': appt.status === 'Cancelled',
+                'bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Rescheduled' && appt.status !== 'Cancelled'
+              }"
+            >
+              {{ appt.status || 'N/A' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
