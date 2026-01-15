@@ -1,0 +1,389 @@
+
+
+/* -------------------------------
+
+   HAM System Navbar Styling (CSS)
+
+   Compatible with your current HTML
+
+   ------------------------------- */
+ 
+/* Theme tokens */
+
+:root {
+
+  --primary: #0d6efd;
+
+  --primary-600: #0b5ed7;
+
+  --primary-700: #0a58ca;
+
+  --surface: #ffffff;
+
+  --text: #1f2937;
+
+  --muted: #6b7280;
+
+  --border: #e5e7eb;
+
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+/* Dark mode tokens */
+
+@media (prefers-color-scheme: dark) {
+
+  :root {
+
+    --surface: #111418;
+
+    --text: #e5e7eb;
+
+    --muted: #9ca3af;
+
+    --border: #1f2937;
+
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+
+  }
+
+}
+ 
+/* -------------------------------
+
+   Navbar container
+
+   ------------------------------- */
+
+.navbar {
+
+  background-color: var(--surface) !important;
+
+  border-bottom: 1px solid var(--border);
+
+  box-shadow: var(--shadow);
+
+  transition: box-shadow 240ms var(--ease), background-color 240ms var(--ease);
+
+}
+ 
+.navbar.sticky-top {
+
+  backdrop-filter: saturate(160%) blur(6px);
+
+}
+ 
+.navbar .container {
+
+  padding-top: 0.25rem;
+
+  padding-bottom: 0.25rem;
+
+}
+ 
+/* Branding */
+
+.navbar-brand {
+
+  color: var(--text);
+
+  letter-spacing: 0.2px;
+
+  font-size: 1.05rem;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  transition: color 200ms var(--ease), transform 200ms var(--ease);
+
+  text-decoration: none;
+
+}
+ 
+.navbar-brand svg {
+
+  display: block;
+
+  height: 28px;
+
+  width: 28px;
+
+}
+ 
+.navbar-brand:hover {
+
+  color: var(--primary-600);
+
+  transform: translateY(-1px);
+
+}
+ 
+.navbar-brand:focus-visible {
+
+  outline: 2px solid var(--primary-600);
+
+  outline-offset: 4px;
+
+  border-radius: 6px;
+
+}
+ 
+/* Toggler button */
+
+.navbar-toggler {
+
+  border-color: transparent;
+
+  padding: 0.4rem 0.6rem;
+
+  transition: background-color 160ms var(--ease), transform 160ms var(--ease);
+
+}
+ 
+.navbar-toggler .navbar-toggler-icon {
+
+  filter: contrast(1.2) brightness(0.9);
+
+}
+ 
+.navbar-toggler:hover {
+
+  background-color: rgba(13, 110, 253, 0.08);
+
+}
+ 
+.navbar-toggler:active {
+
+  transform: scale(0.98);
+
+}
+ 
+.navbar-toggler:focus-visible {
+
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.3);
+
+  border-radius: 8px;
+
+}
+ 
+/* Collapse animation */
+
+.collapse.navbar-collapse {
+
+  transition: transform 240ms var(--ease), opacity 240ms var(--ease);
+
+  will-change: transform, opacity;
+
+}
+ 
+.collapse.navbar-collapse.show {
+
+  opacity: 1;
+
+  transform: translateY(0);
+
+}
+ 
+.collapse.navbar-collapse:not(.show) {
+
+  opacity: 0.98;
+
+  transform: translateY(-4px);
+
+}
+ 
+/* Nav links */
+
+.nav-link {
+
+  color: var(--muted);
+
+  font-weight: 500;
+
+  padding: 0.5rem 0.75rem;
+
+  border-radius: 8px;
+
+  position: relative;
+
+  transition: color 160ms var(--ease), background-color 160ms var(--ease), transform 160ms var(--ease);
+
+  text-decoration: none;
+
+}
+ 
+/* underline accent on hover */
+
+.nav-link::after {
+
+  content: '';
+
+  position: absolute;
+
+  left: 0.75rem;
+
+  right: 0.75rem;
+
+  bottom: 0.25rem;
+
+  height: 2px;
+
+  background: linear-gradient(90deg, var(--primary), var(--primary-700));
+
+  transform: scaleX(0);
+
+  transform-origin: left;
+
+  transition: transform 200ms var(--ease);
+
+  border-radius: 2px;
+
+  opacity: 0.8;
+
+}
+ 
+.nav-link:hover {
+
+  color: var(--primary-600);
+
+  background-color: rgba(13, 110, 253, 0.06);
+
+}
+ 
+.nav-link:hover::after {
+
+  transform: scaleX(1);
+
+}
+ 
+.nav-link:focus-visible {
+
+  outline: 2px solid rgba(13, 110, 253, 0.4);
+
+  outline-offset: 4px;
+
+}
+ 
+/* Active style (Angular may add .router-link-active automatically in some setups,
+
+   but we style both to be safe without changing HTML) */
+
+.nav-link.active,
+
+.nav-link.router-link-active {
+
+  color: var(--primary);
+
+  background-color: rgba(13, 110, 253, 0.10);
+
+}
+ 
+.nav-link.active::after,
+
+.nav-link.router-link-active::after {
+
+  transform: scaleX(1);
+
+}
+ 
+/* Left and right groups spacing */
+
+.navbar-nav.me-auto .nav-link {
+
+  margin-right: 0.25rem;
+
+}
+ 
+.navbar-nav.ms-auto .nav-link {
+
+  margin-left: 0.25rem;
+
+}
+ 
+/* Mobile divider between groups */
+
+@media (max-width: 991.98px) {
+
+  .navbar-nav.me-auto {
+
+    margin-bottom: 0.75rem;
+
+    border-bottom: 1px dashed var(--border);
+
+    padding-bottom: 0.5rem;
+
+  }
+
+}
+ 
+/* Accessibility / mobile niceties */
+
+.nav-link,
+
+.navbar-brand,
+
+.navbar-toggler {
+
+  -webkit-tap-highlight-color: transparent;
+
+}
+ 
+/* Optional: smoother hover elevation on navbar */
+
+.navbar:hover {
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+
+}
+ 
+/* Dark mode tweaks (uses variables set above) */
+
+@media (prefers-color-scheme: dark) {
+
+  .navbar-brand:hover {
+
+    color: #5ea2ff; /* slightly brighter in dark */
+
+  }
+
+  .navbar-toggler .navbar-toggler-icon {
+
+    filter: invert(1) brightness(1.2);
+
+  }
+
+  .nav-link:hover {
+
+    color: #69a9ff;
+
+    background-color: rgba(13, 110, 253, 0.14);
+
+  }
+
+  .nav-link.active,
+
+  .nav-link.router-link-active {
+
+    color: #69a9ff;
+
+    background-color: rgba(13, 110, 253, 0.18);
+
+  }
+
+  .nav-link::after {
+
+    background: linear-gradient(90deg, #3b82f6, var(--primary-700));
+
+    opacity: 0.9;
+
+  }
+
+}
+
+ 

@@ -50,7 +50,7 @@ public class Appointment {
  
     public Doctor getDoctor() {
 
-        return doctor;
+        return doctor;  
 
     }
  

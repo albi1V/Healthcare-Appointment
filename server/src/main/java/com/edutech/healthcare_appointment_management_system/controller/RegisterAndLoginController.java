@@ -60,30 +60,37 @@ public class RegisterAndLoginController {
     // LOGIN ENDPOINT (REQUIRED BY TESTS)
     // =========================
 
-    @PostMapping("/api/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            // Authenticate username & password
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-                )
-            );
-
-            // Load user details
-            UserDetails userDetails =
-                    userService.loadUserByUsername(loginRequest.getUsername());
-
-            // Generate JWT
-            String token = jwtUtil.generateToken(userDetails.getUsername());
-
-            // Return token (tests expect this)
-            return ResponseEntity.ok(Map.of("token", token));
-
-        } catch (AuthenticationException ex) {
-            // Tests expect 401 on invalid login
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        @PostMapping("/api/user/login")
+public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    try {
+        // Authenticate username & password
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+            )
+        );
+ 
+        // Load user details
+        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+ 
+        // Fetch the actual user from DB to get role and id
+        var user = userService.getUserByUsername(loginRequest.getUsername()); // your service method
+        // user should have getUserId() and getRole()
+ 
+        // Generate JWT
+        String token = jwtUtil.generateToken(userDetails.getUsername());
+ 
+        // Return token + role + userId + username
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "userId", user.getId(),
+                "username", user.getUsername(),
+                "role", user.getRole()
+        ));
+ 
+    } catch (AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+}
 }

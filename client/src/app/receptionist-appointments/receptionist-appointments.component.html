@@ -1,65 +1,139 @@
-
-<div class="patient-appointments-container">
-  <h2 class="page-title">My Appointments</h2>
-  <p class="page-subtitle">Review your upcoming and past appointments</p>
-
-  <!-- Empty State -->
-  <div *ngIf="appointmentList.length === 0" class="empty-message">
-    You have no appointments yet.
-  </div>
-
-  <!-- Appointments Table -->
-  <div *ngIf="appointmentList.length > 0" class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Doctor</th>
-          <th>Department</th>
-          <th>Date &amp; Time</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let appt of appointmentList">
-          <td>
-            <div class="doctor-cell">
-              <div class="avatar" aria-hidden="true">
-                {{ (appt.doctor?.name || 'D')[0] | uppercase }}
-              </div>
-              <div class="doctor-meta">
-                <div class="name">{{ appt.doctor?.name || 'Unknown Doctor' }}</div>
-                <small class="muted">ID: {{ appt.doctor?.id || '—' }}</small>
-              </div>
-            </div>
-          </td>
-
-          <td>
-            {{ appt.doctor?.department || '—' }}
-          </td>
-
-          <td>
-            <div class="dt">
-              <div class="date">{{ appt.appointmentTime | date: 'dd MMM yyyy' }}</div>
-              <div class="time muted">{{ appt.appointmentTime | date: 'hh:mm a' }}</div>
-            </div>
-          </td>
-
-          <td>
-            <span
-              class="badge"
-              [ngClass]="{
-                'bg-success': appt.status === 'Scheduled',
-                'bg-warning': appt.status === 'Rescheduled',
-                'bg-danger': appt.status === 'Cancelled',
-                'bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Rescheduled' && appt.status !== 'Cancelled'
-              }"
-            >
-              {{ appt.status || 'N/A' }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="receptionist-appointments-page">
+ 
+  <!-- Feedback message -->
+<div *ngIf="responseMessage" class="alert mt-3" [ngClass]="{ 'alert-success': !responseMessage?.includes('Failed'), 'alert-danger': responseMessage?.includes('Failed') }" role="alert">
+    {{ responseMessage }}
+</div>
+ 
+  <!-- Appointments list -->
+<div class="card mt-3">
+<div class="card-header d-flex align-items-center justify-content-between">
+<div>
+<h4 class="card-title mb-0">All Appointments</h4>
+<small class="text-muted">Select an appointment to reschedule</small>
+</div>
+<button class="btn btn-outline-secondary btn-sm" (click)="getAppointments()">Refresh</button>
+</div>
+ 
+    <div class="card-body">
+<!-- Empty state -->
+<div *ngIf="!appointmentList || appointmentList.length === 0" class="empty-state text-center py-4">
+<div class="empty-icon">🗓️</div>
+<p class="mb-0">No appointments found.</p>
+<small class="text-muted">Try refreshing or check back later.</small>
+</div>
+ 
+      <!-- Table -->
+<div *ngIf="appointmentList && appointmentList.length > 0" class="table-responsive">
+<table class="table table-bordered align-middle">
+<thead>
+<tr>
+<th>Appointment ID</th>
+<th>Time</th>
+<th>Status</th>
+<th>Doctor</th>
+<th>Patient</th>
+<th class="text-center">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let appt of appointmentList">
+<td class="text-muted">{{ appt.id }}</td>
+ 
+              <!-- Prefer appointmentTime; fallback to appointmentDate if needed -->
+<td>
+                {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy HH:mm:ss' }}
+</td>
+ 
+              <td>
+<span class="badge"
+                      [ngClass]="{
+                        'bg-primary': appt.status === 'Scheduled',
+                        'bg-warning text-dark': appt.status === 'Rescheduled',
+                        'bg-danger': appt.status === 'Cancelled',
+                        'bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Rescheduled' && appt.status !== 'Cancelled'
+                      }">
+                  {{ appt.status || '—' }}
+</span>
+</td>
+ 
+              <td>
+<strong>{{ appt.doctor?.username || appt.doctor?.name || '—' }}</strong><br />
+<small class="text-muted">{{ appt.doctor?.email || '—' }}</small>
+</td>
+ 
+              <td>
+<strong>{{ appt.patient?.username || appt.patient?.name || '—' }}</strong><br />
+<small class="text-muted">{{ appt.patient?.email || '—' }}</small>
+</td>
+ 
+              <td class="text-center">
+<button class="btn btn-sm btn-outline-primary" (click)="editAppointment(appt)">
+                  Edit
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+ 
+  <!-- Reschedule form -->
+<div class="card mt-4" *ngIf="isAdded">
+<div class="card-header">
+<h5 class="mb-0">Reschedule Appointment</h5>
+<small class="text-muted">Update the appointment time and submit</small>
+</div>
+ 
+    <div class="card-body">
+<form [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
+<!-- Appointment ID (read-only while editing) -->
+<div class="mb-3">
+<label for="appointmentId" class="form-label">Appointment ID</label>
+<input
+            id="appointmentId"
+            type="number"
+            class="form-control"
+            formControlName="id"
+            placeholder="Appointment ID"
+            readonly
+          />
+<div *ngIf="itemForm.controls['id'].invalid && (itemForm.controls['id'].dirty || itemForm.controls['id'].touched)"
+               class="text-danger mt-1">
+<small>Appointment ID is required.</small>
+</div>
+</div>
+ 
+        <!-- New time -->
+<div class="mb-3">
+<label for="newTime" class="form-label">New Time</label>
+<input
+            id="newTime"
+            type="datetime-local"
+            class="form-control"
+            formControlName="time"
+            placeholder="Select new appointment time"
+          />
+<div *ngIf="itemForm.controls['time'].invalid && (itemForm.controls['time'].dirty || itemForm.controls['time'].touched)"
+               class="text-danger mt-1">
+<small>Please choose a valid appointment time.</small>
+</div>
+<small class="text-muted d-block mt-1">
+            The time will be formatted as <code>yyyy-MM-dd HH:mm:ss</code> before sending to the server.
+</small>
+</div>
+ 
+        <!-- Actions -->
+<div class="d-flex gap-2">
+<button type="submit" class="btn btn-primary" [disabled]="itemForm.invalid">
+            Save Changes
+</button>
+<button type="button" class="btn btn-outline-secondary" (click)="isAdded = false; itemForm.reset()">
+            Cancel
+</button>
+</div>
+</form>
+</div>
+</div>
 </div>

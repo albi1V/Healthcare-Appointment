@@ -1,116 +1,141 @@
 
 <div class="schedule-appointment-container">
-  <h2 class="page-title">Schedule an Appointment</h2>
-  <p class="page-subtitle">Select a doctor and choose a time</p>
 
-  <!-- Server response message -->
-<div
-  *ngIf="responseMessage"
-  class="server-alert"
-  [class.success]="!isAdded"
-  [class.error]="isAdded && responseMessage.toLowerCase().includes('failed')"
->
-  {{ responseMessage }}
-</div>
+  <h2 class="page-title">Schedule Appointment</h2>
+  <p class="page-subtitle">
+    Choose a doctor, pick a date, and select a 15‑minute slot.
+  </p>
 
+  <!-- Server Response -->
+  <div *ngIf="responseMessage" class="server-alert" [ngClass]="{ 'success': !isAdded && responseMessage.includes('success'), 'error': responseMessage.includes('Failed') }">
+    {{ responseMessage }}
+  </div>
 
-  <!-- Doctors list -->
-  <div class="card">
+  <!-- Doctors List -->
+  <div class="card mt-3">
     <div class="card-header">
-      <h4>Available Doctors</h4>
+      <h4>Doctors</h4>
     </div>
-
     <div class="card-body">
-      <div *ngIf="doctorList.length === 0" class="empty-message">
-        No doctors found.
-      </div>
-
-      <div *ngIf="doctorList.length > 0" class="table-responsive">
-        <table class="table table-hover align-middle">
+      <div class="table-responsive">
+        <table>
           <thead>
             <tr>
-              <th>Doctor Name</th>
-              <th>Department</th>
+              <th style="width: 90px;">Id</th>
+              <th>Doctor</th>
+              <th>Specialty</th>
               <th>Availability</th>
-              <th>Action</th>
+              <th style="width: 160px;">Action</th>
             </tr>
           </thead>
-
           <tbody>
-            <tr *ngFor="let val of doctorList">
+            <tr *ngFor="let doc of doctorList">
+              <td>{{ doc.id }}</td>
               <td>
                 <div class="doctor-cell">
-                  <div class="avatar" aria-hidden="true">
-                    {{ (val.name || 'D')[0] | uppercase }}
-                  </div>
+                  <div class="avatar">{{ (doc.name || 'D')[0] }}</div>
                   <div class="doctor-meta">
-                    <div class="name">{{ val.name || 'Unknown Doctor' }}</div>
-                    <small class="muted">ID: {{ val.id || '—' }}</small>
+                    <div class="name">{{ doc.name }}</div>
+                    <div class="muted">ID: {{ doc.id }}</div>
                   </div>
                 </div>
               </td>
-              <td>{{ val.department || '—' }}</td>
-              <td>{{ val.availability || '—' }}</td>
+              <td>{{ doc.specialty }}</td>
+              <td>{{ doc.availability }}</td>
               <td>
-                <button class="btn btn-primary btn-sm" (click)="addAppointment(val)">
-                  Schedule
-                </button>
+                <button class="btn btn-primary" (click)="addAppointment(doc)">Appointment</button>
               </td>
             </tr>
           </tbody>
         </table>
+
+        <div *ngIf="doctorList?.length === 0" class="empty-message">
+          No doctors available right now. Please try again later.
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Appointment form (shown after Schedule click) -->
-  <div *ngIf="isAdded" class="card mt-3">
+  <!-- Selected Doctor & Slot Picker -->
+  <div class="card mt-3" *ngIf="isAdded">
     <div class="card-header">
-      <h4>Confirm Appointment</h4>
+      <h4>Book with {{ selectedDoctor?.name || 'Doctor' }}</h4>
     </div>
-
     <div class="card-body">
-      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate class="appointment-form">
 
-        <!-- Patient ID (auto-filled from localStorage) -->
-<!-- Patient ID -->
-<div class="form-field">
-  <label class="static-label">Patient ID</label>
-  <div class="static-value">
-    {{ itemForm.get('patientId')?.value || patientId || 'Not found' }}
-  </div>
-  <input type="hidden" formControlName="patientId" />
-</div>
+      <!-- Summary -->
+      <div class="doctor-summary">
+        <div class="doctor-summary__avatar">{{ (selectedDoctor?.name || 'D')[0] }}</div>
+        <div class="doctor-summary__meta">
+          <div class="title">{{ selectedDoctor?.name }}</div>
+          <div class="sub">Specialty: {{ selectedDoctor?.specialty || '—' }}</div>
+          <div class="sub">Availability: {{ selectedDoctor?.availability || '—' }}</div>
+        </div>
+      </div>
 
+      <!-- Date + Slots -->
+      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="appointment-form" novalidate>
 
-        <!-- Doctor ID (set when clicking Schedule) -->
-        <div class="form-field">
-          <label class="static-label">Doctor ID</label>
-          <div class="static-value">
-            {{ itemForm.get('doctorId')?.value || 'Not selected' }}
+        <!-- Doctor & Date -->
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label>Doctor</label>
+            <div class="static-value">{{ itemForm.controls['doctorName'].value }}</div>
           </div>
-          <input type="hidden" formControlName="doctorId" />
+
+          <div class="form-field">
+            <label>Date</label>
+            <input
+              type="date"
+              class="form-control"
+              [value]="selectedDate"
+              [min]="today"
+              (change)="onDateChange($event)"
+            />
+          </div>
         </div>
 
-        <!-- Appointment time -->
-        <div class="form-field" [ngClass]="{'has-error': itemForm.get('time')?.invalid && itemForm.get('time')?.touched}">
-          <label for="time">Appointment Time</label>
-          <input
-            id="time"
-            type="datetime-local"
-            class="form-control"
-            formControlName="time"
-          />
-          <span *ngIf="itemForm.get('time')?.invalid && itemForm.get('time')?.touched" class="error-message">
-            Please choose a valid appointment time.
-          </span>
+        <!-- Selected slot preview -->
+        <div class="form-field">
+          <label>Selected Slot</label>
+          <div class="static-value">
+            {{ itemForm.controls['time'].value ? (itemForm.controls['time'].value | date:'medium') : '—' }}
+          </div>
         </div>
 
-        <!-- Submit -->
+        <!-- Hidden controls to keep form valid & payload complete -->
+        <input type="text" formControlName="doctorName" class="visually-hidden" />
+        <input type="date" formControlName="date" class="visually-hidden" />
+        <input type="datetime-local" formControlName="time" class="visually-hidden" />
+
+        <div class="slots-header">
+          <h5>Available Slots</h5>
+          <div *ngIf="loadingSlots" class="slots-loading">Loading slots…</div>
+        </div>
+
+        <div *ngIf="!loadingSlots && slots.length === 0" class="empty-message">
+          No slots available on this date. Try another date.
+        </div>
+
+        <div class="slots-grid" *ngIf="!loadingSlots && slots.length > 0">
+          <button
+            type="button"
+            class="slot"
+            *ngFor="let s of slots"
+            [class.taken]="s.taken"
+            [disabled]="s.disabled"
+            (click)="selectSlot(s)"
+          >
+            <span class="slot-time">{{ s.label }}</span>
+            <span class="slot-badge" *ngIf="s.taken">Taken</span>
+          </button>
+        </div>
+
         <button type="submit" class="submit-button" [disabled]="itemForm.invalid">
-          Save Appointment
+          Submit
         </button>
       </form>
     </div>
   </div>
+
 </div>

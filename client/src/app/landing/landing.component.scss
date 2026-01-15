@@ -1,0 +1,133 @@
+
+// Colors
+$greenblue: #2c7be5;
+$greenblue-dark: #1b62c6;
+$dark-bg: #101820;
+
+.text-greenblue { color: $greenblue; }
+.btn-greenblue {
+  background: $greenblue;
+  color: #fff;
+  border: 1px solid transparent;
+  &:hover { background: $greenblue-dark; color: #fff; }
+}
+
+/* Reference-like button styles */
+.login-btn {
+  border: 1px solid #fff;
+  color: #fff;
+  background: transparent;
+  transition: all 0.2s ease;
+  &:hover { background: rgba(255,255,255,0.15); }
+}
+.register-btn {
+  background: #fff;
+  color: #000;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  &:hover { background: #f0f0f0; }
+}
+
+// Hero
+.hero-header {
+  background: linear-gradient(135deg, rgba(#0a3d62, 0.9), rgba($greenblue, 0.85));
+  min-height: 420px;
+  border-radius: 0 0 24px 24px;
+
+  .display-1 { font-weight: 700; letter-spacing: 0.5px; }
+  .typed-cursor {
+    display: inline-block;
+    margin-left: 6px;
+    animation: blink 0.9s infinite;
+  }
+}
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+// We Care Section
+.we-care-section {
+  background: linear-gradient(135deg, rgba($greenblue, 0.85), rgba(#0a3d62, 0.85));
+  padding: 64px 0;
+  .we-care-content { max-width: 840px; }
+}
+
+// Service flip cards
+.service-card {
+  perspective: 1000px;
+  .service-inner {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  &:hover .service-inner { transform: rotateY(180deg); }
+
+  .service-front, .service-back {
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    width: 100%;
+    height: 100%;
+  }
+  .service-front {
+    background: linear-gradient(135deg, $greenblue, $greenblue-dark);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .service-back {
+    transform: rotateY(180deg);
+    background: #1b2a41;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+}
+
+// Testimonials
+.testimonial-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,0.15); }
+}
+
+// Stats counters
+.stats-section {
+  background: #f8f9fa;
+  padding: 48px 0;
+  .counter {
+    font-size: 48px;
+    font-weight: 800;
+    color: $greenblue;
+    line-height: 1;
+  }
+  p { color: #6c757d; margin-top: 8px; }
+}
+
+// Appointment section
+.appointment-section {
+  background: linear-gradient(135deg, rgba($dark-bg, 0.95), rgba(#1b2a41, 0.9));
+  .appointment-card {
+    border: 0;
+    backdrop-filter: saturate(1.2) blur(8px);
+  }
+}
+
+// Back to top
+.back-to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+// Responsive tweaks
+@media (max-width: 992px) {
+  .hero-header { text-align: center; }
+}

@@ -1,34 +1,79 @@
-<div class="doctor-availability-container">
-  <h2 class="page-title">Update Availability</h2>
-  <p class="page-subtitle">Set your availability status</p>
 
-  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
-
-    <!-- Doctor ID (read-only display) -->
-    <div class="form-field">
-      <label class="static-label">Doctor ID</label>
-      <div class="static-value">
-        {{ doctorId ?? 'Not found' }}
-      </div>
-      <input type="hidden" formControlName="doctorId" />
-    </div>
-
-    <!-- Availability -->
-    <div class="form-field">
-      <label for="availability">Availability</label>
-      <select id="availability" formControlName="availability">
-        <option value="" disabled>Select availability</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select>
-    </div>
-
-    <button type="submit" [disabled]="itemForm.invalid">
-      Update Availability
-    </button>
-  </form>
-
-  <div *ngIf="responseMessage">
+<div class="doctor-availability-page">
+  <!-- Alerts -->
+  <div *ngIf="responseMessage" class="alert mt-3" [ngClass]="{ 'alert-success': isAdded, 'alert-danger': !isAdded }" role="alert">
     {{ responseMessage }}
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      <h4 class="card-title">Doctor Availability</h4>
+      <p class="subtitle">Add your available days and time slots</p>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- Doctor ID (read-only) -->
+        <div class="mb-3">
+          <label class="form-label">Doctor ID</label>
+          <input class="form-control" [value]="doctorIdCtrl.value" readonly>
+          <small class="text-muted d-block mt-1">Auto-filled from your session. Contact admin if this is incorrect.</small>
+        </div>
+
+        <div class="slots-header">
+          <h6 class="mb-2">Time Slots</h6>
+          <button type="button" class="btn btn-outline btn-sm" (click)="addSlot()">
+            <i class="fa fa-plus"></i> Add Slot
+          </button>
+        </div>
+
+        <div formArrayName="slots" class="slots-list">
+          <div class="slot-row" *ngFor="let slot of slots.controls; let i=index" [formGroupName]="i">
+            <div class="row gx-2">
+              <div class="col-md-4 col-12">
+                <label class="form-label">Day</label>
+                <select class="form-select" formControlName="dayOfWeek">
+                  <option value="" disabled>Select a day</option>
+                  <option *ngFor="let d of days" [value]="d">{{ d }}</option>
+                </select>
+                <div class="text-danger mt-1" *ngIf="slot.get('dayOfWeek')?.touched && slot.get('dayOfWeek')?.invalid">
+                  <small>Day is required</small>
+                </div>
+              </div>
+
+              <div class="col-md-3 col-6">
+                <label class="form-label">Start</label>
+                <input type="time" class="form-control" formControlName="startTime">
+              </div>
+
+              <div class="col-md-3 col-6">
+                <label class="form-label">End</label>
+                <input type="time" class="form-control" formControlName="endTime">
+                <div class="text-danger mt-1" *ngIf="slot?.errors?.['timeRange']">
+                  <small>Start time must be before end time</small>
+                </div>
+              </div>
+
+              <div class="col-md-2 col-12 d-flex align-items-end">
+                <button type="button" class="btn btn-danger-outline w-100" (click)="removeSlot(i)">
+                  <i class="fa fa-trash"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="text-danger mt-2" *ngIf="slots?.errors?.['overlap']">
+            <small>{{ slots?.errors?.['overlap'] }}</small>
+          </div> -->
+        </div>
+
+        <div class="d-grid mt-3">
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+            Update Availability
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

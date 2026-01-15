@@ -1,37 +1,70 @@
-
-<div class="doctor-appointments-container">
-  <h2 class="page-title">My Appointments</h2>
-
-  <!-- If no appointments -->
-  <div *ngIf="appointmentList.length === 0" class="empty-message">
-    No appointments found.
-  </div>
-
-  <!-- Appointments Table -->
-  <div *ngIf="appointmentList.length > 0" class="table-responsive">
-    <table class="table table-striped table-hover align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Patient Name</th>
-          <th>Appointment Time</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let appt of appointmentList">
-          <td>{{ appt.patient?.name || 'Unknown' }}</td>
-          <td>{{ appt.appointmentTime | date: 'dd MMM yyyy, hh:mm a' }}</td>
-          <td>
-            <span [ngClass]="{
-              'badge bg-success': appt.status === 'Scheduled',
-              'badge bg-danger': appt.status === 'Cancelled',
-              'badge bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Cancelled'
-            }">
-              {{ appt.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="doctor-appointments-page">
+ 
+  <div class="card mt-4">
+<div class="card-header">
+<h4 class="card-title">My Appointments</h4>
+<p class="subtitle">Today’s schedule and upcoming visits</p>
+</div>
+ 
+    <div class="card-body">
+<!-- Empty state -->
+<div *ngIf="!appointmentList || appointmentList.length === 0" class="empty-state">
+<div class="empty-icon">🗓️</div>
+<p>No appointments found.</p>
+<small class="text-muted">Try refreshing or check back later.</small>
+</div>
+ 
+      <!-- Table -->
+<div *ngIf="appointmentList && appointmentList.length > 0" class="table-responsive">
+<table class="table table-bordered align-middle doctor-appointments-table">
+<thead>
+<tr>
+<th>Appointment ID</th>
+<th>Time</th>
+<th>Status</th>
+<th>Patient</th>
+<th>Contact</th>
+</tr>
+</thead>
+ 
+          <!-- Render rows -->
+<tbody>
+<tr *ngFor="let appt of appointmentList">
+<td class="col-id">{{ appt.id }}</td>
+ 
+              <!-- Prefer appointmentTime, fallback to appointmentDate if present -->
+<td class="col-time">
+                {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy hh:mm a' }}
+</td>
+ 
+              <td class="col-status">
+<span
+                  class="status-badge"
+                  [ngClass]="{
+                    'status-scheduled': appt.status === 'Scheduled',
+                    'status-cancelled': appt.status === 'Cancelled',
+                    'status-rescheduled': appt.status === 'Rescheduled',
+                    'status-default': appt.status !== 'Scheduled' && appt.status !== 'Cancelled' && appt.status !== 'Rescheduled'
+                  }"
+>
+                  {{ appt.status || '—' }}
+</span>
+</td>
+ 
+              <!-- Patient name (support either patient.name or patient.username) -->
+<td class="col-patient">
+<strong>{{ appt.patient?.name || appt.patient?.username || 'Unknown' }}</strong>
+</td>
+ 
+              <!-- Patient email (optional) -->
+<td class="col-contact">
+<small class="text-muted">{{ appt.patient?.email || '—' }}</small>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+    </div>
+</div>
 </div>

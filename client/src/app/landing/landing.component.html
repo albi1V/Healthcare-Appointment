@@ -1,0 +1,363 @@
+
+<!-- Hero Start -->
+<div class="container-fluid hero-header py-15 mb-5">
+  <div class="container py-5">
+    <div class="row justify-content-start">
+      <div class="col-lg-8 text-center text-lg-start">
+        <h1 class="display-1 text-white mb-md-4">
+          <span>{{ typedText }}</span><span class="typed-cursor">|</span>
+        </h1>
+
+        <!-- Primary Actions (programmatic navigation like the reference) -->
+        <div class="pt-2 d-flex gap-3 justify-content-center justify-content-lg-start">
+          <button class="btn btn-outline-light rounded-pill py-md-3 px-md-5 mx-2 login-btn" (click)="goToLogin()">Login</button>
+          <button class="btn btn-light rounded-pill py-md-3 px-md-5 mx-2 register-btn" (click)="goToRegister()">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Hero End -->
+
+<!-- About Start -->
+<div class="container-fluid py-5">
+  <div class="container">
+    <div class="row gx-5">
+      <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
+        <div class="position-relative h-100">
+          <img class="position-absolute w-100 h-100 rounded" src="assets/img/about.jpg" style="object-fit: cover;" alt="About">
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="mb-4">
+          <h5 class="d-inline-block text-greenblue text-uppercase border-bottom border-5">About Us</h5>
+          <h1 class="display-6">Feeling ill..? No worries!! we are here to book your doctor appointment.</h1>
+        </div>
+        <p>
+          Your doctor appointment booking system is a smart healthcare platform that allows patients to easily schedule
+          appointments with doctors based on availability and specialty. It streamlines the booking process, provides
+          real-time availability insights, and helps improve access to medical care through a user-friendly interface.
+        </p>
+        <div class="row g-3 pt-3">
+          <div class="col-sm-3 col-6">
+            <div class="bg-light text-center rounded-circle py-4">
+              <i class="fa fa-3x fa-user-md text-greenblue mb-3"></i>
+              <h6 class="mb-0">Qualified<small class="d-block text-greenblue">Doctors</small></h6>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="bg-light text-center rounded-circle py-4">
+              <i class="fa fa-3x fa-procedures text-greenblue mb-3"></i>
+              <h6 class="mb-0">Emergency<small class="d-block text-greenblue">Services</small></h6>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="bg-light text-center rounded-circle py-4">
+              <i class="fa fa-3x fa-microscope text-greenblue mb-3"></i>
+              <h6 class="mb-0">Fast<small class="d-block text-greenblue">Booking</small></h6>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="bg-light text-center rounded-circle py-4">
+              <i class="fa fa-3x fa-ambulance text-greenblue mb-3"></i>
+              <h6 class="mb-0">Voice<small class="d-block text-greenblue">Service</small></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- About End -->
+
+<!-- We Care Section Start -->
+<section class="we-care-section">
+  <div class="we-care-content container text-center text-white">
+    <h2 class="display-4 mb-3">We Care For Your Health</h2>
+    <p class="lead mb-4">
+      At HAM System, your well-being is our mission.
+      We combine compassion, innovation, and expertise
+      to deliver exceptional healthcare experiences.
+    </p>
+    <a routerLink="/login" class="btn btn-outline-light rounded-pill px-4 py-2">Book an Appointment</a>
+  </div>
+</section>
+<!-- We Care Section End -->
+
+<!-- Services Start -->
+<section id="services" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mx-auto mb-5" style="max-width: 500px;">
+      <h5 class="d-inline-block text-greenblue text-uppercase border-bottom border-5">Services</h5>
+      <h2 class="fw-bold">Our Premium Medical Services</h2>
+      <p class="text-muted">
+        We combine compassion and technology to provide world-class care across all specialties.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" *ngFor="let service of [
+        {icon:'fa-user-md', title:'Healthy Start', text:'Tip: Begin your day with a glass of water and a short walk to boost circulation and energy.'},
+        {icon:'fa-procedures', title:'Heart Matters', text:'Tip: Eat more fiber-rich foods and reduce salt intake to support heart health.'},
+        {icon:'fa-stethoscope', title:'Mindful Minutes', text:'Tip: Take 5 minutes daily to practice deep breathing or meditation to reduce stress.'},
+        {icon:'fa-ambulance', title:'Immunity Boost', text:'Tip: Include citrus fruits, garlic, and yogurt in your diet to strengthen your immune system.'},
+        {icon:'fa-pills', title:'Stay Active', text:'Tip: Aim for at least 30 minutes of physical activity each day to maintain overall wellness.'},
+        {icon:'fa-microscope', title:'Sleep Smart', text:'Tip: Avoid screens 1 hour before bed and maintain a consistent sleep schedule for better rest.'}
+      ]">
+        <div class="service-card">
+          <div class="service-inner">
+            <!-- Front -->
+            <div class="service-front d-flex flex-column align-items-center justify-content-center text-center p-4">
+              <div class="service-icon mb-3">
+                <i class="fa fa-2x {{service.icon}} text-white"></i>
+              </div>
+              <h5 class="fw-bold">{{service.title}}</h5>
+            </div>
+            <!-- Back -->
+            <div class="service-back d-flex flex-column align-items-center justify-content-center text-center p-4">
+              <p class="text-white">{{service.text}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- Services End -->
+
+<!-- Testimonials Start -->
+<section id="testimonials" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h5 class="text-uppercase text-greenblue fw-semibold">What Our Patients Say</h5>
+      <h2 class="fw-bold">Real Stories, Real Care</h2>
+      <p class="text-muted mx-auto" style="max-width: 600px;">
+        We take pride in providing top-quality care and building trust with every patient.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-4 h-100 text-center rounded-4 testimonial-card">
+          <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Patient" class="rounded-circle mx-auto mb-3" width="90" height="90">
+          <h5 class="fw-bold mb-0">Ananya Sharma</h5>
+          <p class="text-muted small mb-3">Patient</p>
+          <p class="fst-italic text-muted">
+            “Booking appointments is so easy now! The doctors are friendly, and I get reminders right on time.
+            It’s truly a modern healthcare experience.”
+          </p>
+          <div class="text-greenblue fs-5">★★★★★</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-4 h-100 text-center rounded-4 testimonial-card">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Patient" class="rounded-circle mx-auto mb-3" width="90" height="90">
+          <h5 class="fw-bold mb-0">Rahul Mehta</h5>
+          <p class="text-muted small mb-3">Software Engineer</p>
+          <p class="fst-italic text-muted">
+            “From booking to consultation — everything feels seamless.
+            The website design is smooth and works perfectly on mobile too!”
+          </p>
+          <div class="text-greenblue fs-5">★★★★★</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-4 h-100 text-center rounded-4 testimonial-card">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Patient" class="rounded-circle mx-auto mb-3" width="90" height="90">
+          <h5 class="fw-bold mb-0">Priya Nair</h5>
+          <p class="text-muted small mb-3">Teacher</p>
+          <p class="fst-italic text-muted">
+            “The appointment process has never been this convenient.
+            I love how everything is transparent and quick to access.”
+          </p>
+          <div class="text-greenblue fs-5">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Testimonials End -->
+
+<!-- Stats Start -->
+<div class="stats-section">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h2 class="counter" data-target="5000">0</h2>
+        <p>Patients Treated</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h2 class="counter" data-target="120">0</h2>
+        <p>Doctors Available</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h2 class="counter" data-target="3200">0</h2>
+        <p>Successful Cases</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h2 class="counter" data-target="50">0</h2>
+        <p>Years of Service</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Stats End -->
+
+<!-- Appointment Start -->
+<section class="appointment-section py-5">
+  <div class="container py-5">
+    <div class="row align-items-center g-5">
+
+      <!-- Text Column -->
+      <div class="col-lg-6 text-white">
+        <h5 class="text-uppercase fw-bold border-bottom border-3 d-inline-block pb-2 mb-3">Appointment</h5>
+        <h1 class="display-5 fw-bold mb-4">Book an Appointment for You &amp; Your Family</h1>
+        <p class="lead text-light mb-5">
+          Experience world-class healthcare with compassionate professionals.
+          Schedule appointments effortlessly and get personalized treatment
+          plans designed to keep your loved ones healthy and happy.
+        </p>
+        <a routerLink="/doctor-availability" class="btn btn-light rounded-pill px-5 py-3 fw-semibold shadow-sm">
+          Find a Doctor
+        </a>
+      </div>
+
+      <!-- Form Column (static demo) -->
+      <div class="col-lg-6">
+        <div class="appointment-card p-5 rounded-4 shadow-lg bg-white bg-opacity-75 backdrop-blur">
+          <h3 class="fw-bold text-center mb-4 text-greenblue">Book Your Appointment</h3>
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-building"></i></span>
+                  <select class="form-select bg-light border-0" style="height: 55px;">
+                    <option selected>Choose Department</option>
+                    <option>General</option>
+                    <option>Cardiology</option>
+                    <option>Neurology</option>
+                    <option>Pediatrics</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-person-badge"></i></span>
+                  <select class="form-select bg-light border-0" style="height: 55px;">
+                    <option selected>Select Doctor</option>
+                    <option>Dr. Smith</option>
+                    <option>Dr. Johnson</option>
+                    <option>Dr. Patel</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-person"></i></span>
+                  <input type="text" class="form-control bg-light border-0" placeholder="Your Name" style="height: 55px;">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
+                  <input type="email" class="form-control bg-light border-0" placeholder="Your Email" style="height: 55px;">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-calendar"></i></span>
+                  <input type="text" class="form-control bg-light border-0" placeholder="Preferred Date" style="height: 55px;">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-clock"></i></span>
+                  <input type="text" class="form-control bg-light border-0" placeholder="Preferred Time" style="height: 55px;">
+                </div>
+              </div>
+
+              <div class="col-12 mt-3">
+                <button class="btn btn-greenblue w-100 py-3 fw-semibold shadow-sm" type="button">
+                  Make Appointment
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- Appointment End -->
+
+<!-- Footer Start -->
+<div class="container-fluid bg-dark text-light mt-5 py-5">
+  <div class="container py-5">
+    <div class="row g-5">
+      <div class="col-lg-3 col-md-6">
+        <h4 class="d-inline-block text-greenblue text-uppercase border-bottom border-5 border-secondary mb-4">Get In Touch</h4>
+        <p class="mb-4">HAM SERVICES</p>
+        <p class="mb-2"><i class="fa fa-map-marker-alt text-greenblue me-3"></i>LTIMINDTREE, MAHAPE</p>
+        <p class="mb-2"><i class="fa fa-envelope text-greenblue me-3"></i>ltim.com</p>
+        <p class="mb-0"><i class="fa fa-phone-alt text-greenblue me-3"></i>+012 345 67890</p>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h4 class="d-inline-block text-greenblue text-uppercase border-bottom border-5 border-secondary mb-4">Quick Links</h4>
+        <div class="d-flex flex-column justify-content-start">
+          <a class="text-light mb-2" routerLink="/"><i class="fa fa-angle-right me-2"></i>Home</a>
+          <a class="text-light mb-2" routerLink="/login"><i class="fa fa-angle-right me-2"></i>Login</a>
+          <a class="text-light mb-2" routerLink="/registration"><i class="fa fa-angle-right me-2"></i>Register</a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h4 class="d-inline-block text-greenblue text-uppercase border-bottom border-5 border-secondary mb-4">Newsletter</h4>
+        <form>
+          <div class="input-group">
+            <input type="text" class="form-control p-3 border-0" placeholder="Your Email Address">
+            <button class="btn btn-greenblue" type="button">Sign Up</button>
+          </div>
+        </form>
+        <h6 class="text-greenblue text-uppercase mt-4 mb-3">Follow Us</h6>
+        <div class="d-flex">
+          <a class="btn btn-lg btn-greenblue btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-twitter"></i></a>
+          <a class="btn btn-lg btn-greenblue btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f"></i></a>
+          <a class="btn btn-lg btn-greenblue btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a class="btn btn-lg btn-greenblue btn-lg-square rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.9431656793727!2d73.02813971152797!3d19.110149082026847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c0fa95ff1789%3A0xed94f90522f1346b!2sLTIMindtree!5e0!3m2!1sen!2sin!4v1759677108946!5m2!1sen!2sin"
+                width="300" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="container-fluid bg-dark text-light border-top border-secondary py-4">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="mb-md-0">&copy; <a class="text-greenblue" routerLink="/">HAM</a>. All Rights Reserved.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer End -->
+
+<!-- Back to Top -->
+<a href="javascript:void(0)" class="btn btn-lg btn-greenblue btn-lg-square back-to-top" (click)="scrollToTop($event)">
+  <i class="bi bi-arrow-up"></i>
+</a>
