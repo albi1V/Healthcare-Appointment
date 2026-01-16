@@ -47,31 +47,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
 
     public SecurityConfig(UserDetailsService userDetailsService,
-
                           JwtRequestFilter jwtRequestFilter,
-
                           PasswordEncoder passwordEncoder) {
-
         this.userDetailsService = userDetailsService;
-
         this.jwtRequestFilter = jwtRequestFilter;
-
         this.passwordEncoder = passwordEncoder;
 
     }
  
     @Override
-
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-
     }
  
     @Override
-
     protected void configure(HttpSecurity http) throws Exception {
-
         // IMPORTANT: list all public endpoints FIRST, then call anyRequest().authenticated()
 
         http.cors().and().csrf().disable()

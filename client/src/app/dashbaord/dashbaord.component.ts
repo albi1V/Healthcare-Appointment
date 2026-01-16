@@ -19,10 +19,10 @@ export class DashbaordComponent implements OnInit {
     // Prefer getting from your AuthService (JWT decode) if available,
     // fallback to localStorage for now to match your current code.
     const storedRole = localStorage.getItem('role');
-    const storedUser = localStorage.getItem('userId') || localStorage.getItem('username');
+     localStorage.getItem('username');
 
     this.roleType = storedRole ? storedRole.toUpperCase() as Role : null;
-    this.username = storedUser ?? null;
+    this.username = localStorage.getItem('username');
 
     // Optional sanity logs
     // console.log('[Dashboard] role:', this.roleType, 'username:', this.username);

@@ -1,78 +1,90 @@
-
 <div class="doctor-availability-page">
-  <!-- Alerts -->
-  <div *ngIf="responseMessage" class="alert mt-3" [ngClass]="{ 'alert-success': isAdded, 'alert-danger': !isAdded }" role="alert">
+
+  <!-- Alert -->
+  <div *ngIf="responseMessage"
+       class="alert mt-3"
+       [ngClass]="{ 'alert-success': isAdded, 'alert-danger': !isAdded }">
     {{ responseMessage }}
   </div>
 
   <div class="card mt-3">
     <div class="card-header">
-      <h4 class="card-title">Doctor Availability</h4>
-      <p class="subtitle">Add your available days and time slots</p>
+      <h4>Doctor Availability</h4>
+      <p class="subtitle">Select specific dates and time slots</p>
     </div>
 
     <div class="card-body">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
-        <!-- Doctor ID (read-only) -->
+        <!-- Doctor ID -->
         <div class="mb-3">
           <label class="form-label">Doctor ID</label>
           <input class="form-control" [value]="doctorIdCtrl.value" readonly>
-          <small class="text-muted d-block mt-1">Auto-filled from your session. Contact admin if this is incorrect.</small>
         </div>
 
-        <div class="slots-header">
-          <h6 class="mb-2">Time Slots</h6>
-          <button type="button" class="btn btn-outline btn-sm" (click)="addSlot()">
-            <i class="fa fa-plus"></i> Add Slot
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6>Time Slots</h6>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addSlot()">
+            + Add Slot
           </button>
         </div>
 
-        <div formArrayName="slots" class="slots-list">
-          <div class="slot-row" *ngFor="let slot of slots.controls; let i=index" [formGroupName]="i">
-            <div class="row gx-2">
-              <div class="col-md-4 col-12">
-                <label class="form-label">Day</label>
-                <select class="form-select" formControlName="dayOfWeek">
-                  <option value="" disabled>Select a day</option>
-                  <option *ngFor="let d of days" [value]="d">{{ d }}</option>
-                </select>
-                <div class="text-danger mt-1" *ngIf="slot.get('dayOfWeek')?.touched && slot.get('dayOfWeek')?.invalid">
-                  <small>Day is required</small>
-                </div>
+        <div formArrayName="slots">
+          <div class="border rounded p-3 mb-3"
+               *ngFor="let slot of slots.controls; let i = index"
+               [formGroupName]="i">
+
+            <div class="row g-2">
+              <!-- Date -->
+              <div class="col-md-4">
+                <label class="form-label">Date</label>
+                <input
+  type="date"
+  class="form-control"
+  formControlName="date"
+  [min]="today"
+/>
+
               </div>
 
-              <div class="col-md-3 col-6">
-                <label class="form-label">Start</label>
+              <!-- Start -->
+              <div class="col-md-3">
+                <label class="form-label">Start Time</label>
                 <input type="time" class="form-control" formControlName="startTime">
               </div>
 
-              <div class="col-md-3 col-6">
-                <label class="form-label">End</label>
+              <!-- End -->
+              <div class="col-md-3">
+                <label class="form-label">End Time</label>
                 <input type="time" class="form-control" formControlName="endTime">
-                <div class="text-danger mt-1" *ngIf="slot?.errors?.['timeRange']">
-                  <small>Start time must be before end time</small>
-                </div>
+                <small class="text-danger" *ngIf="slot.errors?.['timeRange']">
+                  Start time must be before end time
+                </small>
               </div>
 
-              <div class="col-md-2 col-12 d-flex align-items-end">
-                <button type="button" class="btn btn-danger-outline w-100" (click)="removeSlot(i)">
-                  <i class="fa fa-trash"></i> Remove
+              <!-- Remove -->
+              <div class="col-md-2 d-flex align-items-end">
+                <button type="button"
+                        class="btn btn-outline-danger w-100"
+                        (click)="removeSlot(i)">
+                  Remove
                 </button>
               </div>
             </div>
-          </div>
 
-          <!-- <div class="text-danger mt-2" *ngIf="slots?.errors?.['overlap']">
-            <small>{{ slots?.errors?.['overlap'] }}</small>
-          </div> -->
+          </div>
         </div>
 
-        <div class="d-grid mt-3">
+        <div class="text-danger mb-2" *ngIf="slots.errors?.['overlap']">
+          Overlapping slots on the same date are not allowed
+        </div>
+
+        <div class="d-grid">
           <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
             Update Availability
           </button>
         </div>
+
       </form>
     </div>
   </div>

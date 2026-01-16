@@ -1,241 +1,210 @@
-
-/* -------------------------------
-   Theme tokens (tweak as needed)
----------------------------------*/
-$primary: #0d6efd;        // Primary blue
-$primary-dark: #0b5ed7;
-$bg: #0e1420;             // Page background
-$card-bg: #111827;        // Card surface
-$text: #e5e7eb;           // Light text
-$text-muted: #9ca3af;     // Muted text
-$error: #ef4444;          // Error red
-$border: rgba(255, 255, 255, 0.12);
-$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
-
-/* -------------------------------
-   Page layout
----------------------------------*/
+/* ------------------------------
+   Theme tokens (easy to tweak)
+------------------------------- */
+:root {
+  --primary: #0d6efd;
+  --primary-600: #0b5ed7;
+  --text: #111827;       /* dark gray */
+  --muted: #6b7280;      /* medium gray */
+  --card-bg: rgba(255, 255, 255, 0.18);
+  --card-border: rgba(255, 255, 255, 0.35);
+  --shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+ 
+  /* Background image: change this to your own */
+  --bg-url: url('https://images.unsplash.com/photo-1586773860418-d37227b3a8bf?q=80&w=1600&auto=format&fit=crop%27'); 
+}
+ 
+/* Full page layout */
 .login-page {
   min-height: 100vh;
+  position: relative;
   display: grid;
   place-items: center;
-  background: radial-gradient(1200px 600px at 0% 0%, #0f172a 0%, #0b1220 45%, #09111f 100%);
-  color: $text;
+  overflow: hidden;
 }
-
-/* -------------------------------
-   Form section wrapper
----------------------------------*/
-.login-form-section {
-  width: min(720px, 96%);
-  padding: clamp(20px, 4vw, 32px);
+ 
+/* Background image + overlay */
+.bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-url);
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+  filter: brightness(0.85);
+  z-index: 0;
 }
-
-/* -------------------------------
-   Card
----------------------------------*/
-.login-card {
-  position: relative;
+ 
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  /* soft blue gradient overlay for readability */
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.35), rgba(17, 24, 39, 0.55));
+  backdrop-filter: blur(1.5px);
   z-index: 1;
-  width: 100%;
-  padding: clamp(24px, 4.5vw, 36px);
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.88) 100%);
-  box-shadow: $shadow-soft;
-  border: 1px solid $border;
-  backdrop-filter: blur(6px);
 }
-
-/* -------------------------------
-   Header area
----------------------------------*/
+ 
+/* Centered form section */
+.login-form-section {
+  position: relative;
+  z-index: 2;
+  width: min(520px, calc(100% - 32px));
+}
+ 
+/* Glassmorphism card */
+.login-card {
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  color: #fff;
+  backdrop-filter: blur(10px) saturate(120%);
+}
+ 
+/* Header */
 .header-section {
-  margin-bottom: 18px;
-
-  h1 {
-    margin: 0 0 8px;
-    font-size: clamp(22px, 3.2vw, 28px);
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    color: $text;
-  }
-
-  p {
-    margin: 0;
-    color: $text-muted;
-    font-size: clamp(13px, 2.2vw, 14px);
-  }
+  text-align: center;
+  margin-bottom: 8px;
 }
-
-/* -------------------------------
-   Form layout
----------------------------------*/
+ 
+.logo {
+  color: #fff;
+  opacity: 0.95;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+ 
+.project-title {
+  margin: 4px 0 6px 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+ 
+.subtitle {
+  margin: 0;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+ 
+/* Form */
 .login-form {
-  display: grid;
-  gap: 18px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
-
-/* Field wrapper & floating label pattern */
+ 
 .form-field {
   position: relative;
-  display: grid;
-  gap: 6px;
-
-  input {
-    width: 100%;
-    padding: 14px 12px;
-    border-radius: 12px;
-    border: 1px solid $border;
-    background: #0b1220;
-    color: $text;
-    outline: none;
-    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
-
-    /* Floating placeholder spacing */
-    &:placeholder-shown + label {
-      transform: translateY(16px) scale(1);
-      opacity: 0.7;
-    }
-
-    &:focus {
-      border-color: rgba(13, 110, 253, 0.75);
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
-      background: #0a1322;
-    }
-
-    &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0px 1000px #0b1220 inset;
-      -webkit-text-fill-color: $text;
-      transition: background-color 99999s ease-in-out 0s;
-    }
-  }
-
-  label {
-    position: absolute;
-    left: 12px;
-    top: 6px;
-    padding: 0 4px;
-    font-size: 12px;
-    color: $text-muted;
-    background: transparent;
-    transform: translateY(0) scale(0.96);
-    transition: transform 160ms ease, opacity 160ms ease, color 160ms ease;
-    pointer-events: none;
-  }
-
-  .field-underline {
-    height: 2px;
-    background: linear-gradient(90deg, rgba(13, 110, 253, 0.35), rgba(16, 185, 129, 0.35));
-    border-radius: 999px;
-    opacity: 0.65;
-  }
-
-  /* Error state */
-  &.has-error {
-    input {
-      border-color: rgba($error, 0.8);
-      box-shadow: 0 0 0 3px rgba($error, 0.2);
-    }
-
-    label {
-      color: $error;
-    }
-
-    .error-message {
-      margin-top: -2px;
-      font-size: 12px;
-      color: $error;
-    }
-  }
+  margin-bottom: 16px;
 }
-
-/* -------------------------------
-   Submit button
----------------------------------*/
-.login-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
+ 
+.form-field input {
   width: 100%;
-  padding: 14px 16px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 12px;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-
-  background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
-  box-shadow: 0 8px 18px rgba(13, 110, 253, 0.35);
+  padding: 12px 12px 10px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #000 !important;   /* ⬅⬅ ONLY CHANGE → Black credentials text */
+  outline: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+ 
+.form-field input::placeholder {
+  color: transparent; /* for floating label */
+}
+ 
+.form-field label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 6px;
+  color: #e5e7eb;
+  background: transparent;
+  transition: all 0.15s ease;
+  pointer-events: none;
+}
+ 
+/* Focus + floating */
+.form-field input:focus {
+  border-color: rgba(13, 110, 253, 0.8);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.35);
+  background-color: rgba(255, 255, 255, 0.24);
+}
+ 
+.form-field input:focus + label,
+.form-field input:not(:placeholder-shown) + label {
+  top: 0;
+  transform: translateY(-50%) scale(0.92);
+  color: #cfe3ff;
+}
+ 
+/* Error messages */
+.error-message {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #ffb4b4;
+}
+ 
+.has-error input {
+  border-color: rgba(255, 82, 82, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.25);
+}
+ 
+/* Submit button */
+.login-button {
+  width: 100%;
+  border: 1px solid #ffffff;
+  color: #0d1b2a;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 160ms ease, filter 160ms ease;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.45);
-    filter: brightness(1.05);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.55;
-    box-shadow: none;
-    filter: grayscale(0.2);
-  }
+  transition: transform 120ms ease, box-shadow 140ms ease, background-color 140ms ease;
 }
-
-/* -------------------------------
-   Error message from server
----------------------------------*/
-.server-error-alert {
-  margin-top: 14px;
-  padding: 12px 14px;
+ 
+.login-button:hover:enabled {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  background-color: #f8fafc;
+}
+ 
+.login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+ 
+/* Server error */
+.server-error {
+  margin-top: 10px;
+  background: rgba(255, 82, 82, 0.18);
+  border: 1px solid rgba(255, 82, 82, 0.55);
+  color: #fff;
   border-radius: 12px;
-  background: rgba($error, 0.12);
-  color: #fecaca; // light red text
-  border: 1px solid rgba($error, 0.35);
+  padding: 10px 12px;
+  font-size: 14px;
 }
-
-/* -------------------------------
-   Registration link
----------------------------------*/
+ 
+/* Footer link */
 .signup-link-section {
   margin-top: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: $text-muted;
-
-  .register-link {
-    color: $primary;
-    font-weight: 600;
-    text-decoration: none;
-    position: relative;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  text-align: center;
+  color: #e5e7eb;
 }
-
-/* -------------------------------
-   Focus visibility (accessibility)
----------------------------------*/
-:focus-visible {
-  outline: 3px solid rgba(13, 110, 253, 0.45);
-  outline-offset: 2px;
-  border-radius: 8px;
+ 
+.register-link {
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 4px;
 }
-
-/* -------------------------------
-   Reduce Motion Preference
----------------------------------*/
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
+ 
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .project-title { font-size: 20px; }
+  .login-card { padding: 18px; }
 }

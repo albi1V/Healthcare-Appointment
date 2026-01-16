@@ -1,51 +1,62 @@
-
 <main class="login-page">
+<!-- Background layer -->
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+ 
   <section class="login-form-section">
-    <div class="login-card">
-      <div class="header-section">
-        <h1>Login to Your Account</h1>
-        <p>Access the Healthcare Appointment Management System</p>
-      </div>
-
-      <!-- Login Form -->
-      <form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form" novalidate>
-        
-        <!-- Username -->
-        <div class="form-field" [ngClass]="{'has-error': itemForm.get('username')?.invalid && itemForm.get('username')?.touched}">
-          <input type="text" id="username" formControlName="username" placeholder=" " autocomplete="username" />
-          <label for="username">Username</label>
-          <div class="field-underline"></div>
-          <span *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched" class="error-message">
-            Username is required.
-          </span>
-        </div>
-
+<div class="login-card">
+<!-- Header -->
+<div class="header-section">
+<div class="logo" aria-hidden="true">
+<!-- ECG / Health icon -->
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" role="img" aria-label="Healthcare Logo">
+<circle cx="28" cy="28" r="26" stroke="currentColor" stroke-width="2" opacity="0.7"></circle>
+<path d="M10 28h8l3-6 5 14 4-8h10"
+                  stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="43" cy="28" r="2" fill="currentColor" opacity="0.9"></circle>
+</svg>
+</div>
+<h1 class="project-title">Healthcare Management Project</h1>
+<p class="subtitle">Sign in to continue</p>
+</div>
+ 
+      <!-- Login form (username + password) -->
+<form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form" novalidate>
+<!-- Username -->
+<div class="form-field"
+             [ngClass]="{'has-error': itemForm.controls['username'].invalid && (itemForm.controls['username'].dirty || itemForm.controls['username'].touched)}">
+<input type="text" id="username" formControlName="username" placeholder=" " autocomplete="username" />
+<label for="username">Username</label>
+<span *ngIf="itemForm.controls['username'].invalid && (itemForm.controls['username'].dirty || itemForm.controls['username'].touched)"
+                class="error-message">Username is required.</span>
+</div>
+ 
         <!-- Password -->
-        <div class="form-field" [ngClass]="{'has-error': itemForm.get('password')?.invalid && itemForm.get('password')?.touched}">
-          <input type="password" id="password" formControlName="password" placeholder=" " autocomplete="current-password" />
-          <label for="password">Password</label>
-          <div class="field-underline"></div>
-          <span *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched" class="error-message">
-            Password is required.
-          </span>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" class="login-button" [disabled]="itemForm.invalid">
+<div class="form-field"
+             [ngClass]="{'has-error': itemForm.controls['password'].invalid && (itemForm.controls['password'].dirty || itemForm.controls['password'].touched)}">
+<input type="password" id="password" formControlName="password" placeholder=" " autocomplete="current-password" />
+<label for="password">Password</label>
+<span *ngIf="itemForm.controls['password'].invalid && (itemForm.controls['password'].dirty || itemForm.controls['password'].touched)"
+                class="error-message">Password is required.</span>
+</div>
+ 
+        <!-- Submit -->
+<button type="submit" class="login-button" [disabled]="itemForm.invalid">
           Login
-        </button>
-      </form>
-
-      <!-- Error Message -->
-      <div *ngIf="showError" class="server-error-alert">
+</button>
+</form>
+ 
+      <!-- Server error -->
+<div *ngIf="showError" class="server-error" role="alert">
         {{ errorMessage }}
-      </div>
-
-      <!-- Registration Link -->
-      <div class="signup-link-section">
-        <span>Don't have an account? </span>
-        <a (click)="registration()" class="register-link">Create Account</a>
-      </div>
-    </div>
-  </section>
+</div>
+ 
+      <!-- Registration link -->
+<div class="signup-link-section">
+<span>Don’t have an account?</span>
+<a (click)="registration()" class="register-link">Register</a>
+</div>
+</div>
+</section>
 </main>

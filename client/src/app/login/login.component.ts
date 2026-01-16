@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
         this.authService.saveToken(res.token);
         this.authService.saveUserId(res.userId);
         this.authService.SetRole(res.role);
+        localStorage.setItem('username',res.username);
 
         this.router.navigateByUrl('/dashboard').then(() => {
           setTimeout(() => window.location.reload(), 200);

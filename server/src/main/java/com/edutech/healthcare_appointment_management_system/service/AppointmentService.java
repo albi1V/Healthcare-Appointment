@@ -15,15 +15,7 @@ import java.util.Date;
 import java.util.List;
  
  
-// import com.wecp.healthcare_appointment_management_system.dto.TimeDto;
-// import com.wecp.healthcare_appointment_management_system.entity.Appointment;
-// import com.wecp.healthcare_appointment_management_system.entity.Doctor;
-// import com.wecp.healthcare_appointment_management_system.entity.Patient;
-// import com.wecp.healthcare_appointment_management_system.repository.*;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
-// import org.springframework.transaction.annotation.Transactional;
-// import com.wecp.healthcare_appointment_management_system.util.QrCodeGenerator;
+
 import java.time.LocalDateTime;
 import java.util.List;
  
@@ -38,16 +30,42 @@ public class AppointmentService {
  
     @Autowired
     private DoctorService doctorService;
-    public Appointment scheduleAppointment(Long patientId,Long doctorId,TimeDto timeDto){
-        Appointment appointment = new Appointment();
-        Patient p = patientRepository.findById(patientId).orElse(null);
-        Doctor d = doctorService.findDoctorByID(doctorId);
-        appointment.setDoctor(d);
-        appointment.setPatient(p);
-        appointment.setAppointmentTime(timeDto.getTime());
-        appointment.setStatus("Scheduled");
-        return appointmentRepository.save(appointment);
-      }
+
+
+ /*
+ 
+  */   
+public Appointment scheduleAppointment(Long patientId, Long doctorId, TimeDto timeDto) {
+
+    List<Appointment> existingAppointments =
+            appointmentRepository.getAppointmentsByDoctorId(doctorId);
+
+    for (Appointment a : existingAppointments) {
+        if (a.getAppointmentTime() == null) continue;
+
+        long diff = Math.abs(
+            a.getAppointmentTime().getTime() - timeDto.getTime().getTime()
+        );
+
+        // Block same 15-minute slot
+        if (diff < (15 * 60 * 1000)) {
+            throw new RuntimeException("Slot already booked");
+        }
+    }
+
+    Appointment appointment = new Appointment();
+
+    Patient p = patientRepository.findById(patientId).orElse(null);
+    Doctor d = doctorService.findDoctorByID(doctorId);
+
+    appointment.setDoctor(d);
+    appointment.setPatient(p);
+    appointment.setAppointmentTime(timeDto.getTime());
+    appointment.setStatus("Scheduled");
+
+    return appointmentRepository.save(appointment);
+}
+
 
       public List<Appointment> getAppointmentsByPatientId(Long patientId){
           return appointmentRepository.getAppointmentsByPatientId(patientId);

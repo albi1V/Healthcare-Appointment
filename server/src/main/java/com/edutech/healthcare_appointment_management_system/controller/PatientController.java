@@ -86,7 +86,11 @@ public class PatientController {
 
                                                  @RequestBody TimeDto timeDto) {
 
-      // schedule appointment
+          System.out.println("===== BACKEND RECEIVED DATA =====");
+    System.out.println("Patient ID: " + patientId);
+    System.out.println("Doctor ID: " + doctorId);
+    System.out.println("Appointment Time: " + timeDto.getTime());
+    System.out.println("================================");
 
       return new ResponseEntity<Appointment>(appointmentService.scheduleAppointment(patientId,doctorId,timeDto),HttpStatus.OK);
 

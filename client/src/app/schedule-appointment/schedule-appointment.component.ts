@@ -191,7 +191,7 @@ getDoctors(): void {
             this.selectedDate = this.today;
           },
           (err: unknown) => {
-            this.responseMessage = 'Failed to save appointment';
+            this.responseMessage = 'Failed to save appointment ,it already allowed';
             console.error(err);
           }
         );
@@ -200,17 +200,21 @@ getDoctors(): void {
   }
 
   /** Check if selected ISO slot is taken on selected date from doctor’s appointments list */
-  private isIsoTakenOnSelectedDate(selectedIso: string, appts: any[]): boolean {
-    const selectedDateOnly = selectedIso.slice(0, 10); // yyyy-MM-dd
-    for (const a of (appts as any[])) {
-      const dtStr = (a.time || a.dateTime || a.datetime || '').toString();
-      const iso = dtStr.includes('T') ? dtStr : dtStr.replace(' ', 'T');
-      if (iso.slice(0, 10) !== selectedDateOnly) continue;
-      const key = iso.slice(0, 16); // yyyy-MM-ddTHH:mm
-      if (key === selectedIso) return true;
+private isIsoTakenOnSelectedDate(selectedIso: string, appts: any[]): boolean {
+  for (const a of appts) {
+    if (!a.appointmentTime) continue;
+
+    const iso = a.appointmentTime.includes('T')
+      ? a.appointmentTime
+      : a.appointmentTime.replace(' ', 'T');
+
+    if (iso.slice(0, 16) === selectedIso) {
+      return true;
     }
-    return false;
   }
+  return false;
+}
+
 
   /* -------------------------------
      Slot generation & helpers
@@ -223,9 +227,9 @@ getDoctors(): void {
     this.loadingSlots = true;
     try {
       const dayOfWeek = this.getDayOfWeek(this.selectedDate);
-      const segments = this.parseAvailability(this.selectedDoctor.availability || '');
+const segments = this.parseAvailability(this.selectedDoctor.availability || '');
+const todays = segments.filter(s => s.date === this.selectedDate);
 
-      const todays = segments.filter(s => s.day === dayOfWeek);
       const newSlots: Slot[] = [];
 
       for (const seg of todays) {
@@ -246,35 +250,43 @@ getDoctors(): void {
     }
   }
 
-  /** Mark already-taken slots (UI) */
-  private fetchTakenSlotsForSelectedDate(): void {
-    if (!this.selectedDoctor) return;
 
-    this.httpService.getAppointmentByDoctor(this.selectedDoctor.id).subscribe({
-      next: (appts: any) => {
-        this.takenSlotKeys.clear();
-        const sameDay = (appts as any[]).filter(a => {
-          const dtStr = (a.time || a.dateTime || a.datetime || '').toString();
-          const iso = dtStr.includes('T') ? dtStr : dtStr.replace(' ', 'T');
-          return iso.slice(0, 10) === this.selectedDate;
-        });
+  /* Mark already-taken slots (UI) */
+ private fetchTakenSlotsForSelectedDate(): void {
+  if (!this.selectedDoctor) return;
 
-        for (const a of sameDay) {
-          const dtStr = (a.time || a.dateTime || a.datetime || '').toString();
-          const iso = dtStr.includes('T') ? dtStr : dtStr.replace(' ', 'T');
-          this.takenSlotKeys.add(iso.slice(0, 16)); // yyyy-MM-ddTHH:mm
+  this.httpService.getAppointmentByDoctor(this.selectedDoctor.id).subscribe({
+    next: (appts: any) => {
+
+      this.takenSlotKeys.clear();
+
+      for (const a of appts) {
+        if (!a.appointmentTime) continue;
+
+        const dt = new Date(a.appointmentTime);
+
+        const dateKey = this.datePipe.transform(dt, 'yyyy-MM-dd');
+        if (dateKey !== this.selectedDate) continue;
+
+        const slotKey = this.datePipe.transform(dt, 'yyyy-MM-ddTHH:mm');
+        if (slotKey) {
+          this.takenSlotKeys.add(slotKey);
         }
+      }
 
-        // Update the grid
-        this.slots = this.slots.map(s => {
-          const taken = this.takenSlotKeys.has(s.isoForControl);
-          return { ...s, taken, disabled: s.disabled || taken };
-        });
-      },
-      error: () => { /* ignore non-critical errors */ }
-    });
-  }
+      // 🔒 THIS is what makes the button disabled
+      this.slots = this.slots.map(s => ({
+        ...s,
+        taken: this.takenSlotKeys.has(s.isoForControl),
+        disabled: s.disabled || this.takenSlotKeys.has(s.isoForControl)
+      }));
+    },
+    error: () => {}
+  });
+}
 
+
+  
   private getDayOfWeek(yyyyMMdd: string): Day {
     const [y, m, d] = yyyyMMdd.split('-').map(n => parseInt(n, 10));
     const dt = new Date(y, m - 1, d);
@@ -289,29 +301,28 @@ getDoctors(): void {
     return new Date(y, m - 1, d, H, M, 0, 0);
   }
 
-  /** Parse availability "MONDAY 10:00-13:00; MONDAY 15:00-18:00; FRIDAY 09:00-12:00" */
-  private parseAvailability(availText: string): { day: Day; startHM: string; endHM: string }[] {
-    const parts = availText.split(';').map(p => p.trim()).filter(Boolean);
-    const results: { day: Day; startHM: string; endHM: string }[] = [];
 
-    for (const p of parts) {
-      const m = p.match(/^\s*([A-Za-z]+)\s+(.+?)\s*-\s*(.+)\s*$/);
-      if (!m) continue;
-      const dayRaw = m[1].toUpperCase();
-      const startRaw = m[2].trim();
-      const endRaw = m[3].trim();
 
-      const day = this.normalizeDay(dayRaw);
-      if (!day) continue;
-
-      const startHM = this.to24h(startRaw);
-      const endHM = this.to24h(endRaw);
-      if (!startHM || !endHM) continue;
-
-      results.push({ day, startHM, endHM });
-    }
-    return results;
+private parseAvailability(availText: string): {
+  date: string;
+  startHM: string;
+  endHM: string;
+}[] {
+  const parts = availText.split(';').map(p => p.trim()).filter(Boolean);
+  const results: { date: string; startHM: string; endHM: string }[] = [];
+  for (const p of parts) {
+    const m = p.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})-(\d{2}:\d{2})$/);
+    if (!m) continue;
+    results.push({
+      date: m[1],
+      startHM: m[2],
+      endHM: m[3]
+    });
   }
+  return results;
+}
+
+
 
   private normalizeDay(d: string): Day | null {
     const map: Record<string, Day> = {
@@ -374,3 +385,6 @@ getDoctors(): void {
     return `${h}:${m}`;
   }
 }
+
+
+

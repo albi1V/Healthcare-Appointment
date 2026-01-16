@@ -1,364 +1,364 @@
 
-/* -------------------------------
-   Theme tokens (kept)
----------------------------------*/
-$primary: #0d6efd;
-$primary-dark: #0b5ed7;
-$surface: #111827;
-$text: #e5e7eb;
-$text-muted: #9ca3af;
-$border: rgba(255, 255, 255, 0.12);
-$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
-$success: #10b981;
-$error: #ef4444;
+  /* -------------------------------
+    Theme tokens (kept)
+  ---------------------------------*/
+  $primary: #0d6efd;
+  $primary-dark: #0b5ed7;
+  $surface: #111827;
+  $text: #e5e7eb;
+  $text-muted: #9ca3af;
+  $border: rgba(255, 255, 255, 0.12);
+  $shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
+  $success: #10b981;
+  $error: #ef4444;
 
-/* -------------------------------
-   Container + titles (kept)
----------------------------------*/
-.schedule-appointment-container {
-  width: min(1100px, 96%);
-  margin: 22px auto;
-  padding: clamp(12px, 2vw, 16px);
-  color: $text;
+  /* -------------------------------
+    Container + titles (kept)
+  ---------------------------------*/
+  .schedule-appointment-container {
+    width: min(1100px, 96%);
+    margin: 22px auto;
+    padding: clamp(12px, 2vw, 16px);
+    color: $text;
 
-  .page-title {
-    margin: 0 0 6px;
-    font-size: clamp(20px, 2.6vw, 26px);
-    font-weight: 700;
-    letter-spacing: 0.2px;
-  }
-
-  .page-subtitle {
-    margin: 0 0 14px;
-    color: $text-muted;
-    font-size: clamp(13px, 2.2vw, 14px);
-  }
-}
-
-/* -------------------------------
-   Card (kept)
----------------------------------*/
-.card {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.88) 100%);
-  border: 1px solid $border;
-  border-radius: 14px;
-  box-shadow: $shadow-soft;
-  overflow: hidden;
-  color: $text;
-
-  .card-header {
-    background: rgba(13, 110, 253, 0.18);
-    padding: 12px 16px;
-
-    h4 {
-      margin: 0;
-      color: #dbeafe;
+    .page-title {
+      margin: 0 0 6px;
+      font-size: clamp(20px, 2.6vw, 26px);
       font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .page-subtitle {
+      margin: 0 0 14px;
+      color: $text-muted;
+      font-size: clamp(13px, 2.2vw, 14px);
     }
   }
 
-  .card-body {
-    padding: 16px;
-  }
+  /* -------------------------------
+    Card (kept)
+  ---------------------------------*/
+  .card {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.88) 100%);
+    border: 1px solid $border;
+    border-radius: 14px;
+    box-shadow: $shadow-soft;
+    overflow: hidden;
+    color: $text;
 
-  &.mt-3 {
-    margin-top: 16px;
-  }
-}
+    .card-header {
+      background: rgba(13, 110, 253, 0.18);
+      padding: 12px 16px;
 
-/* -------------------------------
-   Server alert (kept)
----------------------------------*/
-.server-alert {
-  margin-bottom: 12px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid $border;
-  background: rgba(255, 255, 255, 0.06);
-  color: $text;
-
-  &.success {
-    background: rgba($success, 0.12);
-    border-color: rgba($success, 0.35);
-    color: #d1fae5;
-  }
-
-  &.error {
-    background: rgba($error, 0.12);
-    border-color: rgba($error, 0.35);
-    color: #fecaca;
-  }
-}
-
-/* -------------------------------
-   Table (kept, clearer)
----------------------------------*/
-.table-responsive {
-  border-radius: 12px;
-  overflow: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 760px;
-
-  thead {
-    background: rgba(13, 110, 253, 0.18);
-
-    th {
-      text-align: left;
-      padding: 12px 14px;
-      font-weight: 700;
-      font-size: 14px;
-      border-bottom: 1px solid $border;
-      color: #dbeafe;
-      white-space: nowrap;
-    }
-  }
-
-  tbody {
-    tr {
-      transition: background 140ms ease;
-
-      &:nth-child(odd) {
-        background: rgba(255, 255, 255, 0.03);
-      }
-      &:hover {
-        background: rgba(13, 110, 253, 0.08);
+      h4 {
+        margin: 0;
+        color: #dbeafe;
+        font-weight: 700;
       }
     }
 
-    td {
-      padding: 12px 14px;
-      border-bottom: 1px solid $border;
-      vertical-align: middle;
+    .card-body {
+      padding: 16px;
+    }
+
+    &.mt-3 {
+      margin-top: 16px;
+    }
+  }
+
+  /* -------------------------------
+    Server alert (kept)
+  ---------------------------------*/
+  .server-alert {
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid $border;
+    background: rgba(255, 255, 255, 0.06);
+    color: $text;
+
+    &.success {
+      background: rgba($success, 0.12);
+      border-color: rgba($success, 0.35);
+      color: #d1fae5;
+    }
+
+    &.error {
+      background: rgba($error, 0.12);
+      border-color: rgba($error, 0.35);
+      color: #fecaca;
+    }
+  }
+
+  /* -------------------------------
+    Table (kept, clearer)
+  ---------------------------------*/
+  .table-responsive {
+    border-radius: 12px;
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+
+    thead {
+      background: rgba(13, 110, 253, 0.18);
+
+      th {
+        text-align: left;
+        padding: 12px 14px;
+        font-weight: 700;
+        font-size: 14px;
+        border-bottom: 1px solid $border;
+        color: #dbeafe;
+        white-space: nowrap;
+      }
+    }
+
+    tbody {
+      tr {
+        transition: background 140ms ease;
+
+        &:nth-child(odd) {
+          background: rgba(255, 255, 255, 0.03);
+        }
+        &:hover {
+          background: rgba(13, 110, 253, 0.08);
+        }
+      }
+
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid $border;
+        vertical-align: middle;
+        color: $text;
+      }
+    }
+  }
+
+  /* -------------------------------
+    Doctor cell (kept)
+  ---------------------------------*/
+  .doctor-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(13, 110, 253, 0.25);
+      color: #dbeafe;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      border: 1px solid $border;
+      flex: 0 0 auto;
+    }
+
+    .doctor-meta {
+      display: flex;
+      flex-direction: column;
+
+      .name { font-weight: 600; line-height: 1.1; }
+      .muted { color: $text-muted; font-size: 12px; line-height: 1.1; margin-top: 2px; }
+    }
+  }
+
+  /* -------------------------------
+    Selected Doctor summary (kept/add)
+  ---------------------------------*/
+  .doctor-summary {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid $border;
+    margin-bottom: 12px;
+
+    &__avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      background: rgba(13, 110, 253, 0.3);
+      color: #e3f2ff;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      border: 1px solid $border;
+      flex: 0 0 auto;
+    }
+    &__meta {
+      .title { font-weight: 700; margin: 0; }
+      .sub { font-size: 12px; color: $text-muted; margin-top: 2px; }
+    }
+  }
+
+  /* -------------------------------
+    Form (kept)
+  ---------------------------------*/
+  .appointment-form { display: grid; gap: 16px; }
+
+  .form-grid-2 {
+    display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
+    @media (max-width: 640px) { grid-template-columns: 1fr; }
+  }
+
+  .form-field {
+    display: grid; gap: 6px;
+
+    label { font-size: 13px; color: $text-muted; }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid $border;
+      background: #0b1220;
+      color: $text;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+
+      &:focus {
+        border-color: rgba(13, 110, 253, 0.75);
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+        background: #0a1322;
+      }
+    }
+
+    .static-value {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid $border;
+      background: #0b1220;
       color: $text;
     }
   }
-}
 
-/* -------------------------------
-   Doctor cell (kept)
----------------------------------*/
-.doctor-cell {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  .visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap; border: 0; padding: 0; margin: -1px;
+  }
 
-  .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+  /* -------------------------------
+    Slots grid
+  ---------------------------------*/
+  .slots-header {
+    display: flex; align-items: center; justify-content: space-between;
+    h5 { margin: 0; }
+    .slots-loading { color: $text-muted; font-size: 13px; }
+  }
+
+  .slots-grid {
     display: grid;
-    place-items: center;
-    background: rgba(13, 110, 253, 0.25);
-    color: #dbeafe;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    border: 1px solid $border;
-    flex: 0 0 auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 6px;
+
+    @media (max-width: 960px) { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 640px) { grid-template-columns: repeat(2, 1fr); }
   }
 
-  .doctor-meta {
-    display: flex;
-    flex-direction: column;
-
-    .name { font-weight: 600; line-height: 1.1; }
-    .muted { color: $text-muted; font-size: 12px; line-height: 1.1; margin-top: 2px; }
-  }
-}
-
-/* -------------------------------
-   Selected Doctor summary (kept/add)
----------------------------------*/
-.doctor-summary {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid $border;
-  margin-bottom: 12px;
-
-  &__avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    display: grid; place-items: center;
-    background: rgba(13, 110, 253, 0.3);
-    color: #e3f2ff;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    border: 1px solid $border;
-    flex: 0 0 auto;
-  }
-  &__meta {
-    .title { font-weight: 700; margin: 0; }
-    .sub { font-size: 12px; color: $text-muted; margin-top: 2px; }
-  }
-}
-
-/* -------------------------------
-   Form (kept)
----------------------------------*/
-.appointment-form { display: grid; gap: 16px; }
-
-.form-grid-2 {
-  display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
-}
-
-.form-field {
-  display: grid; gap: 6px;
-
-  label { font-size: 13px; color: $text-muted; }
-
-  .form-control {
-    width: 100%;
-    padding: 12px;
+  .slot {
     border-radius: 12px;
     border: 1px solid $border;
     background: #0b1220;
     color: $text;
-    outline: none;
-    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 100ms ease, box-shadow 140ms ease, background 160ms ease;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
 
-    &:focus {
-      border-color: rgba(13, 110, 253, 0.75);
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
-      background: #0a1322;
+    .slot-time { font-weight: 700; }
+    .slot-badge {
+      font-size: 11px; padding: 3px 6px; border-radius: 999px;
+      background: rgba($error, 0.18); color: #fecaca; border: 1px solid rgba($error, 0.35);
+    }
+
+    &:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,0.3); }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      filter: grayscale(0.2);
+    }
+    &.taken {
+      border-color: rgba($error, 0.35);
+      background: rgba(255, 255, 255, 0.05);
     }
   }
 
-  .static-value {
-    padding: 12px;
+  /* -------------------------------
+    Buttons (kept)
+  ---------------------------------*/
+  .btn {
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 100ms ease, box-shadow 140ms ease, filter 160ms ease;
+
+    &:active { transform: translateY(1px); }
+  }
+  .btn-primary {
+    background: $primary; border-color: $primary; color: #fff;
+    &:hover {
+      background: $primary-dark; border-color: $primary-dark;
+      box-shadow: 0 8px 16px rgba(13, 110, 253, 0.35);
+    }
+  }
+
+  .submit-button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 100%; padding: 12px 16px; border: none; border-radius: 12px; color: #fff; font-weight: 600;
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    box-shadow: 0 8px 18px rgba(13, 110, 253, 0.35);
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 160ms ease, filter 160ms ease;
+
+    &:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(13, 110, 253, 0.45); filter: brightness(1.05); }
+    &:disabled { cursor: not-allowed; opacity: 0.55; box-shadow: none; filter: grayscale(0.2); }
+  }
+
+  /* -------------------------------
+    Empty message (kept)
+  ---------------------------------*/
+  .empty-message {
+    padding: 16px;
     border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid $border;
-    background: #0b1220;
-    color: $text;
-  }
-}
-
-.visually-hidden {
-  position: absolute !important;
-  height: 1px; width: 1px;
-  overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
-  white-space: nowrap; border: 0; padding: 0; margin: -1px;
-}
-
-/* -------------------------------
-   Slots grid
----------------------------------*/
-.slots-header {
-  display: flex; align-items: center; justify-content: space-between;
-  h5 { margin: 0; }
-  .slots-loading { color: $text-muted; font-size: 13px; }
-}
-
-.slots-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 6px;
-
-  @media (max-width: 960px) { grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 640px) { grid-template-columns: repeat(2, 1fr); }
-}
-
-.slot {
-  border-radius: 12px;
-  border: 1px solid $border;
-  background: #0b1220;
-  color: $text;
-  padding: 10px 12px;
-  text-align: left;
-  cursor: pointer;
-  transition: transform 100ms ease, box-shadow 140ms ease, background 160ms ease;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 8px;
-
-  .slot-time { font-weight: 700; }
-  .slot-badge {
-    font-size: 11px; padding: 3px 6px; border-radius: 999px;
-    background: rgba($error, 0.18); color: #fecaca; border: 1px solid rgba($error, 0.35);
+    color: $text-muted;
   }
 
-  &:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,0.3); }
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    filter: grayscale(0.2);
+  /* -------------------------------
+    Responsive (kept)
+  ---------------------------------*/
+  @media (max-width: 640px) {
+    .schedule-appointment-container { margin: 12px auto; padding: 10px; }
+
+    table thead th, table tbody td { padding: 10px 12px; font-size: 13px; }
+
+    .doctor-cell .avatar { width: 32px; height: 32px; font-size: 12px; }
   }
-  &.taken {
-    border-color: rgba($error, 0.35);
-    background: rgba(255, 255, 255, 0.05);
+
+  /* -------------------------------
+    Accessibility & motion (kept)
+  ---------------------------------*/
+  :focus-visible {
+    outline: 3px solid rgba(13, 110, 253, 0.45);
+    outline-offset: 2px;
+    border-radius: 8px;
   }
-}
-
-/* -------------------------------
-   Buttons (kept)
----------------------------------*/
-.btn {
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: transform 100ms ease, box-shadow 140ms ease, filter 160ms ease;
-
-  &:active { transform: translateY(1px); }
-}
-.btn-primary {
-  background: $primary; border-color: $primary; color: #fff;
-  &:hover {
-    background: $primary-dark; border-color: $primary-dark;
-    box-shadow: 0 8px 16px rgba(13, 110, 253, 0.35);
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
   }
-}
-
-.submit-button {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 100%; padding: 12px 16px; border: none; border-radius: 12px; color: #fff; font-weight: 600;
-  background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
-  box-shadow: 0 8px 18px rgba(13, 110, 253, 0.35);
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 160ms ease, filter 160ms ease;
-
-  &:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(13, 110, 253, 0.45); filter: brightness(1.05); }
-  &:disabled { cursor: not-allowed; opacity: 0.55; box-shadow: none; filter: grayscale(0.2); }
-}
-
-/* -------------------------------
-   Empty message (kept)
----------------------------------*/
-.empty-message {
-  padding: 16px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid $border;
-  color: $text-muted;
-}
-
-/* -------------------------------
-   Responsive (kept)
----------------------------------*/
-@media (max-width: 640px) {
-  .schedule-appointment-container { margin: 12px auto; padding: 10px; }
-
-  table thead th, table tbody td { padding: 10px 12px; font-size: 13px; }
-
-  .doctor-cell .avatar { width: 32px; height: 32px; font-size: 12px; }
-}
-
-/* -------------------------------
-   Accessibility & motion (kept)
----------------------------------*/
-:focus-visible {
-  outline: 3px solid rgba(13, 110, 253, 0.45);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
