@@ -39,12 +39,13 @@ export class HttpService {
     );
   }
 
-  getAppointmentByDoctor(id: any) {
-    return this.http.get(
-      `${this.serverName}/api/doctor/appointments?doctorId=${id}`,
-      { headers: this.authHeaders() }
-    );
-  }
+getAppointmentByDoctor(id: any): Observable<any[]> {
+  return this.http.get<any[]>(
+    `${this.serverName}/api/doctor/appointments?doctorId=${id}`,
+    { headers: this.authHeaders() }
+  );
+}
+
 
   getAppointmentByPatient(id: any) {
     return this.http.get(

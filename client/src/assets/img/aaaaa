@@ -1,0 +1,277 @@
+Understood. I will **not write full logic or code**.
+I’ll turn your idea into a **clean, structured, implementation-ready plan** that a developer can follow without confusion.
+
+I’ll also **flag assumptions and risks**, because OTP systems fail easily if designed loosely.
+
+---
+
+# ✅ Feature Plan: Email OTP Verification During Registration
+
+## 🎯 Goal (Clear & Narrow)
+
+During **user registration**:
+
+* User must **verify their email via OTP**
+* Registration **cannot be completed** unless OTP is verified
+* OTP is **time-bound** and **single-use**
+
+---
+
+## 🧩 High-Level Flow (User Perspective)
+
+1. User enters **email address**
+2. User clicks **“Send OTP”**
+3. System sends OTP to the entered email
+4. OTP input field becomes visible/enabled
+5. User enters OTP
+6. User clicks **“Verify OTP”**
+7. System verifies OTP
+8. If verified → allow full registration submission
+   If not → block registration
+
+---
+
+## 🏗️ System Design (Structured)
+
+### 1️⃣ Frontend Changes (Registration Page)
+
+#### UI Elements
+
+* Email input field
+* **Send OTP** button (next to email)
+* OTP input field (hidden initially)
+* **Verify OTP** button
+* Status messages:
+
+  * “OTP sent”
+  * “OTP verified”
+  * “Invalid OTP”
+  * “OTP expired”
+
+#### UI State Rules
+
+* `Send OTP` button:
+
+  * Enabled only when email is valid
+  * Disabled after OTP is sent (optional resend timer)
+* OTP input + Verify button:
+
+  * Visible only after OTP is sent
+* Register / Submit button:
+
+  * **Disabled until OTP is verified**
+
+---
+
+### 2️⃣ Frontend State Management (Conceptual)
+
+Maintain flags like:
+
+* `otpSent: boolean`
+* `otpVerified: boolean`
+* `otpError: string | null`
+
+Purpose:
+
+* Control button enable/disable
+* Prevent premature submission
+* Improve UX clarity
+
+---
+
+### 3️⃣ Backend Responsibilities (Critical)
+
+The backend is **authoritative**.
+Frontend verification alone is **not acceptable**.
+
+#### Backend must:
+
+* Generate OTP
+* Store OTP securely (temporary)
+* Associate OTP with:
+
+  * Email
+  * Expiry time
+  * Verification status
+* Validate OTP
+* Prevent reuse
+
+---
+
+### 4️⃣ OTP Generation Strategy (Design Only)
+
+* OTP length: **6 digits** (industry standard)
+* Random, numeric
+* Expiry: **5–10 minutes**
+* One active OTP per email
+
+❗ Design decision:
+
+* New OTP invalidates old OTPs for same email
+
+---
+
+### 5️⃣ Data Model Changes (Minimal)
+
+#### Option A: Add fields to `User` table (temporary storage)
+
+* `otp`
+* `otpExpiry`
+* `otpVerified`
+
+#### Option B (Better design): Separate OTP table
+
+* `email`
+* `otp`
+* `expiresAt`
+* `verified`
+* `createdAt`
+
+👉 Option B is **cleaner and scalable**
+
+---
+
+### 6️⃣ Backend API Endpoints (Conceptual)
+
+#### 1. Send OTP
+
+```
+POST /api/auth/send-otp
+```
+
+Input:
+
+* email
+
+Responsibility:
+
+* Generate OTP
+* Store OTP + expiry
+* Send email
+
+Response:
+
+* success / failure message
+
+---
+
+#### 2. Verify OTP
+
+```
+POST /api/auth/verify-otp
+```
+
+Input:
+
+* email
+* otp
+
+Responsibility:
+
+* Check OTP correctness
+* Check expiry
+* Mark as verified
+
+Response:
+
+* verified / invalid / expired
+
+---
+
+#### 3. Register User (Modified Flow)
+
+```
+POST /api/patient/register
+```
+
+Backend must:
+
+* Check `otpVerified == true`
+* Reject registration otherwise
+
+❗ **This is mandatory** to prevent bypassing OTP.
+
+---
+
+### 7️⃣ Email Sending (Design Level)
+
+* Use existing email service (e.g., SMTP / Nodemailer / JavaMail)
+* Email content:
+
+  * Clear OTP
+  * Expiry time
+  * Security note (“Do not share”)
+
+No UI dependency here.
+
+---
+
+### 8️⃣ Security Considerations (Non-Optional)
+
+* OTP never stored in plain logs
+* OTP expires automatically
+* Limit resend attempts (basic rate limiting)
+* OTP verified flag must be checked server-side
+* OTP verification endpoint must not reveal whether email exists (optional hardening)
+
+---
+
+### 9️⃣ Error Handling Rules
+
+| Scenario              | Expected Result         |
+| --------------------- | ----------------------- |
+| Invalid OTP           | Show error, allow retry |
+| Expired OTP           | Force resend            |
+| OTP already verified  | Ignore / success        |
+| Register without OTP  | Reject                  |
+| Multiple OTP requests | Invalidate previous     |
+
+---
+
+### 🔟 Testing Checklist (High Value)
+
+* Send OTP with valid email
+* Send OTP with invalid email
+* Verify correct OTP
+* Verify wrong OTP
+* Verify expired OTP
+* Attempt registration without verification
+* Attempt OTP reuse
+
+---
+
+## ⚠️ Explicit Non-Goals (Out of Scope)
+
+* SMS OTP
+* CAPTCHA
+* Multi-factor auth
+* Password reset OTP (separate flow)
+
+---
+
+## 🔍 Assumptions (Flagged)
+
+* Email delivery is reliable
+* Users have immediate email access
+* Registration is email-centric
+
+If any assumption is false, design must adapt.
+
+---
+
+## ✅ Confidence Level
+
+**0.95** — this is a standard, production-grade OTP flow plan without overengineering.
+
+---
+
+### Next Step (Your Choice)
+
+If you want, next I can:
+
+* Convert this into **backend-only design**
+* Convert this into **frontend-only UX flow**
+* Provide a **DB schema only**
+* Or give a **step-by-step implementation order**
+
+Just say which.

@@ -118,19 +118,20 @@
         </div>
 
         <div class="slots-grid" *ngIf="!loadingSlots && slots.length > 0">
+
 <button
   type="button"
   class="slot"
   *ngFor="let s of slots"
   [class.taken]="s.taken"
   [disabled]="s.disabled"
-  [attr.title]="s.taken ? 'Already booked' : null"
+  [attr.aria-disabled]="s.disabled ? true : null"
   (click)="selectSlot(s)"
 >
+  <span class="slot-time">{{ s.label }}</span>
+  <span class="slot-badge" *ngIf="s.taken">Taken</span>
+</button>
 
-            <span class="slot-time">{{ s.label }}</span>
-            <span class="slot-badge" *ngIf="s.taken">Taken</span>
-          </button>
         </div>
 
         <button type="submit" class="submit-button" [disabled]="itemForm.invalid">

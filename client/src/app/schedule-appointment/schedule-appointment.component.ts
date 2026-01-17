@@ -199,18 +199,16 @@ getDoctors(): void {
     });
   }
 
-  /** Check if selected ISO slot is taken on selected date from doctor’s appointments list */
+
+/** Check if selected ISO slot is taken on selected date from doctor’s appointments list */
 private isIsoTakenOnSelectedDate(selectedIso: string, appts: any[]): boolean {
-  for (const a of appts) {
-    if (!a.appointmentTime) continue;
+  // selectedIso looks like "yyyy-MM-ddTHH:mm"
+  for (const a of appts ?? []) {
+    const raw = String(a.appointmentTime || '').trim();
+    if (!raw) continue;
 
-    const iso = a.appointmentTime.includes('T')
-      ? a.appointmentTime
-      : a.appointmentTime.replace(' ', 'T');
-
-    if (iso.slice(0, 16) === selectedIso) {
-      return true;
-    }
+    const isoLike = raw.includes('T') ? raw : raw.replace(' ', 'T');
+    if (isoLike.slice(0, 16) === selectedIso) return true;
   }
   return false;
 }
@@ -251,39 +249,45 @@ const todays = segments.filter(s => s.date === this.selectedDate);
   }
 
 
-  /* Mark already-taken slots (UI) */
- private fetchTakenSlotsForSelectedDate(): void {
+/* Mark already-taken slots (UI) */
+private fetchTakenSlotsForSelectedDate(): void {
   if (!this.selectedDoctor) return;
 
   this.httpService.getAppointmentByDoctor(this.selectedDoctor.id).subscribe({
     next: (appts: any) => {
-
       this.takenSlotKeys.clear();
 
-      for (const a of appts) {
-        if (!a.appointmentTime) continue;
+      for (const a of appts ?? []) {
+        const raw = String(a.appointmentTime || '').trim();
+        if (!raw) continue;
 
-        const dt = new Date(a.appointmentTime);
+        // Normalize to "yyyy-MM-ddTHH:mm[:ss]" and keep first 16 chars
+        const isoLike = raw.includes('T') ? raw : raw.replace(' ', 'T');
+        // Must match the selected date
+        if (!isoLike.startsWith(this.selectedDate)) continue;
 
-        const dateKey = this.datePipe.transform(dt, 'yyyy-MM-dd');
-        if (dateKey !== this.selectedDate) continue;
-
-        const slotKey = this.datePipe.transform(dt, 'yyyy-MM-ddTHH:mm');
-        if (slotKey) {
-          this.takenSlotKeys.add(slotKey);
-        }
+        const key16 = isoLike.slice(0, 16); // yyyy-MM-ddTHH:mm
+        this.takenSlotKeys.add(key16);
       }
 
-      // 🔒 THIS is what makes the button disabled
-      this.slots = this.slots.map(s => ({
-        ...s,
-        taken: this.takenSlotKeys.has(s.isoForControl),
-        disabled: s.disabled || this.takenSlotKeys.has(s.isoForControl)
-      }));
+      // 🔒 Disable slots that are already taken
+      this.slots = this.slots.map(s => {
+        const isTaken = this.takenSlotKeys.has(s.isoForControl);
+        return {
+          ...s,
+          taken: isTaken,
+          disabled: s.disabled || isTaken
+        };
+      });
     },
-    error: () => {}
+    error: () => {
+      // Silent: if we can't fetch, UI remains as-is; server still enforces uniqueness
+    }
   });
 }
+
+
+
 
 
   
