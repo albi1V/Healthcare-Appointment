@@ -10,5 +10,8 @@ import com.edutech.healthcare_appointment_management_system.entity.User;
 public interface UserRepository extends JpaRepository<User,Long> {
  
     User findByUsername(String username);
- 
+    
+    User findByEmail(String email);               // NEW
+    boolean existsByEmail(String email);          // NEW
+
 }

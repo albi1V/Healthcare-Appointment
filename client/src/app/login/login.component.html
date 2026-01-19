@@ -23,15 +23,46 @@
  
       <!-- Login form (username + password) -->
 <form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form" novalidate>
-<!-- Username -->
-<div class="form-field"
-             [ngClass]="{'has-error': itemForm.controls['username'].invalid && (itemForm.controls['username'].dirty || itemForm.controls['username'].touched)}">
-<input type="text" id="username" formControlName="username" placeholder=" " autocomplete="username" />
-<label for="username">Username</label>
-<span *ngIf="itemForm.controls['username'].invalid && (itemForm.controls['username'].dirty || itemForm.controls['username'].touched)"
-                class="error-message">Username is required.</span>
+
+<!-- Email -->
+<div
+  class="form-field"
+  [ngClass]="{
+    'has-error':
+      itemForm.get('email')?.invalid &&
+      (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)
+  }"
+>
+  <input
+    id="email"
+    type="email"
+    formControlName="email"
+    placeholder="Enter email"
+    autocomplete="email"
+  />
+  <label for="email">Email</label>
+
+  <!-- Required error -->
+  <span
+    *ngIf="
+      itemForm.get('email')?.hasError('required') &&
+      (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)
+    "
+    class="error-message"
+    >Email is required.</span
+  >
+
+  <!-- Invalid email format -->
+  <span
+    *ngIf="
+      itemForm.get('email')?.hasError('email') &&
+      !itemForm.get('email')?.hasError('required') &&
+      (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)
+    "
+    class="error-message"
+    >Please enter a valid email address.</span
+  >
 </div>
- 
         <!-- Password -->
 <div class="form-field"
              [ngClass]="{'has-error': itemForm.controls['password'].invalid && (itemForm.controls['password'].dirty || itemForm.controls['password'].touched)}">

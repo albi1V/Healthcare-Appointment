@@ -61,37 +61,39 @@ public class RegisterAndLoginController {
     // LOGIN ENDPOINT (REQUIRED BY TESTS)
     // =========================
 
-        @PostMapping("/api/user/login")
+        
+@PostMapping("/api/user/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
     try {
-        // Authenticate username & password
+        // CHANGED: authenticate with email (as the principal)
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),
+                loginRequest.getEmail(),              // CHANGED
                 loginRequest.getPassword()
             )
         );
- 
-        // Load user details
-        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
- 
-        // Fetch the actual user from DB to get role and id
-        var user = userService.getUserByUsername(loginRequest.getUsername()); // your service method
-        // user should have getUserId() and getRole()
- 
-        // Generate JWT
+
+        // CHANGED: load user by email
+        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getEmail());
+
+        // Get full user (for id/role/username)
+        var user = userService.getUserByEmail(loginRequest.getEmail()); // CHANGED
+
+        // Generate JWT; subject will now be the email
         String token = jwtUtil.generateToken(userDetails.getUsername());
- 
-        // Return token + role + userId + username
+
+        // Return token + id + role + username + email (keep username for UI compatibility)
         return ResponseEntity.ok(Map.of(
                 "token", token,
                 "userId", user.getId(),
                 "username", user.getUsername(),
+                "email", user.getEmail(),             // CHANGED: add email
                 "role", user.getRole()
         ));
- 
+
     } catch (AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
+
 }

@@ -389,6 +389,3 @@ private parseAvailability(availText: string): {
     return `${h}:${m}`;
   }
 }
-
-
-

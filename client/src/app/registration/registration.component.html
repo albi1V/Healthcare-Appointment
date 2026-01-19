@@ -19,10 +19,45 @@
 <input type="text" formControlName="username" placeholder="Enter username" />
 </div>
  
-        <div class="form-group">
+<div class="form-group">
 <label>Email address</label>
-<input type="email" formControlName="email" placeholder="Enter email" />
+<input
+    type="email"
+    formControlName="email"
+    placeholder="Enter email"
+    [disabled]="emailVerified"
+  />
+ 
+  <!-- Verify Email Button -->
+<button
+    type="button"
+    class="verify-btn"
+    *ngIf="!showOtpSection"
+    (click)="onVerifyEmail()"
+    [disabled]="itemForm.get('email')?.invalid"
+>
+    Verify Email
+</button>
 </div>
+ 
+<!-- OTP SECTION -->
+<div class="form-group" *ngIf="showOtpSection && !emailVerified">
+<label>Enter OTP</label>
+<input
+    type="text"
+    placeholder="Enter OTP"
+    formControlName="otp"
+    name="otp"
+  />
+ 
+  <button type="button" class="verify-btn" (click)="verifyOtp()">
+    Verify OTP
+</button>
+</div>
+ 
+<p class="success-msg" *ngIf="emailVerified">
+  ✅ Email verified successfully
+</p>
  
         <div class="form-group">
 <label>Password</label>

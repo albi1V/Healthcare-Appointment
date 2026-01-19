@@ -86,7 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                  "/api/news",
 
-                 "/api/doctor/profile"
+                 "/api/doctor/profile",
+                 "/api/otp/send",      
+                 "/api/otp/verify"
 
  
             ).permitAll()

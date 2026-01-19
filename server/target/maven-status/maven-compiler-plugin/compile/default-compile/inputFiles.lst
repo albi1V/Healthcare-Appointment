@@ -2,9 +2,12 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/entity/Patient.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/DoctorRepository.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/entity/Doctor.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/advice/ApiExceptionHandler.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/MedicalRecordRepository.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/LoginResponse.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/EmailService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/RegisterAndLoginController.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/OtpService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/DoctorController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/LoginRequest.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/AppointmentService.java
@@ -18,6 +21,8 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/jwt/JwtUtil.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/DoctorService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/config/Configurations.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/exception/UsernameAlreadyTakenException.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/OtpController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/entity/User.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/MedicalRecordService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/HealthcareAppointmentManagementSystemApplication.java

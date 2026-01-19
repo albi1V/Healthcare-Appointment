@@ -31,6 +31,14 @@ public class AppointmentService {
     @Autowired
     private DoctorService doctorService;
 
+    @Autowired
+private EmailService emailService;
+
+@Autowired
+private DoctorRepository doctorRepository;
+
+@Autowired
+private UserRepository userRepository;
 
  /*
  
@@ -84,6 +92,40 @@ public Appointment scheduleAppointment(Long patientId, Long doctorId, TimeDto ti
       public List<Appointment> getAppointmentsByDoctorId(Long doctorId){
           return appointmentRepository.getAppointmentsByDoctorId(doctorId);
       }
+
+
+      @Transactional
+public void sendAppointmentReminders() {
+
+Date now = new Date();
+Date from = new Date(now.getTime() + (0 * 60 * 1000));
+Date to   = new Date(now.getTime() + (1 * 60 * 1000));
+
+
+    List<Appointment> appointments =
+            appointmentRepository.findAppointmentsForReminder(from, to);
+
+    for (Appointment appointment : appointments) {
+
+        Patient patient = appointment.getPatient();
+        Doctor doctor = appointment.getDoctor();
+
+        if (patient == null || doctor == null) {
+            continue;
+        }
+
+        emailService.sendAppointmentReminder(
+                patient.getEmail(),
+                patient.getUsername(),
+                doctor.getUsername(),
+                appointment.getAppointmentTime()
+        );
+
+        appointment.setReminderSent(true);
+        appointmentRepository.save(appointment);
+    }
+}
+
  
       // public String genrateAppointmentQr(Long appointmentId) throws Exception{
       //   Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
