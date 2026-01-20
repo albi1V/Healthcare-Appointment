@@ -88,7 +88,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                  "/api/doctor/profile",
                  "/api/otp/send",      
-                 "/api/otp/verify"
+                 "/api/otp/verify",
+                 "/api/password/send-otp",
+                 "/api/password/verify-otp",
+                 "/api/password/reset-password",
+                 "/api/chatbot/**"
 
  
             ).permitAll()

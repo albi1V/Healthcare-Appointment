@@ -1,128 +1,133 @@
-
-<!-- Hero -->
 <section class="dashboard-hero">
-  <div class="container">
-    <div class="hero-content">
-      <h1 class="hero-title">
+<div class="container">
+<div class="hero-content">
+<h1 class="hero-title">
         Welcome, <span class="highlight">{{ username || 'Guest' }}</span>
-      </h1>
-
+</h1>
+ 
       <p class="hero-subtitle">
         Role:
-        <span class="badge-role">
+<span class="badge-role">
           {{ roleType || 'Not Logged In' }}
-        </span>
-      </p>
-
+</span>
+</p>
+ 
       <div class="hero-actions">
-        <a class="btn btn-outline-light" routerLink="/login" *ngIf="!username">Login</a>
-        <a class="btn btn-light" routerLink="/registration" *ngIf="!username">Register</a>
-
+<a class="btn btn-outline-light" routerLink="/login" *ngIf="!username">Login</a>
+<a class="btn btn-light" routerLink="/registration" *ngIf="!username">Register</a>
+ 
         <a class="btn btn-light" routerLink="/doctor-availability">Find a Doctor</a>
-      </div>
-    </div>
-  </div>
+</div>
+</div>
+</div>
 </section>
-
+ 
 <!-- Quick Actions (visible for all logged-in roles; adjust as needed) -->
 <section class="quick-actions-section" *ngIf="username">
-  <div class="container">
-    <h2 class="section-title">Quick Actions</h2>
-
+<div class="container">
+<h2 class="section-title">Quick Actions</h2>
+ 
     <div class="actions-grid">
-      <!-- Patient -->
-      <a class="action-card" routerLink="/patient-appointment" *ngIf="isPatient()">
-        <div class="icon-circle"><i class="fa fa-calendar-check"></i></div>
-        <h5>My Appointments</h5>
-        <p>View or manage your upcoming appointments.</p>
-      </a>
-      <a class="action-card" routerLink="/schedule-appointment" *ngIf="isPatient()">
-        <div class="icon-circle"><i class="fa fa-clock"></i></div>
-        <h5>Schedule Appointment</h5>
-        <p>Book a visit with an available doctor.</p>
-      </a>
-
+<!-- Patient -->
+<a class="action-card" routerLink="/patient-appointment" *ngIf="isPatient()">
+<div class="icon-circle"><i class="fa fa-calendar-check"></i></div>
+<h5>My Appointments</h5>
+<p>View or manage your upcoming appointments.</p>
+</a>
+<a class="action-card" routerLink="/schedule-appointment" *ngIf="isPatient()">
+<div class="icon-circle"><i class="fa fa-clock"></i></div>
+<h5>Schedule Appointment</h5>
+<p>Book a visit with an available doctor.</p>
+</a>
+<!-- ✅ NEW: Find Your Doctor (Patient Only) -->
+<a class="action-card" routerLink="/recommend-doctor" *ngIf="isPatient()">
+<div class="icon-circle"><i class="fa fa-search-plus"></i></div>
+<h5>Find Your Doctor</h5>
+<p>Get personalized doctor recommendations based on symptoms.</p>
+</a>
+ 
       <!-- Doctor -->
-      <a class="action-card" routerLink="/doctor-appointment" *ngIf="isDoctor()">
-        <div class="icon-circle"><i class="fa fa-stethoscope"></i></div>
-        <h5>Doctor Appointments</h5>
-        <p>View today’s schedule and upcoming visits.</p>
-      </a>
-      <a class="action-card" routerLink="/doctor-availability" *ngIf="isDoctor()">
-        <div class="icon-circle"><i class="fa fa-user-md"></i></div>
-        <h5>Update Availability</h5>
-        <p>Manage your available slots.</p>
-      </a>
-
+<a class="action-card" routerLink="/doctor-appointment" *ngIf="isDoctor()">
+<div class="icon-circle"><i class="fa fa-stethoscope"></i></div>
+<h5>Doctor Appointments</h5>
+<p>View today's schedule and upcoming visits.</p>
+</a>
+<a class="action-card" routerLink="/doctor-availability" *ngIf="isDoctor()">
+<div class="icon-circle"><i class="fa fa-user-md"></i></div>
+<h5>Update Availability</h5>
+<p>Manage your available slots.</p>
+</a>
+ 
       <!-- Receptionist -->
-      <a class="action-card" routerLink="/receptionist-appointments" *ngIf="isReceptionist()">
-        <div class="icon-circle"><i class="fa fa-clipboard-list"></i></div>
-        <h5>All Appointments</h5>
-        <p>Monitor and manage all bookings.</p>
-      </a>
-      <a class="action-card" routerLink="/receptionist-schedule-appointments" *ngIf="isReceptionist()">
-        <div class="icon-circle"><i class="fa fa-calendar-plus"></i></div>
-        <h5>Schedule for Patient</h5>
-        <p>Create a booking on behalf of a patient.</p>
-      </a>
-
+<a class="action-card" routerLink="/receptionist-appointments" *ngIf="isReceptionist()">
+<div class="icon-circle"><i class="fa fa-clipboard-list"></i></div>
+<h5>All Appointments</h5>
+<p>Monitor and manage all bookings.</p>
+</a>
+<a class="action-card" routerLink="/receptionist-schedule-appointments" *ngIf="isReceptionist()">
+<div class="icon-circle"><i class="fa fa-calendar-plus"></i></div>
+<h5>Schedule for Patient</h5>
+<p>Create a booking on behalf of a patient.</p>
+</a>
+ 
       <!-- Admin (if you have it) -->
-      <a class="action-card" routerLink="/dashboard" *ngIf="isAdmin()">
-        <div class="icon-circle"><i class="fa fa-users-cog"></i></div>
-        <h5>Admin Panel</h5>
-        <p>Manage users and configuration.</p>
-      </a>
-    </div>
-  </div>
+<a class="action-card" routerLink="/dashboard" *ngIf="isAdmin()">
+<div class="icon-circle"><i class="fa fa-users-cog"></i></div>
+<h5>Admin Panel</h5>
+<p>Manage users and configuration.</p>
+</a>
+</div>
+</div>
 </section>
-
+ 
 <!-- Role Panels -->
 <section class="role-panel-section" *ngIf="username">
-  <div class="container">
-    <h2 class="section-title">Your Panel</h2>
-
+<div class="container">
+<h2 class="section-title">Your Panel</h2>
+ 
     <div class="role-panel" *ngIf="isPatient()">
-      <div class="panel-card">
-        <h4>Patient Panel</h4>
-        <p>Book, reschedule, and review doctor visits.</p>
-        <div class="panel-actions">
-          <a class="btn btn-greenblue" routerLink="/schedule-appointment">Schedule New</a>
-          <a class="btn btn-outline" routerLink="/patient-appointment">My Appointments</a>
-        </div>
-      </div>
-    </div>
-
+<div class="panel-card">
+<h4>Patient Panel</h4>
+<p>Book, reschedule, and review doctor visits.</p>
+<div class="panel-actions">
+<a class="btn btn-greenblue" routerLink="/schedule-appointment">Schedule New</a>
+<a class="btn btn-outline" routerLink="/patient-appointment">My Appointments</a>
+<!-- ✅ NEW: Added Find Your Doctor button in Patient Panel -->
+<a class="btn btn-outline" routerLink="/recommend-doctor">Find Your Doctor</a>
+</div>
+</div>
+</div>
+ 
     <div class="role-panel" *ngIf="isDoctor()">
-      <div class="panel-card">
-        <h4>Doctor Panel</h4>
-        <p>See your appointments and update availability.</p>
-        <div class="panel-actions">
-          <a class="btn btn-greenblue" routerLink="/doctor-appointment">View Appointments</a>
-          <a class="btn btn-outline" routerLink="/doctor-availability">Update Availability</a>
-        </div>
-      </div>
-    </div>
-
+<div class="panel-card">
+<h4>Doctor Panel</h4>
+<p>See your appointments and update availability.</p>
+<div class="panel-actions">
+<a class="btn btn-greenblue" routerLink="/doctor-appointment">View Appointments</a>
+<a class="btn btn-outline" routerLink="/doctor-availability">Update Availability</a>
+</div>
+</div>
+</div>
+ 
     <div class="role-panel" *ngIf="isReceptionist()">
-      <div class="panel-card">
-        <h4>Receptionist Panel</h4>
-        <p>Assist patients and manage daily bookings.</p>
-        <div class="panel-actions">
-          <a class="btn btn-greenblue" routerLink="/receptionist-schedule-appointments">Schedule</a>
-          <a class="btn btn-outline" routerLink="/receptionist-appointments">View All</a>
-        </div>
-      </div>
-    </div>
-
+<div class="panel-card">
+<h4>Receptionist Panel</h4>
+<p>Assist patients and manage daily bookings.</p>
+<div class="panel-actions">
+<a class="btn btn-greenblue" routerLink="/receptionist-schedule-appointments">Schedule</a>
+<a class="btn btn-outline" routerLink="/receptionist-appointments">View All</a>
+</div>
+</div>
+</div>
+ 
     <div class="role-panel" *ngIf="isAdmin()">
-      <div class="panel-card">
-        <h4>Admin Panel</h4>
-        <p>Manage users, roles, and settings.</p>
-        <div class="panel-actions">
-          <a class="btn btn-greenblue" routerLink="/dashboard">Admin Dashboard</a>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="panel-card">
+<h4>Admin Panel</h4>
+<p>Manage users, roles, and settings.</p>
+<div class="panel-actions">
+<a class="btn btn-greenblue" routerLink="/dashboard">Admin Dashboard</a>
+</div>
+</div>
+</div>
+</div>
 </section>
-``

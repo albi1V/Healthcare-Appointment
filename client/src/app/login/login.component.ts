@@ -68,4 +68,13 @@ export class LoginComponent implements OnInit {
   registration(): void {
     this.router.navigateByUrl('/registration');
   }
+
+  forgotPassword():void{
+    this.router.navigateByUrl('/forgot-password');
+  }
+
+  chatbot():void{
+    this.router.navigateByUrl('/chat');
+ 
+  }
 }

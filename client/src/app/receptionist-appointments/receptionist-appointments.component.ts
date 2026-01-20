@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../services/http.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-
+ 
 @Component({
   selector: 'app-receptionist-appointments',
   templateUrl: './receptionist-appointments.component.html',
@@ -10,12 +10,12 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class ReceptionistAppointmentsComponent implements OnInit {
-
+ 
   itemForm: FormGroup;
   responseMessage: any;
   appointmentList: any[] = [];
   isAdded = false;
-
+ 
   constructor(
     public httpService: HttpService,
     private formBuilder: FormBuilder,
@@ -26,11 +26,11 @@ export class ReceptionistAppointmentsComponent implements OnInit {
       time: ['', Validators.required]
     });
   }
-
+ 
   ngOnInit(): void {
     this.getAppointments();
   }
-
+ 
   getAppointments(): void {
     this.httpService.getAllAppointments().subscribe(
       (data: any) => {
@@ -41,26 +41,43 @@ export class ReceptionistAppointmentsComponent implements OnInit {
       }
     );
   }
-
+ 
   editAppointment(val: any): void {
     this.itemForm.controls['id'].setValue(val.id);
     this.isAdded = true;
   }
-
+ 
+  deleteAppointment(appointmentId: number): void {
+    if (!confirm('Are you sure you want to delete this appointment?')) {
+      return;
+    }
+ 
+    this.httpService.deleteAppointment(appointmentId).subscribe(
+      (response: any) => {
+        this.responseMessage = 'Appointment deleted successfully';
+        this.getAppointments();
+      },
+      (error: any) => {
+        console.error('Error deleting appointment', error);
+        this.responseMessage = 'Failed to delete appointment';
+      }
+    );
+  }
+ 
   onSubmit(): void {
     if (this.itemForm.invalid) return;
-
+ 
     const formattedTime = this.datePipe.transform(
       this.itemForm.controls['time'].value,
       'yyyy-MM-dd HH:mm:ss'
     );
-
+ 
     const appointmentId = this.itemForm.controls['id'].value;
-
+ 
     const formValue = {
       time: formattedTime
     };
-
+ 
     this.httpService.reScheduleAppointment(appointmentId, formValue).subscribe(
       () => {
         this.responseMessage = 'Appointment Rescheduled Successfully';

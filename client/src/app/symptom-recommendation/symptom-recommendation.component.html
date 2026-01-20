@@ -1,0 +1,145 @@
+<div class="recommendation-container">
+<!-- Header -->
+<div class="header-section">
+<h2>Find Your Doctor</h2>
+<p class="subtitle">
+      Describe your symptoms and we'll recommend the right specialist
+</p>
+</div>
+ 
+  <!-- Input -->
+<div class="input-section">
+<label>Your Symptoms</label>
+<p class="helper-text">Minimum 10 characters</p>
+ 
+    <textarea
+      rows="5"
+      [(ngModel)]="symptoms"
+      class="symptom-input"
+      [disabled]="loading"
+      placeholder="Example: chest pain, shortness of breath">
+</textarea>
+ 
+    <p class="char-count">{{ symptoms.length }} characters</p>
+ 
+    <div class="button-group">
+<button
+        class="btn-primary"
+        (click)="submitSymptoms()"
+        [disabled]="loading || symptoms.trim().length < 10">
+        {{ loading ? 'Analyzing...' : 'Get Recommendation' }}
+</button>
+ 
+      <button
+        class="btn-secondary"
+        (click)="clearForm()"
+        [disabled]="loading">
+        Clear
+</button>
+</div>
+</div>
+ 
+  <!-- Alerts -->
+<div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+</div>
+ 
+  <div *ngIf="successMessage && !errorMessage" class="alert alert-success">
+    {{ successMessage }}
+</div>
+ 
+  <!-- ✅ BLACK Success Alert / ❌ RED Error Alert -->
+<div *ngIf="showBookingAlert" class="server-alert" [ngClass]="{ 'success': bookingAlert.includes('✅'), 'error': bookingAlert.includes('❌') }">
+    {{ bookingAlert }}
+</div>
+ 
+  <!-- Results -->
+<div *ngIf="recommendedSpecialist && !loading && !isBookingAppointment" class="results-section">
+<div class="specialist-card">
+<h3>Recommended Specialist</h3>
+<div class="specialist-name">
+        {{ recommendedSpecialist }}
+</div>
+</div>
+ 
+    <div class="doctors-section">
+<h3>Available Doctors ({{ doctors.length }})</h3>
+ 
+      <div *ngIf="doctors.length === 0" class="no-doctors">
+        No doctors available
+</div>
+ 
+      <div *ngIf="doctors.length > 0" class="doctors-grid">
+<div *ngFor="let doctor of doctors" class="doctor-card">
+<div class="doctor-avatar">
+            {{ doctor.username?.charAt(0)?.toUpperCase() || 'D' }}
+</div>
+ 
+          <div class="doctor-info">
+<h4>{{ doctor.username }}</h4>
+<p class="specialty">{{ doctor.specialty }}</p>
+<p *ngIf="doctor.email" class="email">{{ doctor.email }}</p>
+</div>
+ 
+          <button class="btn-book" (click)="bookAppointment(doctor)">
+            Book Appointment
+</button>
+</div>
+</div>
+</div>
+</div>
+ 
+  <!-- Booking -->
+<div class="card mt-3" *ngIf="isBookingAppointment">
+<div class="card-header">
+<h4>Book with {{ selectedDoctor?.username }}</h4>
+</div>
+ 
+    <div class="card-body">
+<form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+<div class="form-grid-2">
+<div class="form-field">
+<label for="date">Select Date</label>
+<input
+              id="date"
+              type="date"
+              class="form-control"
+              [value]="selectedDate"
+              [min]="today"
+              (change)="onDateChange($event)" />
+</div>
+ 
+          <div class="form-field">
+<label>Selected Doctor</label>
+<div class="static-value">{{ selectedDoctor?.username }}</div>
+</div>
+</div>
+ 
+        <div class="slots-header" *ngIf="selectedDate">
+<h5>Available Slots for {{ selectedDate }}</h5>
+<span class="slots-loading" *ngIf="loadingSlots">Loading slots…</span>
+</div>
+ 
+        <div class="slots-grid">
+<button
+            *ngFor="let s of slots"
+            type="button"
+            class="slot"
+            [disabled]="s.disabled"
+            [ngClass]="{ 'taken': s.taken, 'selected': itemForm.controls['time'].value === s.isoForControl }"
+            (click)="selectSlot(s)">
+            {{ s.label }}
+<span *ngIf="s.taken" class="slot-badge">Taken</span>
+</button>
+</div>
+ 
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="itemForm.invalid">
+          Submit
+</button>
+</form>
+</div>
+</div>
+</div>

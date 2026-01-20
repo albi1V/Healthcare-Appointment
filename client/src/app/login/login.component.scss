@@ -4,7 +4,38 @@
 :root {
   --primary: #0d6efd;
   --primary-600: #0b5ed7;
-  --text: #111827;       /* dark gray */
+  --text: #.chatbot-float {
+  position: fixed;
+  right: 25px;
+  bottom: 30px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2196f3, #0d47a1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+ 
+  box-shadow:
+    0 10px 25px rgba(33, 150, 243, 0.45),
+    0 4px 10px rgba(0, 0, 0, 0.15);
+ 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+ 
+.chatbot-float span {
+  font-size: 30px;
+  color: #ffffff;
+}
+ 
+.chatbot-float:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow:
+    0 16px 35px rgba(33, 150, 243, 0.6),
+    0 6px 15px rgba(0, 0, 0, 0.2);
+}827;       /* dark gray */
   --muted: #6b7280;      /* medium gray */
   --card-bg: rgba(255, 255, 255, 0.18);
   --card-border: rgba(255, 255, 255, 0.35);
@@ -207,4 +238,37 @@
 @media (max-width: 480px) {
   .project-title { font-size: 20px; }
   .login-card { padding: 18px; }
+}
+
+.chatbot-float {
+  position: fixed;
+  right: 25px;
+  bottom: 30px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2196f3, #0d47a1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+ 
+  box-shadow:
+    0 10px 25px rgba(33, 150, 243, 0.45),
+    0 4px 10px rgba(0, 0, 0, 0.15);
+ 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+ 
+.chatbot-float span {
+  font-size: 30px;
+  color: #ffffff;
+}
+ 
+.chatbot-float:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow:
+    0 16px 35px rgba(33, 150, 243, 0.6),
+    0 6px 15px rgba(0, 0, 0, 0.2);
 }

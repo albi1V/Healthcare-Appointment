@@ -116,4 +116,63 @@ getAppointmentByDoctor(id: any): Observable<any[]> {
       { headers: this.jsonHeaders() }
     );
   }
+
+  sendOtp(data: { email: string }) {
+  return this.http.post(
+    this.serverName+'/api/password/send-otp',
+    data,{ responseType: 'text' }
+  );
+}
+ 
+verifyOtp(data: { email: string; otp: string }) {
+  return this.http.post(
+    this.serverName+'/api/password/verify-otp',
+    data,
+    { responseType: 'text' }
+  );
+}
+ 
+resetPassword(data: { email: string; newPassword: string }) {
+  return this.http.post(
+    this.serverName+'/api/password/reset-password',
+    data,
+    { responseType: 'text' }
+  );
+}
+
+
+sendMessage(message: string): Observable<any> {
+  return this.http.post(
+    this.serverName + '/api/chatbot/chat',
+    { message },
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+}
+
+// Delete Appointment
+  deleteAppointment(appointmentId: number): Observable<any> {
+    return this.http.delete(
+      `${this.serverName}/api/receptionist/appointment/${appointmentId}`,
+      { headers: this.authHeaders() }
+    );
+  }
+
+
+    // ✅ NEW: Recommend Doctor Based on Symptoms
+  /**
+   * Recommend doctor based on patient symptoms
+   * @param symptoms - Patient's symptom description
+   * @returns Observable with recommended specialist and available doctors
+   */
+  recommendDoctor(symptoms: string): Observable<any> {
+    return this.http.post(
+      `${this.serverName}/api/patient/recommend-doctor`,
+      { symptoms },
+      { headers: this.authHeaders() }
+    );
+  }
 }

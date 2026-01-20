@@ -13,6 +13,9 @@ import { DoctorAvailabilityComponent } from './doctor-availability/doctor-availa
 import { ReceptionistAppointmentsComponent } from './receptionist-appointments/receptionist-appointments.component';
 import { ReceptionistScheduleAppointmentsComponent } from './receptionist-schedule-appointments/receptionist-schedule-appointments.component';
 import { AboutComponent } from './about/about.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ChatComponent } from './chat/chat.component';
+import { SymptomRecommendationComponent } from './symptom-recommendation/symptom-recommendation.component.';
 
 const routes: Routes = [
   // ✅ Default route shows Landing
@@ -31,6 +34,10 @@ const routes: Routes = [
   { path: 'doctor-availability', component: DoctorAvailabilityComponent },
   { path: 'receptionist-appointments', component: ReceptionistAppointmentsComponent },
   { path: 'receptionist-schedule-appointments', component: ReceptionistScheduleAppointmentsComponent },
+  {path:'forgot-password',component:ForgotPasswordComponent},
+  {path:'chat',component:ChatComponent},
+    // ✅ NEW: Symptom-based Doctor Recommendation
+  { path: 'recommend-doctor', component: SymptomRecommendationComponent },
 
   // ✅ Fallback route → Landing (NOT dashboard)
   { path: '**', redirectTo: '', pathMatch: 'full' },

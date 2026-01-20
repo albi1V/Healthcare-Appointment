@@ -126,7 +126,13 @@ Date to   = new Date(now.getTime() + (1 * 60 * 1000));
     }
 }
 
- 
+    // NEW DELETE METHOD
+    @Transactional
+    public void deleteAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + appointmentId));
+        appointmentRepository.delete(appointment);
+    }
       // public String genrateAppointmentQr(Long appointmentId) throws Exception{
       //   Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
       //   if(appointmentId == null){

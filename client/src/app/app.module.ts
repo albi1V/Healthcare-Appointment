@@ -18,6 +18,9 @@ import { DoctorAvailabilityComponent } from './doctor-availability/doctor-availa
 import { ReceptionistAppointmentsComponent } from './receptionist-appointments/receptionist-appointments.component';
 import { ReceptionistScheduleAppointmentsComponent } from './receptionist-schedule-appointments/receptionist-schedule-appointments.component';
 import { AboutComponent } from './about/about.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ChatComponent } from './chat/chat.component';
+import { SymptomRecommendationComponent } from './symptom-recommendation/symptom-recommendation.component.';
 
 
 
@@ -34,7 +37,10 @@ import { AboutComponent } from './about/about.component';
     DoctorAppointmentComponent,
     ReceptionistAppointmentsComponent,
     ReceptionistScheduleAppointmentsComponent,
-    AboutComponent
+    AboutComponent,
+    ForgotPasswordComponent,
+    ChatComponent,
+    SymptomRecommendationComponent // ✅ ADD THIS LINE
 
     
   ],
