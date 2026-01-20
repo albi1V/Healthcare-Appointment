@@ -175,4 +175,60 @@ sendMessage(message: string): Observable<any> {
       { headers: this.authHeaders() }
     );
   }
+
+
+  // ========================================
+ 
+  // ✅ NEW: DOCTOR PROFILE MANAGEMENT
+ 
+  // ========================================
+ 
+  /**
+ 
+   * Get Doctor Profile by ID
+ 
+   * @param doctorId - The ID of the doctor
+ 
+   * @returns Observable with doctor profile data (DTO)
+ 
+   */
+ 
+  getDoctorProfile(doctorId: any): Observable<any> {
+ 
+    return this.http.get(
+ 
+      `${this.serverName}/api/doctor/profile/full/${doctorId}`,
+ 
+      { headers: this.authHeaders() }
+ 
+    );
+ 
+  }
+ 
+  /**
+ 
+   * Update Doctor Profile
+ 
+   * @param doctorId - The ID of the doctor
+ 
+   * @param profileData - Updated profile data (DTO)
+ 
+   * @returns Observable with success message
+ 
+   */
+ 
+  updateDoctorProfile(doctorId: any, profileData: any): Observable<any> {
+ 
+    return this.http.put(
+ 
+      `${this.serverName}/api/doctor/profile/${doctorId}`,
+ 
+      profileData,
+ 
+      { headers: this.authHeaders() }
+ 
+    );
+ 
+  }
+ 
 }

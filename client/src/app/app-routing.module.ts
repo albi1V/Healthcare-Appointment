@@ -16,6 +16,8 @@ import { AboutComponent } from './about/about.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ChatComponent } from './chat/chat.component';
 import { SymptomRecommendationComponent } from './symptom-recommendation/symptom-recommendation.component.';
+import { DoctorProfileComponent } from './doctor-profile/doctor-profile.component';
+import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
 
 const routes: Routes = [
   // ✅ Default route shows Landing
@@ -38,6 +40,10 @@ const routes: Routes = [
   {path:'chat',component:ChatComponent},
     // ✅ NEW: Symptom-based Doctor Recommendation
   { path: 'recommend-doctor', component: SymptomRecommendationComponent },
+
+    // new path for updation
+  { path: 'doctor/profile', component: DoctorProfileComponent },
+  { path: 'doctor-details',component: DoctorDetailsComponent},
 
   // ✅ Fallback route → Landing (NOT dashboard)
   { path: '**', redirectTo: '', pathMatch: 'full' },

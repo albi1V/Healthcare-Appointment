@@ -94,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                  "/api/password/reset-password",
                  "/api/chatbot/**"
 
+
  
             ).permitAll()
 
@@ -118,6 +119,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/receptionist/appointments").hasAuthority("RECEPTIONIST")
 
             .antMatchers(HttpMethod.PUT, "/api/receptionist/appointment-reschedule/**").hasAuthority("RECEPTIONIST")
+                        // ==========================================
+ 
+            // NEW: Doctor Profile Management Endpoints
+ 
+            // ==========================================
+ 
+            // GET full profile - Only DOCTOR role can access
+ 
+            .antMatchers(HttpMethod.GET, "/api/doctor/profile/full/**").hasAuthority("DOCTOR")
+ 
+            // UPDATE profile - Only DOCTOR role can modify
+ 
+            .antMatchers(HttpMethod.PUT, "/api/doctor/profile/**").hasAuthority("DOCTOR")
+ 
+            // ==========================================
+ 
+            // DEFAULT: Everything else requires authentication
+ 
+            // ==========================================
  
             // everything else requires authentication
 

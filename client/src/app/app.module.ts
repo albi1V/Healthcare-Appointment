@@ -21,6 +21,8 @@ import { AboutComponent } from './about/about.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ChatComponent } from './chat/chat.component';
 import { SymptomRecommendationComponent } from './symptom-recommendation/symptom-recommendation.component.';
+import { DoctorProfileComponent } from './doctor-profile/doctor-profile.component';
+import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
 
 
 
@@ -40,7 +42,9 @@ import { SymptomRecommendationComponent } from './symptom-recommendation/symptom
     AboutComponent,
     ForgotPasswordComponent,
     ChatComponent,
-    SymptomRecommendationComponent // ✅ ADD THIS LINE
+    SymptomRecommendationComponent, // ✅ ADD THIS LINE
+    DoctorProfileComponent,
+    DoctorDetailsComponent
 
     
   ],
