@@ -1,0 +1,126 @@
+<div class="container mt-4">
+<h2>Patient Medical Records</h2>
+ 
+  <!-- Search Section -->
+<div class="row mt-4" *ngIf="!selectedPatientId">
+<div class="col-md-8">
+<div class="input-group">
+<input
+          type="text"
+          class="form-control"
+          placeholder="Search by patient name or ID..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInput()"
+          (keyup.enter)="onSearch()"
+        />
+<div class="input-group-append">
+<button class="btn btn-primary" type="button" (click)="onSearch()">
+            Search
+</button>
+</div>
+</div>
+</div>
+</div>
+ 
+  <!-- Patient List -->
+<div *ngIf="!selectedPatientId">
+<div class="row mt-4" *ngIf="isSearching">
+<div class="col-12 text-center">
+<p>Loading patients...</p>
+</div>
+</div>
+ 
+    <div class="row mt-4" *ngIf="!isSearching && searchQuery && patientList.length === 0">
+<div class="col-12">
+<div class="alert alert-info">
+          No patients found matching "{{ searchQuery }}". Try a different search term.
+</div>
+</div>
+</div>
+ 
+    <div class="row mt-4" *ngIf="!isSearching && patientList.length > 0">
+<div class="col-12">
+<p class="text-muted mb-2">Found {{ patientList.length }} patient(s)</p>
+<table class="table table-bordered table-hover">
+<thead class="thead-dark">
+<tr>
+<th>Patient ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let patient of patientList">
+<td>{{ patient.id }}</td>
+<td>{{ patient.username }}</td>
+<td>{{ patient.email }}</td>
+<td>
+<button class="btn btn-sm btn-info" (click)="viewRecords(patient.id)">
+                  View Records
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+ 
+  <!-- Medical Records View -->
+<div *ngIf="selectedPatientId">
+<div class="mb-3">
+<button class="btn btn-secondary" (click)="closeRecords()">
+        Back to Patients
+</button>
+</div>
+ 
+    <h4>
+      Patient ID: {{ selectedPatientId }}
+<span *ngIf="selectedPatientName"> | Name: {{ selectedPatientName }}</span>
+</h4>
+ 
+    <div *ngIf="isLoadingRecords" class="text-center">
+<p>Loading medical records...</p>
+</div>
+ 
+    <div *ngIf="!isLoadingRecords && medicalRecords.length === 0" class="alert alert-info">
+      No medical records found for this patient.
+</div>
+ 
+    <div *ngIf="!isLoadingRecords && medicalRecords.length > 0">
+<table class="table table-bordered">
+<thead class="thead-dark">
+<tr>
+<th>Record ID</th>
+<th>Date</th>
+<th>Doctor</th>
+<th>Diagnosis</th>
+<th>Treatment</th>
+<th>Report</th> <!-- NEW -->
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let record of medicalRecords">
+<td>{{ record.id }}</td>
+<td>{{ formatDate(record.recordDate) }}</td>
+<td>
+              Dr. {{ record?.doctor?.username || 'N/A' }}
+<span *ngIf="record?.doctor?.id"> (ID {{ record.doctor.id }})</span>
+</td>
+<td>{{ record.diagnosis }}</td>
+<td>{{ record.treatment }}</td>
+<td>
+<button class="btn btn-sm btn-outline-primary"
+                      (click)="downloadReport(record)"
+                      [disabled]="downloadingRecordId === record.id">
+<span *ngIf="downloadingRecordId === record.id" class="spinner-border spinner-border-sm mr-1"></span>
+                {{ downloadingRecordId === record.id ? 'Downloading...' : 'Download' }}
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>

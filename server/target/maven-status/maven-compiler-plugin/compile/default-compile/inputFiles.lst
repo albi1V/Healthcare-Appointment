@@ -3,8 +3,11 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/common/QrUtil.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/ForgotPasswordController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/DoctorProfileRequestDTO.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/DoctorBrief.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/advice/ApiExceptionHandler.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/MedicalRecordView.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/EmailService.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/PatientSummary.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/EmailRequest.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/ChatRequestDTO.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/OtpService.java
@@ -15,11 +18,13 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/PatientRepository.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/entity/Receptionist.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/config/AppConfig.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/ReportService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/DoctorService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/config/Configurations.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/OtpController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/entity/User.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/MedicalRecordService.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/PatientService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/jwt/JwtRequestFilter.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/config/SecurityConfig.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/SendGridEmailService.java
@@ -31,6 +36,7 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/MedicalRecordRepository.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/LoginResponse.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/RegisterAndLoginController.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/MedicalRecordController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/GroqAIService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/UserService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/ReceptionistController.java
@@ -46,6 +52,7 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/ChatbotService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/exception/UsernameAlreadyTakenException.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/HealthcareAppointmentManagementSystemApplication.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/PatientBrief.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/PatientController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/AppointmentRepository.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/UserRepository.java

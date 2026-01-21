@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.edutech.healthcare_appointment_management_system.dto.DoctorBrief;
 import com.edutech.healthcare_appointment_management_system.dto.DoctorProfileRequestDTO;
 import com.edutech.healthcare_appointment_management_system.dto.DoctorProfileResponseDTO;
 import com.edutech.healthcare_appointment_management_system.entity.Appointment;
@@ -140,4 +141,13 @@ public ResponseEntity<String> getDoctorUsername(@PathVariable Long id) {
  
     }
  
+// NEW: returns { id, username }
+    @GetMapping("/api/doctor/brief/{id}")
+    public ResponseEntity<DoctorBrief> getDoctorBrief(@PathVariable Long id) {
+        Doctor d = doctorService.findDoctorByID(id);
+        if (d == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new DoctorBrief(d.getId(), d.getUsername()));
+    }
+
+
 }

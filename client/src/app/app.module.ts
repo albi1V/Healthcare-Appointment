@@ -23,6 +23,10 @@ import { ChatComponent } from './chat/chat.component';
 import { SymptomRecommendationComponent } from './symptom-recommendation/symptom-recommendation.component.';
 import { DoctorProfileComponent } from './doctor-profile/doctor-profile.component';
 import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
+import { DoctorAddMedicalRecordComponent } from './doctor-add-medical-record/doctor-add-medical-record.component';
+import { DoctorPatientHistoryComponent } from './doctor-patient-history/doctor-patient-history.component';
+import { DoctorPatientSearchComponent } from './doctor-patient-search/doctor-patient-search.component';
+import { ReceptionistPatientRecordsComponent } from './receptionist-patient-records/receptionist-patient-records.component';
 
 
 
@@ -44,7 +48,11 @@ import { DoctorDetailsComponent } from './doctor-details/doctor-details.componen
     ChatComponent,
     SymptomRecommendationComponent, // ✅ ADD THIS LINE
     DoctorProfileComponent,
-    DoctorDetailsComponent
+    DoctorDetailsComponent,
+    DoctorAddMedicalRecordComponent,
+    DoctorPatientHistoryComponent,
+    DoctorPatientSearchComponent,
+    ReceptionistPatientRecordsComponent
 
     
   ],

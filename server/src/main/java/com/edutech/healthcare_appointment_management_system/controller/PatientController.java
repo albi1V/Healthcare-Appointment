@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.edutech.healthcare_appointment_management_system.dto.DoctorRecommendationDTO;
+import com.edutech.healthcare_appointment_management_system.dto.PatientBrief;
 import com.edutech.healthcare_appointment_management_system.dto.SymptomRequestDTO;
 import com.edutech.healthcare_appointment_management_system.dto.TimeDto;
 
@@ -54,6 +55,8 @@ import com.edutech.healthcare_appointment_management_system.service.AppointmentS
 import com.edutech.healthcare_appointment_management_system.service.DoctorRecommendationService;
 import com.edutech.healthcare_appointment_management_system.service.DoctorService;
 
+import com.edutech.healthcare_appointment_management_system.service.PatientService;
+ 
 import com.edutech.healthcare_appointment_management_system.service.MedicalRecordService;
  
  
@@ -76,6 +79,9 @@ public class PatientController {
     @Autowired
     private DoctorRecommendationService recommendationService;
  
+
+    @Autowired
+    private PatientService patientService;
     @GetMapping("/api/patient/doctors")
 
     public ResponseEntity<List<Doctor>> getDoctors() {
@@ -228,5 +234,18 @@ public class PatientController {
         }
     }
 
+
+        // NEW: returns { id, username } for a patient
+
+    @GetMapping("/api/patient/brief/{id}")
+
+    public ResponseEntity<PatientBrief> getPatientBrief(@PathVariable Long id) {
+
+        return patientService.getPatientById(id)
+                .map(p -> ResponseEntity.ok(new PatientBrief(p.getId(), p.getUsername())))
+                .orElse(ResponseEntity.notFound().build());
+
+    }
+ 
 }
  

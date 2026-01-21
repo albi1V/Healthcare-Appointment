@@ -1,0 +1,82 @@
+<div class="container mt-4">
+<h2>Add Medical Record</h2>
+<div *ngIf="responseMessage" class="alert mt-3" [ngClass]="isAdded ? 'alert-success' : 'alert-danger'">
+<i class="fas" [ngClass]="isAdded ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+    {{ responseMessage }}
+</div>
+ 
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+<div class="form-group">
+<label>Patient ID</label>
+<input 
+        type="text" 
+        class="form-control" 
+        formControlName="patientId" 
+        readonly
+      />
+<small class="form-text text-muted" *ngIf="patientUsername">
+        Patient Name: {{ patientUsername }}
+</small>
+</div>
+ 
+    <div class="form-group">
+<label>Doctor ID</label>
+<input 
+        type="text" 
+        class="form-control" 
+        formControlName="doctorId" 
+        readonly
+      />
+<small class="form-text text-muted" *ngIf="doctorUsername">
+        Doctor Name: {{ doctorUsername }}
+</small>
+</div>
+ 
+    <div class="form-group">
+<label>Diagnosis *</label>
+<textarea 
+        class="form-control" 
+        formControlName="diagnosis" 
+        rows="3"
+        placeholder="Enter diagnosis details..."
+        [ngClass]="{'is-invalid': itemForm.get('diagnosis')?.touched && itemForm.get('diagnosis')?.invalid}"
+></textarea>
+<small class="text-danger" *ngIf="itemForm.get('diagnosis')?.touched && itemForm.get('diagnosis')?.invalid">
+        Diagnosis is required
+</small>
+</div>
+ 
+    <div class="form-group">
+<label>Treatment *</label>
+<textarea 
+        class="form-control" 
+        formControlName="treatment" 
+        rows="4"
+        placeholder="Enter treatment plan and medications..."
+        [ngClass]="{'is-invalid': itemForm.get('treatment')?.touched && itemForm.get('treatment')?.invalid}"
+></textarea>
+<small class="text-danger" *ngIf="itemForm.get('treatment')?.touched && itemForm.get('treatment')?.invalid">
+        Treatment is required
+</small>
+</div>
+ 
+    <div class="form-group">
+<button 
+        type="submit" 
+        class="btn btn-primary mr-2" 
+        [disabled]="!itemForm.valid || isSubmitting"
+>
+<i class="fas fa-save"></i> 
+        {{ isSubmitting ? 'Saving...' : 'Save Medical Record' }}
+</button>
+<button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="cancel()"
+        [disabled]="isSubmitting"
+>
+<i class="fas fa-times"></i> Cancel
+</button>
+</div>
+</form>
+</div>

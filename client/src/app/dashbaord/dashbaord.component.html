@@ -1,293 +1,332 @@
+
+<!-- HERO -->
 <section class="dashboard-hero">
-<div class="container">
-<div class="hero-content">
-<h1 class="hero-title">
-
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">
         Welcome, <span class="highlight">{{ username || 'Guest' }}</span>
-</h1>
-<p class="hero-subtitle">
-
+      </h1>
+      <p class="hero-subtitle">
         Role:
-<span class="badge-role">
-
+        <span class="badge-role">
           {{ roleType || 'Not Logged In' }}
-</span>
-</p>
-<div class="hero-actions">
-<a class="btn btn-outline-light" routerLink="/login" *ngIf="!username">Login</a>
-<a class="btn btn-light" routerLink="/registration" *ngIf="!username">Register</a>
-<a class="btn btn-light" routerLink="/doctor-availability">Find a Doctor</a>
-</div>
-</div>
-</div>
+        </span>
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-outline-light" routerLink="/login" *ngIf="!username">Login</a>
+        <a class="btn btn-light" routerLink="/registration" *ngIf="!username">Register</a>
+        <a class="btn btn-light" routerLink="/doctor-availability">Find a Doctor</a>
+      </div>
+    </div>
+  </div>
 </section>
- 
-<!-- Quick Actions -->
+
+<!-- QUICK ACTIONS -->
 <section class="quick-actions-section" *ngIf="username">
-<div class="container">
-<h2 class="section-title">Quick Actions</h2>
-<div class="actions-grid">
-<!-- Patient -->
-<a class="action-card" routerLink="/patient-appointment" *ngIf="isPatient()">
-<div class="icon-circle"><i class="fa fa-calendar-check"></i></div>
-<h5>My Appointments</h5>
-<p>View or manage your upcoming appointments.</p>
-</a>
-<a class="action-card" routerLink="/schedule-appointment" *ngIf="isPatient()">
-<div class="icon-circle"><i class="fa fa-clock"></i></div>
-<h5>Schedule Appointment</h5>
-<p>Book a visit with an available doctor.</p>
-</a>
-<a class="action-card" routerLink="/recommend-doctor" *ngIf="isPatient()">
-<div class="icon-circle"><i class="fa fa-search-plus"></i></div>
-<h5>Find Your Doctor</h5>
-<p>Get personalized doctor recommendations.</p>
-</a>
- 
-      <!-- Doctor -->
-<a class="action-card" routerLink="/doctor-appointment" *ngIf="isDoctor()">
-<div class="icon-circle"><i class="fa fa-stethoscope"></i></div>
-<h5>Doctor Appointments</h5>
-<p>View today's schedule.</p>
-</a>
-<a class="action-card" routerLink="/doctor-availability" *ngIf="isDoctor()">
-<div class="icon-circle"><i class="fa fa-user-md"></i></div>
-<h5>Update Availability</h5>
-<p>Manage your available slots.</p>
-</a>
-<!-- ⭐ NEW: Doctor Profile -->
-<a class="action-card" routerLink="/doctor/profile" *ngIf="isDoctor()">
-<div class="icon-circle"><i class="fa fa-id-card"></i></div>
-<h5>My Profile</h5>
-<p>View and update your professional profile.</p>
-</a>
- 
-      <!-- Receptionist -->
-<a class="action-card" routerLink="/receptionist-appointments" *ngIf="isReceptionist()">
-<div class="icon-circle"><i class="fa fa-clipboard-list"></i></div>
-<h5>All Appointments</h5>
-<p>Monitor and manage bookings.</p>
-</a>
-<a class="action-card" routerLink="/receptionist-schedule-appointments" *ngIf="isReceptionist()">
-<div class="icon-circle"><i class="fa fa-calendar-plus"></i></div>
-<h5>Schedule for Patient</h5>
-<p>Create a booking.</p>
-</a>
-</div>
-</div>
+  <div class="container">
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="actions-grid">
+
+      <!-- Patient actions -->
+      <a class="action-card" routerLink="/patient-appointment" *ngIf="isPatient()">
+        <div class="icon-circle"><i class="fa fa-calendar-check"></i></div>
+        <h5>My Appointments</h5>
+        <p>View or manage your upcoming appointments.</p>
+      </a>
+
+      <a class="action-card" routerLink="/schedule-appointment" *ngIf="isPatient()">
+        <div class="icon-circle"><i class="fa fa-clock"></i></div>
+        <h5>Schedule Appointment</h5>
+        <p>Book a visit with an available doctor.</p>
+      </a>
+
+      <a class="action-card" routerLink="/recommend-doctor" *ngIf="isPatient()">
+        <div class="icon-circle"><i class="fa fa-search-plus"></i></div>
+        <h5>Find Your Doctor</h5>
+        <p>Get personalized doctor recommendations.</p>
+      </a>
+
+      <!-- Doctor actions -->
+      <a class="action-card" routerLink="/doctor-appointment" *ngIf="isDoctor()">
+        <div class="icon-circle"><i class="fa fa-stethoscope"></i></div>
+        <h5>Doctor Appointments</h5>
+        <p>View today's schedule.</p>
+      </a>
+
+      <a class="action-card" routerLink="/doctor-availability" *ngIf="isDoctor()">
+        <div class="icon-circle"><i class="fa fa-user-md"></i></div>
+        <h5>Update Availability</h5>
+        <p>Manage your available slots.</p>
+      </a>
+
+      <!-- ✅ New from friend: Doctor → Patient Medical Records via search -->
+      <a class="action-card" routerLink="/doctor/patient-search" *ngIf="isDoctor()">
+        <div class="icon-circle"><i class="fa fa-notes-medical"></i></div>
+        <h5>Patient Medical Records</h5>
+        <p>Select a patient, then add a medical record.</p>
+      </a>
+
+      <!-- Your extra (keep): Doctor Profile -->
+      <a class="action-card" routerLink="/doctor/profile" *ngIf="isDoctor()">
+        <div class="icon-circle"><i class="fa fa-id-card"></i></div>
+        <h5>My Profile</h5>
+        <p>View and update your professional profile.</p>
+      </a>
+
+      <!-- Receptionist actions -->
+      <a class="action-card" routerLink="/receptionist-appointments" *ngIf="isReceptionist()">
+        <div class="icon-circle"><i class="fa fa-clipboard-list"></i></div>
+        <h5>All Appointments</h5>
+        <p>Monitor and manage bookings.</p>
+      </a>
+
+      <a class="action-card" routerLink="/receptionist-schedule-appointments" *ngIf="isReceptionist()">
+        <div class="icon-circle"><i class="fa fa-calendar-plus"></i></div>
+        <h5>Schedule for Patient</h5>
+        <p>Create a booking.</p>
+      </a>
+
+      <!-- ✅ New from friend: Receptionist → Patient Records -->
+      <a class="action-card" routerLink="/receptionist/patient-records" *ngIf="isReceptionist()">
+        <div class="icon-circle"><i class="fa fa-folder-open"></i></div>
+        <h5>Patient Records</h5>
+        <p>Access and manage patient files.</p>
+      </a>
+
+      <!-- Admin actions -->
+      <a class="action-card" routerLink="/dashboard" *ngIf="isAdmin()">
+        <div class="icon-circle"><i class="fa fa-users-cog"></i></div>
+        <h5>Admin Panel</h5>
+        <p>Manage users and configuration.</p>
+      </a>
+
+    </div>
+  </div>
 </section>
- 
+
 <!-- ⭐ AVAILABLE DOCTORS (PATIENT ONLY) -->
 <section class="available-doctors-section" *ngIf="isPatient() && !isBookingAppointment">
-<div class="container">
-<h2 class="section-title">Available Doctors</h2>
-<!-- Loading -->
-<p *ngIf="loadingDoctors" class="text-muted">Loading doctors...</p>
-<!-- Empty -->
-<p *ngIf="!loadingDoctors && availableDoctors.length === 0" class="text-muted">
+  <div class="container">
+    <h2 class="section-title">Available Doctors</h2>
 
+    <!-- Loading -->
+    <p *ngIf="loadingDoctors" class="text-muted">Loading doctors...</p>
+
+    <!-- Empty -->
+    <p *ngIf="!loadingDoctors && availableDoctors.length === 0" class="text-muted">
       No doctors are available right now.
-</p>
-<!-- Doctors Grid -->
-<div class="doctors-grid" *ngIf="availableDoctors.length > 0">
-<div class="doctor-card" *ngFor="let doctor of availableDoctors">
-<div class="doctor-card-inner">
-<!-- Doctor Image/Avatar -->
-<div class="doctor-image-section">
-<div class="doctor-avatar-large">
+    </p>
 
+    <!-- Doctors Grid -->
+    <div class="doctors-grid" *ngIf="availableDoctors.length > 0">
+      <div class="doctor-card" *ngFor="let doctor of availableDoctors">
+        <div class="doctor-card-inner">
+          <!-- Doctor Image/Avatar -->
+          <div class="doctor-image-section">
+            <div class="doctor-avatar-large">
               {{ (doctor.firstName || doctor.username)?.charAt(0) | uppercase }}
-</div>
-</div>
- 
+            </div>
+          </div>
+
           <!-- Doctor Details -->
-<div class="doctor-details-section">
-<!-- Name -->
-<h3 class="doctor-name">
+          <div class="doctor-details-section">
+            <!-- Name -->
+            <h3 class="doctor-name">
+              Dr. {{
+                doctor.firstName && doctor.lastName
+                  ? (doctor.firstName + ' ' + (doctor.middleName ? doctor.middleName + ' ' : '') + doctor.lastName)
+                  : doctor.username
+              }}
+            </h3>
 
-              Dr. {{ doctor.firstName && doctor.lastName 
-
-                ? (doctor.firstName + ' ' + (doctor.middleName ? doctor.middleName + ' ' : '') + doctor.lastName)
-
-                : doctor.username }}
-</h3>
- 
             <!-- Qualification & Specialty -->
-<p class="doctor-position" *ngIf="doctor.qualification || doctor.specialty">
-
+            <p class="doctor-position" *ngIf="doctor.qualification || doctor.specialty">
               {{ doctor.qualification || 'Specialist' }}
-<span *ngIf="doctor.specialty"> - {{ doctor.specialty }}</span>
-</p>
- 
+              <span *ngIf="doctor.specialty"> - {{ doctor.specialty }}</span>
+            </p>
+
             <!-- Specialty Tag -->
-<p class="doctor-specialty-tag" *ngIf="doctor.specialty">
-
+            <p class="doctor-specialty-tag" *ngIf="doctor.specialty">
               {{ doctor.specialty }}
-</p>
- 
+            </p>
+
             <!-- Gender -->
-<p class="doctor-info" *ngIf="doctor.gender">
-<strong>Gender:</strong> {{ doctor.gender }}
-</p>
- 
+            <p class="doctor-info" *ngIf="doctor.gender">
+              <strong>Gender:</strong> {{ doctor.gender }}
+            </p>
+
             <!-- Phone -->
-<p class="doctor-info" *ngIf="doctor.phone">
-<strong>Phone:</strong> {{ doctor.phone }}
-</p>
- 
+            <p class="doctor-info" *ngIf="doctor.phone">
+              <strong>Phone:</strong> {{ doctor.phone }}
+            </p>
+
             <!-- Email -->
-<p class="doctor-info" *ngIf="doctor.email">
-<strong>Email:</strong> {{ doctor.email }}
-</p>
- 
+            <p class="doctor-info" *ngIf="doctor.email">
+              <strong>Email:</strong> {{ doctor.email }}
+            </p>
+
             <!-- Location -->
-<p class="doctor-info" *ngIf="doctor.city || doctor.state">
-<strong>Location:</strong> 
-
+            <p class="doctor-info" *ngIf="doctor.city || doctor.state">
+              <strong>Location:</strong>
               {{ doctor.city }}{{ doctor.city && doctor.state ? ', ' : '' }}{{ doctor.state }}
-</p>
-</div>
-</div>
- 
+            </p>
+          </div>
+        </div>
+
         <!-- Action Buttons -->
-<div class="doctor-card-actions">
-<button class="btn-view-profile" (click)="viewDoctor(doctor)">
-
-            View Profile
-</button>
-<!-- <button class="btn-book-appointment" (click)="bookAppointment(doctor)">
-
+        <div class="doctor-card-actions">
+          <button class="btn-view-profile" (click)="viewDoctor(doctor)">View Profile</button>
+          <!--
+          <button class="btn-book-appointment" (click)="bookAppointment(doctor)">
             Book an Appointment
-</button> -->
-</div>
-</div>
-</div>
-</div>
+          </button>
+          -->
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
- 
+
 <!-- ⭐ BOOKING SECTION (PATIENT ONLY) -->
 <section class="booking-section" *ngIf="isPatient() && isBookingAppointment">
-<div class="container">
-<!-- Success/Error Alert -->
-<div *ngIf="showBookingAlert" class="booking-alert" [ngClass]="{ 'success': bookingAlert.includes('✅'), 'error': bookingAlert.includes('❌') }">
-
+  <div class="container">
+    <!-- Success/Error Alert -->
+    <div *ngIf="showBookingAlert" class="booking-alert"
+         [ngClass]="{ 'success': bookingAlert.includes('✅'), 'error': bookingAlert.includes('❌') }">
       {{ bookingAlert }}
-</div>
- 
+    </div>
+
     <div class="booking-card">
-<div class="booking-header">
-<div>
-<h2>Book Appointment</h2>
-<p class="booking-subtitle">Schedule with {{ selectedDoctor?.username }}</p>
-</div>
-<button class="btn-close" (click)="cancelBooking()">✕</button>
-</div>
- 
+      <div class="booking-header">
+        <div>
+          <h2>Book Appointment</h2>
+          <p class="booking-subtitle">Schedule with {{ selectedDoctor?.username }}</p>
+        </div>
+        <button class="btn-close" (click)="cancelBooking()">✕</button>
+      </div>
+
       <div class="booking-body">
-<form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-<!-- Doctor Info Card -->
-<div class="selected-doctor-card">
-<div class="doctor-avatar-small">
-
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+          <!-- Doctor Info Card -->
+          <div class="selected-doctor-card">
+            <div class="doctor-avatar-small">
               {{ (selectedDoctor?.firstName || selectedDoctor?.username)?.charAt(0) | uppercase }}
-</div>
-<div class="doctor-mini-info">
-<h4>Dr. {{ selectedDoctor?.firstName || selectedDoctor?.username }}</h4>
-<p>{{ selectedDoctor?.specialty }}</p>
-</div>
-</div>
- 
+            </div>
+            <div class="doctor-mini-info">
+              <h4>Dr. {{ selectedDoctor?.firstName || selectedDoctor?.username }}</h4>
+              <p>{{ selectedDoctor?.specialty }}</p>
+            </div>
+          </div>
+
           <!-- Date Selection -->
-<div class="form-group">
-<label for="date">Select Date</label>
-<input
-
+          <div class="form-group">
+            <label for="date">Select Date</label>
+            <input
               id="date"
-
               type="date"
-
               class="form-input"
-
               [value]="selectedDate"
-
               [min]="today"
+              (change)="onDateChange($event)"
+            />
+          </div>
 
-              (change)="onDateChange($event)" />
-</div>
- 
           <!-- Slots Section -->
-<div class="slots-section">
-<div class="slots-header">
-<h5>Available Slots for {{ selectedDate }}</h5>
-<span class="slots-loading" *ngIf="loadingSlots">Loading slots…</span>
-</div>
- 
+          <div class="slots-section">
+            <div class="slots-header">
+              <h5>Available Slots for {{ selectedDate }}</h5>
+              <span class="slots-loading" *ngIf="loadingSlots">Loading slots…</span>
+            </div>
+
             <div class="slots-grid">
-<button
-
+              <button
                 *ngFor="let s of slots"
-
                 type="button"
-
                 class="slot-button"
-
                 [disabled]="s.disabled"
-
-                [ngClass]="{ 
-
-                  'taken': s.taken, 
-
-                  'selected': itemForm.controls['time'].value === s.isoForControl 
-
+                [ngClass]="{
+                  'taken': s.taken,
+                  'selected': itemForm.controls['time'].value === s.isoForControl
                 }"
-
-                (click)="selectSlot(s)">
-
+                (click)="selectSlot(s)"
+              >
                 {{ s.label }}
-<span *ngIf="s.taken" class="slot-badge">Taken</span>
-</button>
-</div>
- 
+                <span *ngIf="s.taken" class="slot-badge">Taken</span>
+              </button>
+            </div>
+
             <p *ngIf="!loadingSlots && slots.length === 0" class="no-slots">
-
               No slots available for this date
-</p>
-</div>
- 
+            </p>
+          </div>
+
           <!-- Submit Button -->
-<div class="form-actions">
-<button type="button" class="btn-cancel" (click)="cancelBooking()">
-
-              Cancel
-</button>
-<button type="submit" class="btn-submit" [disabled]="itemForm.invalid">
-
-              Confirm Booking
-</button>
-</div>
-</form>
-</div>
-</div>
-</div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="cancelBooking()">Cancel</button>
+            <button type="submit" class="btn-submit" [disabled]="itemForm.invalid">Confirm Booking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </section>
- 
-<!-- Role Panels -->
+
+<!-- ROLE PANELS -->
 <section class="role-panel-section" *ngIf="username">
-<div class="container">
-<h2 class="section-title">Your Panel</h2>
-<div class="role-panel" *ngIf="isDoctor()">
-<div class="panel-card">
-<h4>Doctor Panel</h4>
-<p>Manage appointments, availability, and profile.</p>
-<div class="panel-actions">
-<a class="btn btn-greenblue" routerLink="/doctor-appointment">View Appointments</a>
-<a class="btn btn-outline" routerLink="/doctor-availability">Update Availability</a>
-<!-- ⭐ NEW -->
-<a class="btn btn-outline" routerLink="/doctor/profile">My Profile</a>
-</div>
-</div>
-</div>
-<!-- Patient / Receptionist / Admin panels unchanged -->
-</div>
+  <div class="container">
+    <h2 class="section-title">Your Panel</h2>
+
+    <!-- Patient Panel -->
+    <div class="role-panel" *ngIf="isPatient()">
+      <div class="panel-card">
+        <h4>Patient Panel</h4>
+        <p>Book, reschedule, and review doctor visits.</p>
+        <div class="panel-actions">
+          <a class="btn btn-greenblue" routerLink="/schedule-appointment">Schedule New</a>
+          <a class="btn btn-outline" routerLink="/patient-appointment">My Appointments</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doctor Panel -->
+    <div class="role-panel" *ngIf="isDoctor()">
+      <div class="panel-card">
+        <h4>Doctor Panel</h4>
+        <p>Manage appointments, availability, and profile.</p>
+        <div class="panel-actions">
+          <a class="btn btn-greenblue" routerLink="/doctor-appointment">View Appointments</a>
+          <a class="btn btn-outline" routerLink="/doctor-availability">Update Availability</a>
+          <!-- New from friend: route via search so :patientId can be selected -->
+          <a class="btn btn-greenblue" routerLink="/doctor/patient-search">Patients Medical Records</a>
+          <!-- Your extra (keep) -->
+          <a class="btn btn-outline" routerLink="/doctor/profile">My Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Receptionist Panel -->
+    <div class="role-panel" *ngIf="isReceptionist()">
+      <div class="panel-card">
+        <h4>Receptionist Panel</h4>
+        <p>Assist patients and manage daily bookings.</p>
+        <div class="panel-actions">
+          <a class="btn btn-greenblue" routerLink="/receptionist-schedule-appointments">Schedule</a>
+          <a class="btn btn-outline" routerLink="/receptionist-appointments">View All</a>
+          <a class="btn btn-outline" routerLink="/receptionist/patient-records">Patient Records</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="role-panel" *ngIf="isAdmin()">
+      <div class="panel-card">
+        <h4>Admin Panel</h4>
+        <p>Manage users, roles, and settings.</p>
+        <div class="panel-actions">
+          <a class="btn btn-greenblue" routerLink="/dashboard">Admin Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
- 

@@ -1,0 +1,130 @@
+/* ---------- Theme Tokens ---------- */
+:host {
+  --greenblue: #2c7be5;
+  --greenblue-dark: #1b62c6;
+  --text-muted: #6c757d;
+  --surface: #ffffff;
+  --surface-muted: #f8f9fa;
+  --border: #e6e9ef;
+ 
+  --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+ 
+/* ---------- Container & Headings ---------- */
+.container {
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+ 
+  > h2 {
+    font-weight: 800;
+    font-size: 24px;
+    color: #1f2d3d;
+    margin-bottom: 6px;
+  }
+}
+ 
+.text-muted {
+  color: var(--text-muted) !important;
+}
+ 
+/* ---------- Top Actions ---------- */
+.mb-3 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem !important;
+ 
+  .btn-success,
+  .btn-secondary {
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 700;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.15s ease;
+  }
+ 
+  .btn-success {
+    background: #28a745;
+    border-color: #28a745;
+    color: #fff;
+ 
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+ 
+  .btn-secondary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+}
+ 
+/* ---------- Loading State ---------- */
+.spinner-border {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+ 
+.text-center p {
+  color: var(--text-muted);
+}
+ 
+/* ---------- Empty State ---------- */
+.alert-info {
+  background: #eef7ff;
+  color: #0d5db3;
+  border: 1px solid #d6ebff;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+ 
+/* ---------- Table ---------- */
+.table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+ 
+  thead.thead-dark {
+    th {
+      background: linear-gradient(135deg, #0a3d62, var(--greenblue));
+      color: #fff;
+      border-color: transparent;
+      font-weight: 700;
+    }
+  }
+ 
+  td,
+  th {
+    vertical-align: middle;
+  }
+ 
+  tbody {
+    tr {
+      transition: background-color 0.12s ease;
+ 
+      &:hover {
+        background: rgba(44, 123, 229, 0.06);
+      }
+    }
+  }
+}
+ 
+/* ---------- Spacing Helpers ---------- */
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.mr-2 { margin-right: 0.5rem !important; }
+ 
+/* ---------- Responsive ---------- */
+@media (max-width: 576px) {
+  .btn-success,
+  .btn-secondary {
+    width: 100%;
+  }
+}

@@ -1,5 +1,9 @@
 package com.edutech.healthcare_appointment_management_system.entity;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDateTime;
 @Entity
 public class MedicalRecord {
@@ -8,16 +12,28 @@ public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.LAZY)//new
+    @JoinColumn(name = "patient_id")//new
+    @JsonIgnoreProperties({ "medicalRecords", "appointments", "password" })//new
     private Patient patient;
-    @ManyToOne
+
+    // Prevent recursion via doctor as well
+    @ManyToOne(fetch = FetchType.LAZY)//new
+    @JoinColumn(name = "doctor_id")//new
+    @JsonIgnoreProperties({ "medicalRecords", "appointments", "password" })//new
     private Doctor doctor;
+
     private String diagnosis;
     private String treatment;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")//new
     private LocalDateTime recordDate;
+
     public MedicalRecord() {}
     public MedicalRecord(Long id, Patient patient, Doctor doctor, String diagnosis, String treatment, LocalDateTime recordDate) {
         this.id = id;
+    
         this.patient = patient;
         this.doctor = doctor;
         this.diagnosis = diagnosis;

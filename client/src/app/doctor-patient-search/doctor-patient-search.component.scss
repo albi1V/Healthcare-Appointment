@@ -1,0 +1,160 @@
+/* ---------- Theme Tokens ---------- */
+:host {
+  --greenblue: #2c7be5;
+  --greenblue-dark: #1b62c6;
+  --text-muted: #6c757d;
+  --surface: #ffffff;
+  --surface-muted: #f8f9fa;
+  --border: #e6e9ef;
+ 
+  --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+ 
+/* ---------- Container & Heading ---------- */
+.container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+ 
+.container > h2 {
+  font-weight: 800;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #1f2d3d;
+}
+ 
+/* ---------- Input Group ---------- */
+.input-group .form-control {
+  border-radius: 12px 0 0 12px;
+  border: 1px solid var(--border);
+  height: 44px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+ 
+.input-group .form-control:focus {
+  border-color: var(--greenblue);
+  box-shadow: 0 0 0 4px rgba(44, 123, 229, 0.15);
+  z-index: 2;
+}
+ 
+.input-group-append .btn {
+  border-radius: 0 12px 12px 0;
+  height: 44px;
+  border: 1px solid var(--greenblue);
+  background: var(--greenblue);
+  color: #fff;
+  font-weight: 600;
+  padding: 0 16px;
+  transition: background-color 0.15s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+ 
+.input-group-append .btn:hover {
+  background: var(--greenblue-dark);
+  border-color: var(--greenblue-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+ 
+.input-group .btn i {
+  margin-right: 6px;
+}
+ 
+/* ---------- Loading / Empty States ---------- */
+.text-center p {
+  color: var(--text-muted);
+}
+ 
+.alert-info {
+  background: #eef7ff;
+  color: #0d5db3;
+  border: 1px solid #d6ebff;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+ 
+/* ---------- Table Styles ---------- */
+.table {
+  background: var(--surface);
+  border-radius: 14px;
+  overflow: hidden; /* rounds header corners */
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+ 
+.table thead.thead-dark th {
+  background: linear-gradient(135deg, #0a3d62, var(--greenblue));
+  color: #fff;
+  border-color: transparent;
+  font-weight: 700;
+}
+ 
+.table tbody tr {
+  transition: background-color 0.12s ease;
+}
+ 
+.table tbody tr:hover {
+  background: rgba(44, 123, 229, 0.06);
+}
+ 
+.table td, .table th {
+  vertical-align: middle;
+}
+ 
+/* ---------- Action Buttons ---------- */
+.btn-info.btn-sm {
+  background: #17a2b8;
+  border-color: #17a2b8;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 6px 10px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.btn-info.btn-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+ 
+.btn-success.btn-sm {
+  background: #28a745;
+  border-color: #28a745;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 6px 10px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.btn-success.btn-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+ 
+/* ---------- Helpers ---------- */
+.text-muted { color: var(--text-muted) !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mr-2 { margin-right: 0.5rem !important; }
+ 
+/* ---------- Grid Fine-tuning ---------- */
+.row { align-items: center; }
+.col-md-8 { display: flex; }
+ 
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .input-group .form-control {
+    border-radius: 12px;
+  }
+  .input-group-append {
+    margin-top: 8px;
+    width: 100%;
+  }
+  .input-group-append .btn {
+    width: 100%;
+    border-radius: 12px;
+  }
+}

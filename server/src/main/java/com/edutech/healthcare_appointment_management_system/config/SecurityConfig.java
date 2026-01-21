@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
 
             .authorizeRequests()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()//new
 
             // public endpoints (allow unauthenticated requests)
 
@@ -115,11 +116,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/patient/medicalrecords").hasAuthority("PATIENT")
 
             .antMatchers(HttpMethod.GET, "/api/doctor/appointments").hasAuthority("DOCTOR")
+            .antMatchers(HttpMethod.POST, "/api/doctor/medical-record").hasAuthority("DOCTOR")//new
+                .antMatchers(HttpMethod.GET,  "/api/doctor/patients/*/records").hasAuthority("DOCTOR")//new
 
             .antMatchers(HttpMethod.GET, "/api/receptionist/appointments").hasAuthority("RECEPTIONIST")
 
             .antMatchers(HttpMethod.PUT, "/api/receptionist/appointment-reschedule/**").hasAuthority("RECEPTIONIST")
-                        // ==========================================
+            .antMatchers(HttpMethod.GET,  "/api/receptionist/patients/*/records").hasAuthority("RECEPTIONIST")//new
+            .antMatchers(HttpMethod.GET, "/api/patients/search").hasAnyAuthority("DOCTOR", "RECEPTIONIST")//new
+             // ==========================================
  
             // NEW: Doctor Profile Management Endpoints
  

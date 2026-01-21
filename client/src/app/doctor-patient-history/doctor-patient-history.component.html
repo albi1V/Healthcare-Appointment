@@ -1,0 +1,55 @@
+<div class="container mt-4">
+<h2>Patient Medical History</h2>
+ 
+  <p class="text-muted">
+    Patient ID: {{ patientId }}
+<span *ngIf="patientUsername"> | Name: {{ patientUsername }}</span>
+</p>
+ 
+  <div class="mb-3">
+<button class="btn btn-success mr-2" (click)="addNewRecord()">
+      Add New Record
+</button>
+<button class="btn btn-secondary" (click)="backToSearch()">
+      Back to Search
+</button>
+</div>
+ 
+  <div *ngIf="isLoading" class="text-center mt-4">
+<div class="spinner-border text-primary" role="status">
+<span class="sr-only">Loading...</span>
+</div>
+<p class="mt-2">Loading medical records...</p>
+</div>
+ 
+  <div *ngIf="!isLoading && medicalRecords.length === 0" class="alert alert-info mt-4">
+<i class="fas fa-info-circle"></i> No medical records found for this patient.
+</div>
+ 
+  <div *ngIf="!isLoading && medicalRecords.length > 0" class="mt-4">
+<p class="text-muted mb-2">Total Records: {{ medicalRecords.length }}</p>
+<table class="table table-bordered table-hover">
+<thead class="thead-dark">
+<tr>
+<th>Record ID</th>
+<th>Date</th>
+<th>Doctor</th>
+<th>Diagnosis</th>
+<th>Treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let record of medicalRecords; trackBy: trackById">
+<td>{{ record.id }}</td>
+<td>{{ formatDate(record.recordDate) }}</td>
+<td>
+            Dr. {{ record?.doctor?.username || 'N/A' }}
+<span *ngIf="record?.doctor?.id"> (ID {{ record.doctor.id }})</span>
+</td>
+<td>{{ record.diagnosis }}</td>
+<td>{{ record.treatment }}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>

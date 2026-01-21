@@ -1,0 +1,158 @@
+/* ---------- Theme Tokens (in-component scope) ---------- */
+:host {
+  /* Theme colors */
+  --greenblue: #2c7be5;
+  --greenblue-dark: #1b62c6;
+  --dark-bg: #101820;
+  --text-muted: #6c757d;
+ 
+  /* Surfaces and borders */
+  --surface: #ffffff;
+  --surface-muted: #f8f9fa;
+  --border: #e6e9ef;
+ 
+  /* Shadows */
+  --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+ 
+/* ---------- Container & Heading ---------- */
+.container {
+  background: linear-gradient(180deg, rgba(44, 123, 229, 0.06), transparent 140px);
+  padding: 16px 16px 28px;
+  border-radius: 16px;
+}
+ 
+.container > h2 {
+  font-weight: 800;
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #1f2d3d;
+}
+ 
+/* ---------- Alert (success / error feedback) ---------- */
+.alert {
+  border-radius: 12px;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+ 
+.alert i {
+  margin-right: 6px;
+}
+ 
+.alert-success {
+  background: #e9f6ff;
+  border-color: #cfeaff;
+  color: #0d5db3;
+}
+ 
+.alert-danger {
+  background: #fff1f1;
+  border-color: #ffd7d7;
+  color: #b01818;
+}
+ 
+/* ---------- Form Card ---------- */
+form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow-md);
+}
+ 
+.form-group {
+  margin-bottom: 14px;
+}
+ 
+label {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #1f2d3d;
+  display: inline-block;
+}
+ 
+/* ---------- Inputs / Textareas ---------- */
+.form-control {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  background: #fff;
+}
+ 
+.form-control:focus {
+  border-color: var(--greenblue);
+  box-shadow: 0 0 0 4px rgba(44, 123, 229, 0.15);
+}
+ 
+.form-control[readonly] {
+  background: var(--surface-muted);
+  cursor: not-allowed;
+}
+ 
+/* Validation states that align with Angular's ngClass usage */
+.is-invalid {
+  border-color: #e55353 !important;
+  background: #fff8f8;
+}
+ 
+.text-danger {
+  font-size: 12px;
+}
+ 
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background: var(--greenblue);
+  border-color: var(--greenblue);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 600;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.15s ease;
+}
+ 
+.btn-primary:hover:not(:disabled) {
+  background: var(--greenblue-dark);
+  border-color: var(--greenblue-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+ 
+.btn-secondary {
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+ 
+.btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+ 
+/* Icon spacing inside buttons */
+.btn i {
+  margin-right: 6px;
+}
+ 
+/* ---------- Utilities ---------- */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+ 
+.mt-3 { margin-top: 1rem !important; }
+.mr-2 { margin-right: 0.5rem !important; }
+ 
+/* ---------- Responsive ---------- */
+@media (max-width: 576px) {
+  form {
+    padding: 14px;
+  }
+  .btn {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}

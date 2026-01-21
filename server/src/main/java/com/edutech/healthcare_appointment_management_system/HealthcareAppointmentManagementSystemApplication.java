@@ -27,11 +27,12 @@ public class HealthcareAppointmentManagementSystemApplication {
     @Autowired
     private AppointmentService appointmentService;
 
-    @PostConstruct
-    public void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Kolkata"));
-        log.info("Application timezone set to Asia/Kolkata (IST)");
-    }
+
+@PostConstruct
+public void init() {
+    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Kolkata"));
+    log.info("Application timezone set to Asia/Kolkata (IST)");
+}
 
     public static void main(String[] args) {
         SpringApplication.run(HealthcareAppointmentManagementSystemApplication.class, args);
