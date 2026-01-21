@@ -230,5 +230,21 @@ sendMessage(message: string): Observable<any> {
     );
  
   }
+
+
+  createAppointmentV2(details: { patientId: number; doctorId: number; time: string }) {
+
+  return this.http.post<any>(
+
+    `${this.serverName}/appointments`,    // your new controller also supports /api/appointments; stick to /appointments
+
+    details,
+
+    { headers: this.authHeaders() }
+
+  );
+
+}
+ 
  
 }

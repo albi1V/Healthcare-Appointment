@@ -129,75 +129,157 @@ getDoctors(): void {
     this.itemForm.controls['time'].setValue(slot.isoForControl);
   }
 
-  /** Submit with a fresh pre-flight check to prevent double booking */
-  onSubmit(): void {
-    if (this.itemForm.invalid) return;
+ /** Submit with a fresh pre-flight check to prevent double booking */
 
-    const selectedIso = this.itemForm.controls['time'].value as string;
-    if (!selectedIso) return;
+onSubmit(): void {
 
-    // Fresh check: re-fetch taken slots for the selected date and doctor, then decide
-    this.httpService.getAppointmentByDoctor(this.itemForm.controls['doctorId'].value).subscribe({
-      next: (appts: any) => {
-        const isTakenNow = this.isIsoTakenOnSelectedDate(selectedIso, appts);
-        if (isTakenNow) {
-          this.responseMessage = 'This slot has just been taken. Please choose another.';
-          return;
-        }
+  if (this.itemForm.invalid) return;
+ 
+  const selectedIso = this.itemForm.controls['time'].value as string;
 
-        // Safe to submit
-        const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
-        const formRaw = this.itemForm.getRawValue();
-        const formValue = { ...formRaw, time: formattedTime };
+  if (!selectedIso) return;
+ 
+  // Fresh check: re-fetch taken slots for the selected date and doctor, then decide
 
-        this.httpService.ScheduleAppointment(formValue).subscribe(
-          () => {
-            this.responseMessage = 'Appointment saved successfully';
-            this.isAdded = false;
-            this.itemForm.reset();
-            this.selectedDoctor = null;
+  this.httpService.getAppointmentByDoctor(this.itemForm.controls['doctorId'].value).subscribe({
 
-            // Restore patientId and today’s date after reset
-            if (this.patientId !== null) {
-              this.itemForm.controls['patientId'].setValue(this.patientId);
-            }
-            this.itemForm.controls['date'].setValue(this.today);
-            this.selectedDate = this.today;
-          },
-          (err: unknown) => {
-            // If backend enforces uniqueness and returns 409/400, inform user
-            this.responseMessage = 'Failed to save appointment';
-            console.error(err);
-          }
-        );
-      },
-      error: () => {
-        // If we cannot check, proceed but server should still enforce uniqueness
-        const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
-        const formRaw = this.itemForm.getRawValue();
-        const formValue = { ...formRaw, time: formattedTime };
+    next: (appts: any) => {
 
-        this.httpService.ScheduleAppointment(formValue).subscribe(
-          () => {
-            this.responseMessage = 'Appointment saved successfully';
-            this.isAdded = false;
-            this.itemForm.reset();
-            this.selectedDoctor = null;
+      const isTakenNow = this.isIsoTakenOnSelectedDate(selectedIso, appts);
 
-            if (this.patientId !== null) {
-              this.itemForm.controls['patientId'].setValue(this.patientId);
-            }
-            this.itemForm.controls['date'].setValue(this.today);
-            this.selectedDate = this.today;
-          },
-          (err: unknown) => {
-            this.responseMessage = 'Failed to save appointment ,it already allowed';
-            console.error(err);
-          }
-        );
+      if (isTakenNow) {
+
+        this.responseMessage = 'This slot has just been taken. Please choose another.';
+
+        return;
+
       }
+ 
+      // Safe to submit
+
+      const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
+
+      const formRaw = this.itemForm.getRawValue();
+
+      const formValue = { ...formRaw, time: formattedTime };
+ 
+      this.createAppointmentWithFallback(formValue);
+
+    },
+
+    error: () => {
+
+      // If we cannot check, proceed but server should still enforce uniqueness
+
+      const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
+
+      const formRaw = this.itemForm.getRawValue();
+
+      const formValue = { ...formRaw, time: formattedTime };
+ 
+      this.createAppointmentWithFallback(formValue);
+
+    }
+
+  });
+
+}
+ 
+ 
+ 
+/** Try new /appointments first; if 404 or method missing, fallback to existing endpoint */
+
+private createAppointmentWithFallback(formValue: any) {
+
+  // We’ll try to call HttpService.createAppointmentV2 if it exists (new endpoint)
+
+  const newCall = (this.httpService as any).createAppointmentV2;
+ 
+  const onSuccess = (res: any) => {
+
+    const apptId = res?.id ?? res?.appointmentId ?? '';
+
+    this.responseMessage = apptId
+
+      ? `Appointment #${apptId} booked successfully. A confirmation email has been sent to your registered email.`
+
+      : `Appointment booked successfully. A confirmation email has been sent to your registered email.`;
+ 
+    this.isAdded = false;
+
+    this.itemForm.reset();
+
+    this.selectedDoctor = null;
+ 
+    // Restore patientId and today's date after reset
+
+    if (this.patientId !== null) {
+
+      this.itemForm.controls['patientId'].setValue(this.patientId);
+
+    }
+
+    this.itemForm.controls['date'].setValue(this.today);
+
+    this.selectedDate = this.today;
+
+  };
+ 
+  const onError = (err: any) => {
+
+    if (err?.status === 409 && err?.error) {
+
+      this.responseMessage = String(err.error); // e.g., "Slot already booked"
+
+    } else {
+
+      this.responseMessage = 'Failed to save appointment';
+
+    }
+
+    console.error(err);
+
+  };
+ 
+  // Use the new endpoint first if available
+
+  if (typeof newCall === 'function') {
+
+    newCall.call(this.httpService, {
+
+      patientId: this.itemForm.controls['patientId'].value,
+
+      doctorId: this.itemForm.controls['doctorId'].value,
+
+      time: formValue.time
+
+    }).subscribe(onSuccess, (err: any) => {
+
+      // Fallback to old endpoint if new returns 404
+
+      if (err?.status === 404) {
+
+        this.httpService.ScheduleAppointment(formValue).subscribe(onSuccess, onError);
+
+      } else {
+
+        onError(err);
+
+      }
+
     });
+
+  } else {
+
+    // If new method not present, fallback straight to old endpoint
+
+    this.httpService.ScheduleAppointment(formValue).subscribe(onSuccess, onError);
+
   }
+
+}
+
+ 
 
 
 /** Check if selected ISO slot is taken on selected date from doctor’s appointments list */

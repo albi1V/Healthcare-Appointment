@@ -3,7 +3,8 @@ package com.edutech.healthcare_appointment_management_system.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
- 
+
+import com.edutech.healthcare_appointment_management_system.common.QrUtil;
 import com.edutech.healthcare_appointment_management_system.dto.TimeDto;
 import com.edutech.healthcare_appointment_management_system.entity.Appointment;
 import com.edutech.healthcare_appointment_management_system.entity.Doctor;
@@ -40,6 +41,9 @@ private DoctorRepository doctorRepository;
 @Autowired
 private UserRepository userRepository;
 
+@Autowired
+    private SendGridEmailService sendGridEmailService;
+
  /*
  
   */   
@@ -71,8 +75,83 @@ public Appointment scheduleAppointment(Long patientId, Long doctorId, TimeDto ti
     appointment.setAppointmentTime(timeDto.getTime());
     appointment.setStatus("Scheduled");
 
-    return appointmentRepository.save(appointment);
+    // return appointmentRepository.save(appointment);
+
+
+    Appointment saved = appointmentRepository.save(appointment);
+ 
+// ✅ NEW: Send confirmation email with QR (async). Booking still succeeds if email fails.
+
+// NOTE: This does NOT change any time storage logic. It only formats IST text for the email body.
+
+try {
+
+    if (p != null && d != null && saved.getId() != null) {
+
+        // Build email-friendly IST strings (keeps your existing time fix intact)
+
+        java.util.TimeZone ist = java.util.TimeZone.getTimeZone("Asia/Kolkata");
+
+        java.text.SimpleDateFormat dFmt = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+        dFmt.setTimeZone(ist);
+
+        java.text.SimpleDateFormat tFmt = new java.text.SimpleDateFormat("HH:mm");
+
+        tFmt.setTimeZone(ist);
+ 
+        java.util.Date apptDt = saved.getAppointmentTime();
+
+        String dateStr = dFmt.format(apptDt);
+
+        String timeStr = tFmt.format(apptDt);
+ 
+        String link = ""; // optional: e.g., "https://your-ui.app/appointments/" + saved.getId()
+
+        String qrPayload = "APPT:" + saved.getId()
+
+        + "|PATIENT:" + p.getUsername()
+
+        + "|DATE:" + dateStr
+
+        + "|TIME:" + timeStr;
+ 
+byte[] qrPng = QrUtil.toPng(qrPayload, 320);
+ 
+sendGridEmailService.sendAppointmentConfirmation(
+
+    p.getEmail(),
+
+    p.getUsername(),
+
+    d.getUsername(),
+
+    d.getSpecialty(),
+
+    dateStr,
+
+    timeStr,
+
+    saved.getId(),
+
+    qrPng
+
+);
+ 
+    }
+
+} catch (Exception ignored) {
+
+    // Never break booking flow for email errors
+
 }
+ 
+return saved;
+
+}
+
+ 
+
 
 
       public List<Appointment> getAppointmentsByPatientId(Long patientId){
