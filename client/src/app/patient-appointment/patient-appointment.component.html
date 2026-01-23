@@ -1,4 +1,3 @@
- 
 <div class="card mt-4">
 <div class="card-header">
 <h4>Appointments</h4>
@@ -15,7 +14,11 @@
 <tbody *ngFor="let val of appointmentList">
 <tr >
 <td>{{val.id}}</td>
-<td>{{val.appointmentTime | date:'dd-MMM-yyyy hh:mm:a'}}</td>
+<td>
+{{ val.appointmentTime | date:'dd-MMM-yyyy hh:mm a' }}
+ 
+</td>
+
 <td>{{val.status}}</td>
 <td><strong>{{val.doctor.username}}</strong><br>
 <small>{{val.doctor.email}}</small>
@@ -28,3 +31,4 @@
 </table>
 </div>
 </div>
+

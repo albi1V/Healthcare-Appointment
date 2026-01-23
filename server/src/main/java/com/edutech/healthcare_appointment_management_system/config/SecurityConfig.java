@@ -47,36 +47,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
 
     public SecurityConfig(UserDetailsService userDetailsService,
-
                           JwtRequestFilter jwtRequestFilter,
-
                           PasswordEncoder passwordEncoder) {
-
         this.userDetailsService = userDetailsService;
-
         this.jwtRequestFilter = jwtRequestFilter;
-
         this.passwordEncoder = passwordEncoder;
 
     }
  
     @Override
-
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-
     }
  
     @Override
-
     protected void configure(HttpSecurity http) throws Exception {
-
         // IMPORTANT: list all public endpoints FIRST, then call anyRequest().authenticated()
 
         http.cors().and().csrf().disable()
 
             .authorizeRequests()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()//new
 
             // public endpoints (allow unauthenticated requests)
 
@@ -96,7 +87,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                  "/api/news",
 
-                 "/api/doctor/profile"
+                 "/api/doctor/profile",
+                 "/api/otp/send",      
+                 "/api/otp/verify",
+                 "/api/password/send-otp",
+                 "/api/password/verify-otp",
+                 "/api/password/reset-password",
+                 "/api/chatbot/**"
+
 
  
             ).permitAll()
@@ -118,10 +116,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/patient/medicalrecords").hasAuthority("PATIENT")
 
             .antMatchers(HttpMethod.GET, "/api/doctor/appointments").hasAuthority("DOCTOR")
+            .antMatchers(HttpMethod.POST, "/api/doctor/medical-record").hasAuthority("DOCTOR")//new
+                .antMatchers(HttpMethod.GET,  "/api/doctor/patients/*/records").hasAuthority("DOCTOR")//new
 
             .antMatchers(HttpMethod.GET, "/api/receptionist/appointments").hasAuthority("RECEPTIONIST")
 
             .antMatchers(HttpMethod.PUT, "/api/receptionist/appointment-reschedule/**").hasAuthority("RECEPTIONIST")
+            .antMatchers(HttpMethod.GET,  "/api/receptionist/patients/*/records").hasAuthority("RECEPTIONIST")//new
+            .antMatchers(HttpMethod.GET, "/api/patients/search").hasAnyAuthority("DOCTOR", "RECEPTIONIST")//new
+             // ==========================================
+ 
+            // NEW: Doctor Profile Management Endpoints
+ 
+            // ==========================================
+ 
+            // GET full profile - Only DOCTOR role can access
+ 
+            .antMatchers(HttpMethod.GET, "/api/doctor/profile/full/**").hasAuthority("DOCTOR")
+ 
+            // UPDATE profile - Only DOCTOR role can modify
+ 
+            .antMatchers(HttpMethod.PUT, "/api/doctor/profile/**").hasAuthority("DOCTOR")
+ 
+            // ==========================================
+ 
+            // DEFAULT: Everything else requires authentication
+ 
+            // ==========================================
  
             // everything else requires authentication
 

@@ -12,9 +12,8 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit {
 
   itemForm: FormGroup;
-  formModel: any = {};
   showError: boolean = false;
-  errorMessage: any;
+  errorMessage: string = '';
 
   constructor(
     public router: Router,
@@ -23,28 +22,36 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) {
     this.itemForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],   // CHANGED
       password: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void {
-    // intentionally empty
-  }
+  ngOnInit(): void { }
 
   onLogin(): void {
     if (this.itemForm.invalid) {
+      this.itemForm.markAllAsTouched();
       return;
     }
 
     this.showError = false;
 
-    this.httpService.Login(this.itemForm.value).subscribe({
+    const payload = {
+      email: (this.itemForm.value.email || '').trim().toLowerCase(), // CHANGED
+      password: this.itemForm.value.password
+    };
+
+    this.httpService.Login(payload).subscribe({
       next: (res: any) => {
-        // expected response: { token, userId, role }
+        // Backend returns: token, userId, username, email, role
         this.authService.saveToken(res.token);
-        this.authService.saveUserId(res.userId);
+        this.authService.saveUserId(String(res.userId));
         this.authService.SetRole(res.role);
+
+        // Keep username for UI if needed
+        localStorage.setItem('username', res.username);
+        localStorage.setItem('email', res.email);
 
         this.router.navigateByUrl('/dashboard').then(() => {
           setTimeout(() => window.location.reload(), 200);
@@ -52,7 +59,7 @@ export class LoginComponent implements OnInit {
       },
       error: () => {
         this.showError = true;
-        this.errorMessage = 'Invalid username or password';
+        this.errorMessage = 'Invalid email or password'; // CHANGED
       }
     });
   }
@@ -60,4 +67,15 @@ export class LoginComponent implements OnInit {
   registration(): void {
     this.router.navigateByUrl('/registration');
   }
+
+  forgotPassword():void{
+    this.router.navigateByUrl('/forgot-password');
+  }
+
+  chatbot():void{
+    this.router.navigateByUrl('/chat');
+ 
+  }
 }
+
+

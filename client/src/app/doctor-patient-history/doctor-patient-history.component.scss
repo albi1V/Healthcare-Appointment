@@ -1,0 +1,310 @@
+/* ---------------- Theme Tokens ---------------- */
+:host {
+  --brand-1: #0a3d62;
+  --brand-2: #2c7be5;
+  --brand-3: #1b62c6;
+  --brand-ghost: rgba(44, 123, 229, 0.08);
+
+  --surface: #ffffff;
+  --surface-muted: #f7f9fc;
+  --text-primary: #1f2d3d;
+  --text-muted: #6c7a89;
+  --border: #e6e9ef;
+
+  --ring: rgba(44, 123, 229, 0.28);
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 28px rgba(10, 61, 98, 0.12);
+}
+
+/* ---------------- Page Shell ---------------- */
+.page {
+  min-height: 100%;
+  background: linear-gradient(160deg, var(--brand-1) 0%, var(--brand-2) 60%, #75a7f5 100%);
+  padding: clamp(16px, 2vw, 24px);
+  display: grid;
+  gap: 18px;
+  position: relative;
+  isolation: isolate;
+}
+
+/* ---------------- Header ---------------- */
+.page-header {
+  color: #fff;
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 24px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 1;
+
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    font-size: clamp(20px, 2.1vw, 28px);
+
+    i { font-size: 1.1em; }
+  }
+
+  .subtitle {
+    grid-column: 1 / -1;
+    margin: 6px 0 0;
+    opacity: 0.9;
+  }
+
+  .header-actions {
+    justify-self: end;
+
+    .ghost {
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+
+      i { margin-right: 6px; }
+
+      &:hover {
+        transform: translateY(-1px);
+        background: rgba(255,255,255,0.22);
+        box-shadow: var(--shadow-sm);
+      }
+    }
+
+    @media (max-width: 640px) {
+      justify-self: start;
+    }
+  }
+}
+
+/* ---------------- Card ---------------- */
+.card {
+  background: var(--surface);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: var(--shadow-md);
+  padding: clamp(14px, 2.2vw, 20px);
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------------- Top Row (Patient chip + Actions) ---------------- */
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.patient-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #eef7ff;
+  color: #0d2a4a;
+  border: 1px solid #d6ebff;
+  border-radius: 12px;
+
+  .chip-id {
+    font-weight: 800;
+    color: var(--brand-3);
+  }
+  .chip-name {
+    font-weight: 600;
+    color: #0b4e9b;
+  }
+}
+
+.actions {
+  justify-self: end;
+
+  .btn-success {
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 700;
+    background: #28a745;
+    border: 1px solid #28a745;
+    color: #fff;
+    transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+
+    i { margin-right: 6px; }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      background: #218838;
+      border-color: #218838;
+    }
+  }
+
+  @media (max-width: 640px) {
+    justify-self: start;
+  }
+}
+
+/* ---------------- Results Meta ---------------- */
+.results-meta {
+  margin-top: 12px;
+
+  .badge-count {
+    background: var(--brand-ghost);
+    color: #0d2a4a;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    font-weight: 600;
+  }
+}
+
+/* ---------------- Empty State ---------------- */
+.empty {
+  display: grid;
+  place-items: center;
+  padding: 20px 8px;
+
+  .empty-card {
+    text-align: center;
+    background: #f8fbff;
+    border: 1px dashed #d6ebff;
+    border-radius: 14px;
+    padding: 20px 14px;
+    color: #0d5db3;
+    box-shadow: var(--shadow-sm);
+
+    i {
+      font-size: 28px;
+      color: var(--brand-2);
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin: 0 0 6px;
+      font-weight: 700;
+      color: #0d2a4a;
+    }
+
+    p { margin: 0 0 10px; }
+  }
+}
+
+/* ---------------- Table ---------------- */
+.table-wrap {
+  margin-top: 8px;
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  background: var(--surface);
+  position: relative;
+  z-index: 1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    padding: 12px 14px;
+    border-bottom: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 14px;
+    vertical-align: middle;
+    border-top: 1px solid #eef1f5;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fafbff;
+  }
+
+  tbody tr:hover {
+    background: rgba(44, 123, 229, 0.06);
+    box-shadow: inset 0 0 0 9999px rgba(44, 123, 229, 0.02);
+  }
+
+  .doctor-name { font-weight: 600; }
+  .doctor-id { color: #5a6a7a; }
+}
+
+/* ---------------- Skeleton ---------------- */
+.skeleton {
+  display: inline-block;
+  height: 12px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #eaeef5 25%, #f5f8fd 37%, #eaeef5 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+
+  &.w-60 { width: 60px; }
+  &.w-90 { width: 100px; }
+  &.w-100 { width: 140px; }
+  &.w-140 { width: 180px; }
+  &.w-160 { width: 220px; }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------------- Spacing helpers ---------------- */
+.mt-8 { margin-top: 16px; }
+.mt-10 { margin-top: 10px; }
+
+/* ---------------- Responsive ---------------- */
+.hide-sm {
+  @media (max-width: 720px) {
+    display: none;
+  }
+}
+
+@media (max-width: 540px) {
+  .table tbody td[data-label]::before {
+    content: attr(data-label) ': ';
+    font-weight: 700;
+    color: #4b5a6a;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+

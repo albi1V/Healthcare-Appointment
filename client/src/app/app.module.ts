@@ -17,6 +17,16 @@ import { DoctorAppointmentComponent } from './doctor-appointment/doctor-appointm
 import { DoctorAvailabilityComponent } from './doctor-availability/doctor-availability.component';
 import { ReceptionistAppointmentsComponent } from './receptionist-appointments/receptionist-appointments.component';
 import { ReceptionistScheduleAppointmentsComponent } from './receptionist-schedule-appointments/receptionist-schedule-appointments.component';
+import { AboutComponent } from './about/about.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ChatComponent } from './chat/chat.component';
+import { SymptomRecommendationComponent } from './symptom-recommendation/symptom-recommendation.component.';
+import { DoctorProfileComponent } from './doctor-profile/doctor-profile.component';
+import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
+import { DoctorAddMedicalRecordComponent } from './doctor-add-medical-record/doctor-add-medical-record.component';
+import { DoctorPatientHistoryComponent } from './doctor-patient-history/doctor-patient-history.component';
+import { DoctorPatientSearchComponent } from './doctor-patient-search/doctor-patient-search.component';
+import { ReceptionistPatientRecordsComponent } from './receptionist-patient-records/receptionist-patient-records.component';
 
 
 
@@ -32,7 +42,17 @@ import { ReceptionistScheduleAppointmentsComponent } from './receptionist-schedu
     DoctorAvailabilityComponent,
     DoctorAppointmentComponent,
     ReceptionistAppointmentsComponent,
-    ReceptionistScheduleAppointmentsComponent
+    ReceptionistScheduleAppointmentsComponent,
+    AboutComponent,
+    ForgotPasswordComponent,
+    ChatComponent,
+    SymptomRecommendationComponent, // ✅ ADD THIS LINE
+    DoctorProfileComponent,
+    DoctorDetailsComponent,
+    DoctorAddMedicalRecordComponent,
+    DoctorPatientHistoryComponent,
+    DoctorPatientSearchComponent,
+    ReceptionistPatientRecordsComponent
 
     
   ],

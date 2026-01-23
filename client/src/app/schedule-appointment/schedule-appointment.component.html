@@ -1,141 +1,178 @@
-
-<div class="schedule-appointment-container">
-
-  <h2 class="page-title">Schedule Appointment</h2>
-  <p class="page-subtitle">
-    Choose a doctor, pick a date, and select a 15‑minute slot.
-  </p>
+<div class="page schedule-page">
+  <!-- Header bar with gradient -->
+  <header class="page-header">
+    <div class="header-inner">
+      <h1 class="title">
+        <!-- simple inline icon: calendar + check -->
+        <span class="icon" aria-hidden="true">📅</span>
+        Schedule Appointment
+      </h1>
+      <p class="subtitle">Pick a doctor, choose a date, and book a 15‑minute slot.</p>
+    </div>
+  </header>
 
   <!-- Server Response -->
-  <div *ngIf="responseMessage" class="server-alert" [ngClass]="{ 'success': !isAdded && responseMessage.includes('success'), 'error': responseMessage.includes('Failed') }">
-    {{ responseMessage }}
-  </div>
+  <section class="card" *ngIf="responseMessage">
+    <div
+      class="server-alert"
+      [ngClass]="{ 'success': !isAdded && responseMessage.includes('success'), 'error': responseMessage.includes('Failed') }"
+    >
+      {{ responseMessage }}
+    </div>
+  </section>
 
   <!-- Doctors List -->
-  <div class="card mt-3">
-    <div class="card-header">
-      <h4>Doctors</h4>
+  <section class="card">
+    <div class="card-title-row">
+      <h4 class="card-title">Doctors</h4>
     </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 90px;">Id</th>
-              <th>Doctor</th>
-              <th>Specialty</th>
-              <th>Availability</th>
-              <th style="width: 160px;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let doc of doctorList">
-              <td>{{ doc.id }}</td>
-              <td>
-                <div class="doctor-cell">
-                  <div class="avatar">{{ (doc.name || 'D')[0] }}</div>
-                  <div class="doctor-meta">
-                    <div class="name">{{ doc.name }}</div>
-                    <div class="muted">ID: {{ doc.id }}</div>
-                  </div>
-                </div>
-              </td>
-              <td>{{ doc.specialty }}</td>
-              <td>{{ doc.availability }}</td>
-              <td>
-                <button class="btn btn-primary" (click)="addAppointment(doc)">Appointment</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
 
-        <div *ngIf="doctorList?.length === 0" class="empty-message">
-          No doctors available right now. Please try again later.
+    <div class="table-wrap">
+      <table class="table table-hover" role="table">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 90px;">Id</th>
+            <th scope="col">Doctor</th>
+            <th scope="col">Specialty</th>
+            <th scope="col">Availability</th>
+            <th scope="col" style="width: 160px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of doctorList">
+            <td data-label="Id">#{{ doc.id }}</td>
+            <td data-label="Doctor">
+              <div class="doctor-cell">
+                <div class="avatar">{{ (doc.name || 'D')[0] }}</div>
+                <div class="doctor-meta">
+                  <div class="name">{{ doc.name }}</div>
+                  <div class="muted">ID: {{ doc.id }}</div>
+                </div>
+              </div>
+            </td>
+            <td data-label="Specialty">{{ doc.specialty }}</td>
+            <td data-label="Availability">{{ doc.availability }}</td>
+            <td class="actions" data-label="Action">
+              <button class="btn btn-primary" type="button" (click)="addAppointment(doc)">
+                Appointment
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="doctorList?.length === 0" class="empty">
+        <div class="empty-card">
+          <div class="empty-icon">🩺</div>
+          <h3>No doctors available</h3>
+          <p>Try again later or contact support.</p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Selected Doctor & Slot Picker -->
-  <div class="card mt-3" *ngIf="isAdded">
-    <div class="card-header">
-      <h4>Book with {{ selectedDoctor?.name || 'Doctor' }}</h4>
+  <section class="card" *ngIf="isAdded">
+    <div class="card-title-row">
+      <h4 class="card-title">Book with {{ selectedDoctor?.name || 'Doctor' }}</h4>
     </div>
-    <div class="card-body">
 
-      <!-- Summary -->
-      <div class="doctor-summary">
-        <div class="doctor-summary__avatar">{{ (selectedDoctor?.name || 'D')[0] }}</div>
-        <div class="doctor-summary__meta">
-          <div class="title">{{ selectedDoctor?.name }}</div>
-          <div class="sub">Specialty: {{ selectedDoctor?.specialty || '—' }}</div>
-          <div class="sub">Availability: {{ selectedDoctor?.availability || '—' }}</div>
+    <!-- Summary -->
+    <div class="doctor-summary">
+      <div class="doctor-summary__avatar">{{ (selectedDoctor?.name || 'D')[0] }}</div>
+      <div class="doctor-summary__meta">
+        <div class="title">{{ selectedDoctor?.name }}</div>
+        <div class="sub">Specialty: {{ selectedDoctor?.specialty || '—' }}</div>
+        <div class="sub">Availability: {{ selectedDoctor?.availability || '—' }}</div>
+      </div>
+    </div>
+
+    <!-- Date + Slots -->
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="appointment-form" novalidate>
+      <!-- Doctor & Date -->
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label>Doctor</label>
+          <div class="static-value">{{ itemForm.controls['doctorName'].value }}</div>
+        </div>
+
+        <div class="form-field">
+          <label>Date</label>
+          <input
+            type="date"
+            class="form-control"
+            [value]="selectedDate"
+            [min]="today"
+            (change)="onDateChange($event)"
+          />
         </div>
       </div>
 
-      <!-- Date + Slots -->
-      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="appointment-form" novalidate>
-
-        <!-- Doctor & Date -->
-        <div class="form-grid-2">
-          <div class="form-field">
-            <label>Doctor</label>
-            <div class="static-value">{{ itemForm.controls['doctorName'].value }}</div>
-          </div>
-
-          <div class="form-field">
-            <label>Date</label>
-            <input
-              type="date"
-              class="form-control"
-              [value]="selectedDate"
-              [min]="today"
-              (change)="onDateChange($event)"
-            />
-          </div>
+      <!-- Selected slot preview -->
+      <div class="form-field">
+        <label>Selected Slot</label>
+        <div class="static-value">
+          {{ itemForm.controls['time'].value ? (itemForm.controls['time'].value | date:'medium') : '—' }}
         </div>
+      </div>
 
-        <!-- Selected slot preview -->
-        <div class="form-field">
-          <label>Selected Slot</label>
-          <div class="static-value">
-            {{ itemForm.controls['time'].value ? (itemForm.controls['time'].value | date:'medium') : '—' }}
-          </div>
+      <!-- Hidden controls -->
+      <input type="text" formControlName="doctorName" class="visually-hidden" />
+      <input type="date" formControlName="date" class="visually-hidden" />
+      <input type="datetime-local" formControlName="time" class="visually-hidden" />
+
+      <div class="slots-header">
+        <h5>Available Slots</h5>
+        <div *ngIf="loadingSlots" class="slots-loading">Loading slots…</div>
+      </div>
+
+      <div *ngIf="!loadingSlots && slots.length === 0" class="empty">
+        <div class="empty-card">
+          <div class="empty-icon">🕑</div>
+          <h3>No slots available</h3>
+          <p>Try another date.</p>
         </div>
+      </div>
 
-        <!-- Hidden controls to keep form valid & payload complete -->
-        <input type="text" formControlName="doctorName" class="visually-hidden" />
-        <input type="date" formControlName="date" class="visually-hidden" />
-        <input type="datetime-local" formControlName="time" class="visually-hidden" />
-
-        <div class="slots-header">
-          <h5>Available Slots</h5>
-          <div *ngIf="loadingSlots" class="slots-loading">Loading slots…</div>
-        </div>
-
-        <div *ngIf="!loadingSlots && slots.length === 0" class="empty-message">
-          No slots available on this date. Try another date.
-        </div>
-
-        <div class="slots-grid" *ngIf="!loadingSlots && slots.length > 0">
-          <button
-            type="button"
-            class="slot"
-            *ngFor="let s of slots"
-            [class.taken]="s.taken"
-            [disabled]="s.disabled"
-            (click)="selectSlot(s)"
-          >
-            <span class="slot-time">{{ s.label }}</span>
-            <span class="slot-badge" *ngIf="s.taken">Taken</span>
-          </button>
-        </div>
-
-        <button type="submit" class="submit-button" [disabled]="itemForm.invalid">
-          Submit
+      <div class="slots-grid" *ngIf="!loadingSlots && slots.length > 0">
+        <button
+          type="button"
+          class="slot"
+          *ngFor="let s of slots"
+          [class.taken]="s.taken"
+          [class.selected]="itemForm.controls['time'].value === s.isoForControl"
+          [disabled]="s.disabled"
+          [attr.aria-disabled]="s.disabled ? true : null"
+          (click)="selectSlot(s)"
+          [title]="s.taken ? 'Already booked' : 'Select this slot'"
+        >
+          <span class="slot-time">{{ s.label }}</span>
+          <span class="slot-badge" *ngIf="s.taken">Taken</span>
+          <span class="slot-check" *ngIf="itemForm.controls['time'].value === s.isoForControl" aria-hidden="true">✓</span>
         </button>
-      </form>
-    </div>
-  </div>
+      </div>
 
+      <button
+        type="submit"
+        class="submit-button"
+        [disabled]="itemForm.invalid || isSubmitting"
+        [attr.aria-busy]="isSubmitting ? true : null"
+      >
+        <span class="btn-spinner" *ngIf="isSubmitting" aria-hidden="true"></span>
+        <span>{{ isSubmitting ? 'Booking…' : 'Submit' }}</span>
+      </button>
+    </form>
+  </section>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,165 +1,288 @@
-
 /* -------------------------------
-   Theme tokens (tweak as needed)
+   Theme tokens (Blue + White)
 ---------------------------------*/
-$primary: #0d6efd;        // Primary blue
-$bg: #0e1420;             // Page background (if used globally)
-$card-bg: #111827;        // Card surface / table bg
-$text: #e5e7eb;           // Light text
-$text-muted: #9ca3af;     // Muted text
+$primary: #0d6efd;       // Primary blue
+$primary-600: #1d4ed8;   // Deeper blue
+$bg-grad-start: #0e1b2b; // Deep navy
+$bg-grad-end: #0b1220;   // Darker navy
+$surface: #0f172a;       // Card surface (glass base)
+$white: #ffffff;
+$text: #e5e7eb;
+$text-muted: #aab0bb;
 $border: rgba(255, 255, 255, 0.12);
-$shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.35);
-$error: #ef4444;
+$shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.35);
+
 $success: #10b981;
+$warning: #f59e0b;
+$error: #ef4444;
 
 /* -------------------------------
-   Page container
+   Page base
 ---------------------------------*/
-.doctor-appointments-container {
-  width: min(980px, 96%);
-  margin: 20px auto;
-  padding: clamp(12px, 2vw, 16px);
+.doctor-appointments-page {
+  min-height: 100%;
+  padding: clamp(16px, 3vw, 28px);
+  background: linear-gradient(160deg, $bg-grad-start 0%, $bg-grad-end 100%);
   color: $text;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
 
-  .page-title {
-    margin: 0 0 14px;
-    font-size: clamp(20px, 2.6vw, 26px);
-    font-weight: 700;
-    letter-spacing: 0.2px;
+  /* Header */
+  .page-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+    margin: 0 auto clamp(14px, 2.2vw, 18px);
+    width: min(1100px, 100%);
+
+    .title-wrap {
+      .page-title {
+        margin: 0 0 4px;
+        font-size: clamp(20px, 2.4vw, 28px);
+        font-weight: 800;
+        color: $white;
+        letter-spacing: 0.2px;
+      }
+      .subtitle {
+        margin: 0;
+        color: $text-muted;
+        font-size: 14px;
+      }
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+
+      .search {
+        position: relative;
+        .ph {
+          position: absolute;
+          left: 12px; top: 50%;
+          transform: translateY(-50%);
+          font-size: 16px;
+          color: $text-muted;
+        }
+        .search-input {
+          width: clamp(220px, 28vw, 320px);
+          padding: 10px 12px 10px 36px;
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid $border;
+          color: $text;
+          transition: border-color 140ms ease, background 140ms ease;
+          &::placeholder { color: $text-muted; }
+          &:focus {
+            outline: none;
+            border-color: rgba($primary, 0.6);
+            background: rgba(255, 255, 255, 0.12);
+          }
+        }
+      }
+
+      .status-filters {
+        display: flex;
+        gap: 6px;
+        .chip {
+          padding: 8px 12px;
+          font-size: 13px;
+          border-radius: 999px;
+          border: 1px solid $border;
+          color: $text;
+          background: rgba(255, 255, 255, 0.06);
+          cursor: pointer;
+          transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+          &.active { border-color: rgba($primary, 0.6); background: rgba($primary, 0.18); }
+          &:hover { transform: translateY(-1px); }
+
+          &.success { border-color: rgba($success, 0.45); background: rgba($success, 0.12); }
+          &.warning { border-color: rgba($warning, 0.45); background: rgba($warning, 0.12); }
+          &.danger  { border-color: rgba($error, 0.45);   background: rgba($error, 0.12); }
+        }
+      }
+
+      .btn.btn-refresh {
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba($primary, 0.35);
+        background: linear-gradient(180deg, rgba(13, 110, 253, 0.22) 0%, rgba(13, 110, 253, 0.16) 100%);
+        color: #dbeafe;
+        cursor: pointer;
+        transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+        box-shadow: 0 6px 14px rgba(13, 110, 253, 0.18);
+        &:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(13, 110, 253, 0.22); }
+        &:disabled { opacity: 0.65; cursor: not-allowed; }
+        .spinner {
+          width: 14px; height: 14px; border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.35);
+          border-top-color: $white;
+          display: inline-block;
+          margin-right: 8px;
+          animation: spin 0.8s linear infinite;
+        }
+      }
+    }
+  }
+
+  /* Card */
+  .card {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(8px);
+    border: 1px solid $border;
+    border-radius: 16px;
+    box-shadow: $shadow-soft;
+
+    .card-body {
+      padding: clamp(12px, 2.2vw, 18px);
+    }
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: clamp(24px, 4vw, 36px);
     color: $text;
+    border: 1px dashed $border;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+
+    .empty-graphic { font-size: clamp(36px, 4vw, 48px); margin-bottom: 10px; }
+    h4 { margin: 6px 0; font-weight: 700; color: #eaf2ff; }
+    .muted { color: $text-muted; font-size: 14px; }
   }
-}
 
-/* -------------------------------
-   Empty state
----------------------------------*/
-.empty-message {
-  padding: 16px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid $border;
-  color: $text-muted;
-}
+  /* Table */
+  .table-wrap {
+    overflow: auto;
+    border-radius: 12px;
+    border: 1px solid $border;
+    background: rgba(255, 255, 255, 0.02);
+  }
 
-/* -------------------------------
-   Table styles
----------------------------------*/
-.table-responsive {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(17, 24, 39, 0.86) 100%);
-  border: 1px solid $border;
-  border-radius: 14px;
-  box-shadow: $shadow-soft;
-  overflow: hidden; /* round corners apply to table contents */
-}
+  .appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: $text;
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  color: $text;
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, rgba($primary-600, 0.22) 0%, rgba($primary-600, 0.18) 100%);
+      backdrop-filter: blur(4px);
 
-  thead {
-    background: rgba(13, 110, 253, 0.18);
-
-    th {
-      text-align: left;
-      padding: 12px 14px;
-      font-weight: 700;
-      font-size: 14px;
-      border-bottom: 1px solid $border;
-      color: #dbeafe;
+      th {
+        text-align: left;
+        padding: 12px 14px;
+        font-weight: 700;
+        font-size: 13.5px;
+        color: #dbeafe;
+        border-bottom: 1px solid $border;
+        white-space: nowrap;
+      }
+      .col-time { min-width: 200px; }
     }
-  }
 
-  tbody {
-    tr {
-      transition: background 140ms ease;
-
-      &:nth-child(odd) {
-        background: rgba(255, 255, 255, 0.03);
+    tbody {
+      tr {
+        transition: background 140ms ease;
+        &:nth-child(odd)  { background: rgba(255, 255, 255, 0.03); }
+        &:nth-child(even) { background: rgba(255, 255, 255, 0.015); }
+        &:hover { background: rgba($primary, 0.10); }
       }
 
-      &:hover {
-        background: rgba(13, 110, 253, 0.08);
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid $border;
+        vertical-align: middle;
+        word-break: break-word;
       }
-    }
 
-    td {
-      padding: 12px 14px;
-      border-bottom: 1px solid $border;
-      vertical-align: middle;
-
-      /* Make long names wrap nicely */
-      word-break: break-word;
+      .col-id { color: #c7d2fe; font-weight: 700; }
+      .col-contact .muted { color: $text-muted; }
     }
   }
-}
 
-/* -------------------------------
-   Status badge styles
----------------------------------*/
-.badge {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  line-height: 1;
-
-  &.bg-success {
-    background: rgba($success, 0.18);
-    color: #d1fae5;
-    border: 1px solid rgba($success, 0.45);
-  }
-
-  &.bg-danger {
-    background: rgba($error, 0.18);
-    color: #fecaca;
-    border: 1px solid rgba($error, 0.45);
-  }
-
-  &.bg-secondary {
-    background: rgba(148, 163, 184, 0.22);
-    color: #e2e8f0;
+  /* Badges for status */
+  .badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    line-height: 1;
     border: 1px solid rgba(148, 163, 184, 0.35);
-  }
-}
+    background: rgba(148, 163, 184, 0.16);
+    color: #e2e8f0;
 
-/* -------------------------------
-   Responsive tweaks
----------------------------------*/
-@media (max-width: 640px) {
-  .doctor-appointments-container {
-    margin: 12px auto;
-    padding: 10px;
-
-    .page-title {
-      font-size: 20px;
+    &.bg-success {
+      background: rgba($success, 0.16);
+      color: #d1fae5;
+      border-color: rgba($success, 0.45);
+    }
+    &.bg-warning {
+      background: rgba($warning, 0.16);
+      color: #fff1c2;
+      border-color: rgba($warning, 0.45);
+    }
+    &.bg-danger {
+      background: rgba($error, 0.16);
+      color: #fecaca;
+      border-color: rgba($error, 0.45);
+    }
+    &.bg-secondary {
+      background: rgba(148, 163, 184, 0.18);
+      color: #e2e8f0;
     }
   }
-
-  table thead th,
-  table tbody td {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
 }
 
-/* -------------------------------
-   Focus visibility (accessibility)
----------------------------------*/
+/* Accessibility */
 :focus-visible {
   outline: 3px solid rgba(13, 110, 253, 0.45);
   outline-offset: 2px;
   border-radius: 8px;
 }
 
-/* -------------------------------
-   Reduce Motion Preference
----------------------------------*/
+/* Reduce Motion */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
+  * { transition: none !important; animation: none !important; }
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .doctor-appointments-page {
+    padding: 12px;
+
+    .page-header {
+      grid-template-columns: 1fr;
+      .toolbar {
+        justify-content: stretch;
+        .search .search-input { width: 100%; }
+      }
+    }
+
+    .appointments-table thead th,
+    .appointments-table tbody td {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
   }
 }
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+
+
+
+
+
+
+

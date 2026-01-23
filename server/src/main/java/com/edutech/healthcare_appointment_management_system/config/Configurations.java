@@ -22,7 +22,12 @@ public class Configurations {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                .allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*").allowedHeaders("*");
+                .allowedOrigins("*") // use this for broader compatibility new
+                .allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*").allowedHeaders("*")
+                // .allowedHeaders("*")
+                .exposedHeaders("Authorization", "Cache-Control", "Content-Type")//new
+                .maxAge(3600); // cache preflight for 1 hour new
+ 
             }
         };
     }

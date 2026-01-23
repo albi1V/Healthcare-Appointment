@@ -1,51 +1,60 @@
-
 <main class="login-page">
-  <section class="login-form-section">
-    <div class="login-card">
-      <div class="header-section">
-        <h1>Login to Your Account</h1>
-        <p>Access the Healthcare Appointment Management System</p>
-      </div>
-
+ 
+  <!-- Background Image -->
+<div class="bg-photo">
+<img src="assets/img/Docter3.jpg" alt="Doctor Background" />
+<div class="photo-overlay"></div>
+</div>
+ 
+  <!-- Login Card Section -->
+<section class="login-form-section">
+<div class="login-card">
+ 
+      <!-- Header -->
+<div class="header-section">
+<div class="logo-circle">
+<svg width="32" height="32" viewBox="0 0 56 56" fill="none">
+<circle cx="28" cy="28" r="26" stroke="white" stroke-width="2"></circle>
+<path
+              d="M10 28h8l3-6 5 14 4-8h10"
+              stroke="white"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+></path>
+</svg>
+</div>
+ 
+        <h1 class="project-title">Care made simple</h1>
+<p class="subtitle">Sign in to continue</p>
+</div>
+ 
       <!-- Login Form -->
-      <form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form" novalidate>
-        
-        <!-- Username -->
-        <div class="form-field" [ngClass]="{'has-error': itemForm.get('username')?.invalid && itemForm.get('username')?.touched}">
-          <input type="text" id="username" formControlName="username" placeholder=" " autocomplete="username" />
-          <label for="username">Username</label>
-          <div class="field-underline"></div>
-          <span *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched" class="error-message">
-            Username is required.
-          </span>
-        </div>
-
-        <!-- Password -->
-        <div class="form-field" [ngClass]="{'has-error': itemForm.get('password')?.invalid && itemForm.get('password')?.touched}">
-          <input type="password" id="password" formControlName="password" placeholder=" " autocomplete="current-password" />
-          <label for="password">Password</label>
-          <div class="field-underline"></div>
-          <span *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched" class="error-message">
-            Password is required.
-          </span>
-        </div>
-
-        <!-- Submit Button -->
+<form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form">
+ 
+        <div class="form-field">
+<input type="email" formControlName="email" placeholder="Enter email" />
+</div>
+ 
+        <div class="form-field">
+<input type="password" formControlName="password" placeholder="Enter password" />
+</div>
+ 
         <button type="submit" class="login-button" [disabled]="itemForm.invalid">
           Login
-        </button>
-      </form>
-
-      <!-- Error Message -->
-      <div *ngIf="showError" class="server-error-alert">
-        {{ errorMessage }}
-      </div>
-
-      <!-- Registration Link -->
-      <div class="signup-link-section">
-        <span>Don't have an account? </span>
-        <a (click)="registration()" class="register-link">Create Account</a>
-      </div>
+</button>
+</form>
+ 
+      <!-- Links -->
+<div class="links">
+<a (click)="registration()">Create Account</a>
+<a (click)="forgotPassword()">Forgot Password?</a>
+</div>
+ 
     </div>
-  </section>
+</section>
+ 
+  <!-- Chatbot -->
+<!-- <button class="chatbot-float" (click)="chatbot()">🤖</button> -->
+ 
 </main>

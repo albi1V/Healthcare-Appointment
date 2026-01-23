@@ -5,6 +5,7 @@ package com.edutech.healthcare_appointment_management_system.repository;
  
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
  
 import com.edutech.healthcare_appointment_management_system.entity.Appointment;
@@ -23,4 +24,10 @@ public interface AppointmentRepository  extends JpaRepository<Appointment,Long> 
  
     List<Appointment> findByAppointmentTimeBetween(Date start, Date end);
  
+    @Query("SELECT a FROM Appointment a WHERE a.appointmentTime BETWEEN :from AND :to AND a.reminderSent = false AND a.status = 'Scheduled'")
+List<Appointment> findAppointmentsForReminder(
+        @Param("from") Date from,
+        @Param("to") Date to
+);
+
 }

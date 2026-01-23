@@ -1,0 +1,209 @@
+<div class="doctor-details-container">
+<!-- Loading State -->
+<div *ngIf="loading" class="loading-state">
+<div class="spinner"></div>
+<p>Loading doctor profile...</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error && !loading" class="error-state">
+<div class="error-icon">⚠️</div>
+<h3>No Doctor Selected</h3>
+<p>Redirecting you back to dashboard...</p>
+</div>
+
+<!-- Doctor Profile -->
+<div *ngIf="doctor && !loading" class="doctor-profile">
+<!-- Header Section -->
+<div class="profile-header">
+<button class="btn-back" (click)="goBack()">
+<i class="fa fa-arrow-left"></i> Back to Dashboard
+</button>
+<div class="header-content">
+<div class="doctor-avatar-hero">
+<!-- Profile Photo - Static Path -->
+<img src="assets/img/doctor.jpg" alt="Doctor Photo" class="profile-photo">
+</div>
+<div class="doctor-title-section">
+<h1 class="doctor-name">
+Dr. {{ doctor.firstName && doctor.lastName
+? (doctor.firstName + ' ' + (doctor.middleName ? doctor.middleName + ' ' : '') + doctor.lastName)
+: doctor.username }}
+</h1>
+<p class="doctor-qualification" *ngIf="doctor.qualification">
+{{ doctor.qualification }}
+</p>
+<div class="specialty-badge" *ngIf="doctor.specialty">
+<i class="fa fa-stethoscope"></i>
+{{ doctor.specialty }}
+</div>
+</div>
+</div>
+</div>
+
+<!-- Main Content -->
+<div class="profile-content">
+<div class="content-grid">
+<!-- Personal Information Card -->
+<div class="info-card">
+<div class="card-header">
+<i class="fa fa-user"></i>
+<h3>Personal Information</h3>
+</div>
+<div class="card-body">
+<div class="info-row" *ngIf="doctor.firstName">
+<span class="info-label">First Name:</span>
+<span class="info-value">{{ doctor.firstName }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.middleName">
+<span class="info-label">Middle Name:</span>
+<span class="info-value">{{ doctor.middleName }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.lastName">
+<span class="info-label">Last Name:</span>
+<span class="info-value">{{ doctor.lastName }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.gender">
+<span class="info-label">Gender:</span>
+<span class="info-value">{{ doctor.gender }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.dateOfBirth">
+<span class="info-label">Date of Birth:</span>
+<span class="info-value">{{ doctor.dateOfBirth }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.bloodGroup">
+<span class="info-label">Blood Group:</span>
+<span class="info-value">{{ doctor.bloodGroup }}</span>
+</div>
+</div>
+</div>
+
+<!-- Contact Information Card -->
+<div class="info-card">
+<div class="card-header">
+<i class="fa fa-phone"></i>
+<h3>Contact Information</h3>
+</div>
+<div class="card-body">
+<div class="info-row" *ngIf="doctor.phone">
+<span class="info-label">Phone:</span>
+<span class="info-value">
+<a href="tel:{{ doctor.phone }}">{{ doctor.phone }}</a>
+</span>
+</div>
+<div class="info-row" *ngIf="doctor.email">
+<span class="info-label">Email:</span>
+<span class="info-value">
+<a href="mailto:{{ doctor.email }}">{{ doctor.email }}</a>
+</span>
+</div>
+<div class="info-row" *ngIf="doctor.address">
+<span class="info-label">Address:</span>
+<span class="info-value">{{ doctor.address }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.city">
+<span class="info-label">City:</span>
+<span class="info-value">{{ doctor.city }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.state">
+<span class="info-label">State:</span>
+<span class="info-value">{{ doctor.state }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.pincode">
+<span class="info-label">Pincode:</span>
+<span class="info-value">{{ doctor.pincode }}</span>
+</div>
+</div>
+</div>
+
+<!-- Professional Information Card -->
+<div class="info-card">
+<div class="card-header">
+<i class="fa fa-id-card"></i>
+<h3>Professional Information</h3>
+</div>
+<div class="card-body">
+<div class="info-row" *ngIf="doctor.qualification">
+<span class="info-label">Qualification:</span>
+<span class="info-value">{{ doctor.qualification }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.specialty">
+<span class="info-label">Specialty:</span>
+<span class="info-value">{{ doctor.specialty }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.experience">
+<span class="info-label">Experience:</span>
+<span class="info-value">{{ doctor.experience }} years</span>
+</div>
+<div class="info-row" *ngIf="doctor.licenseNumber">
+<span class="info-label">License Number:</span>
+<span class="info-value">{{ doctor.licenseNumber }}</span>
+</div>
+</div>
+</div>
+
+<!-- Account Information Card -->
+<div class="info-card">
+<div class="card-header">
+<i class="fa fa-user-circle"></i>
+<h3>Account Information</h3>
+</div>
+<div class="card-body">
+<div class="info-row" *ngIf="doctor.username">
+<span class="info-label">Username:</span>
+<span class="info-value">{{ doctor.username }}</span>
+</div>
+<div class="info-row" *ngIf="doctor.id">
+<span class="info-label">Doctor ID:</span>
+<span class="info-value">#{{ doctor.id }}</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Availability Section -->
+<div class="availability-section" *ngIf="availabilitySegments.length > 0">
+<div class="section-header">
+<i class="fa fa-clock"></i>
+<h3>Availability Schedule</h3>
+</div>
+<div class="availability-grid">
+<div class="availability-card" *ngFor="let segment of availabilitySegments">
+<div class="availability-day">
+<span class="day-name">{{ segment.dayOfWeek }}</span>
+<span class="day-date">{{ segment.dateFormatted }}</span>
+</div>
+<div class="availability-time">
+<i class="fa fa-clock"></i>
+<span>{{ segment.startTime }} - {{ segment.endTime }}</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Action Footer -->
+<div class="profile-footer">
+<button class="btn-back-footer" (click)="goBack()">
+<i class="fa fa-arrow-left"></i> Back to Dashboard
+</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

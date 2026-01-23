@@ -1,79 +1,176 @@
-
 <div class="doctor-availability-page">
-  <!-- Alerts -->
-  <div *ngIf="responseMessage" class="alert mt-3" [ngClass]="{ 'alert-success': isAdded, 'alert-danger': !isAdded }" role="alert">
-    {{ responseMessage }}
-  </div>
 
-  <div class="card mt-3">
-    <div class="card-header">
-      <h4 class="card-title">Doctor Availability</h4>
-      <p class="subtitle">Add your available days and time slots</p>
-    </div>
-
-    <div class="card-body">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-
-        <!-- Doctor ID (read-only) -->
-        <div class="mb-3">
-          <label class="form-label">Doctor ID</label>
-          <input class="form-control" [value]="doctorIdCtrl.value" readonly>
-          <small class="text-muted d-block mt-1">Auto-filled from your session. Contact admin if this is incorrect.</small>
-        </div>
-
-        <div class="slots-header">
-          <h6 class="mb-2">Time Slots</h6>
-          <button type="button" class="btn btn-outline btn-sm" (click)="addSlot()">
-            <i class="fa fa-plus"></i> Add Slot
-          </button>
-        </div>
-
-        <div formArrayName="slots" class="slots-list">
-          <div class="slot-row" *ngFor="let slot of slots.controls; let i=index" [formGroupName]="i">
-            <div class="row gx-2">
-              <div class="col-md-4 col-12">
-                <label class="form-label">Day</label>
-                <select class="form-select" formControlName="dayOfWeek">
-                  <option value="" disabled>Select a day</option>
-                  <option *ngFor="let d of days" [value]="d">{{ d }}</option>
-                </select>
-                <div class="text-danger mt-1" *ngIf="slot.get('dayOfWeek')?.touched && slot.get('dayOfWeek')?.invalid">
-                  <small>Day is required</small>
-                </div>
-              </div>
-
-              <div class="col-md-3 col-6">
-                <label class="form-label">Start</label>
-                <input type="time" class="form-control" formControlName="startTime">
-              </div>
-
-              <div class="col-md-3 col-6">
-                <label class="form-label">End</label>
-                <input type="time" class="form-control" formControlName="endTime">
-                <div class="text-danger mt-1" *ngIf="slot?.errors?.['timeRange']">
-                  <small>Start time must be before end time</small>
-                </div>
-              </div>
-
-              <div class="col-md-2 col-12 d-flex align-items-end">
-                <button type="button" class="btn btn-danger-outline w-100" (click)="removeSlot(i)">
-                  <i class="fa fa-trash"></i> Remove
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- <div class="text-danger mt-2" *ngIf="slots?.errors?.['overlap']">
-            <small>{{ slots?.errors?.['overlap'] }}</small>
-          </div> -->
-        </div>
-
-        <div class="d-grid mt-3">
-          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-            Update Availability
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+<!-- Header Section -->
+<div class="page-header">
+<div class="header-content">
+<div class="icon-wrapper">
+<i class="fa fa-calendar-check"></i>
 </div>
+<div class="header-text">
+<h1>Doctor Availability Management</h1>
+<p>Configure your schedule and time slots</p>
+</div>
+</div>
+</div>
+
+<!-- Alert Message -->
+<div *ngIf="responseMessage" class="alert-container">
+<div class="alert" [ngClass]="{ 'alert-success': isAdded, 'alert-danger': !isAdded }">
+<div class="alert-icon">
+<i [class]="isAdded ? 'fa fa-check-circle' : 'fa fa-exclamation-triangle'"></i>
+</div>
+<div class="alert-content">
+<p>{{ responseMessage }}</p>
+</div>
+<button class="alert-close" (click)="responseMessage = ''">
+<i class="fa fa-times"></i>
+</button>
+</div>
+</div>
+
+<!-- Main Card -->
+<div class="availability-card">
+<div class="card-header-gradient">
+<div class="header-pattern"></div>
+<div class="header-info">
+<h2>Schedule Configuration</h2>
+<p>Manage your availability with precision</p>
+</div>
+</div>
+
+<div class="card-body">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+<!-- Doctor ID Section -->
+<div class="form-group doctor-id-section">
+<label class="form-label">
+<i class="fa fa-id-badge"></i>
+Doctor ID
+</label>
+<div class="input-wrapper">
+<input class="form-control" [value]="doctorIdCtrl.value" readonly>
+<span class="input-badge">Verified</span>
+</div>
+</div>
+
+<!-- Slots Header -->
+<div class="slots-header">
+<div class="header-left">
+<i class="fa fa-clock"></i>
+<h6>Time Slots</h6>
+<span class="slot-count">{{ slots.length }}</span>
+</div>
+<button type="button" class="btn-add-slot" (click)="addSlot()">
+<i class="fa fa-plus-circle"></i>
+Add New Slot
+</button>
+</div>
+
+<!-- Slots Array -->
+<div formArrayName="slots" class="slots-container">
+<div class="slot-card"
+*ngFor="let slot of slots.controls; let i = index"
+[formGroupName]="i">
+
+<div class="slot-number">
+<span>{{ i + 1 }}</span>
+</div>
+
+<div class="slot-content">
+<div class="row g-3">
+<!-- Date Input -->
+<div class="col-md-4">
+<label class="form-label">
+<i class="fa fa-calendar"></i>
+Date
+</label>
+<div class="input-icon-wrapper">
+<input
+type="date"
+class="form-control"
+formControlName="date"
+[min]="today"
+/>
+</div>
+</div>
+
+<!-- Start Time Input -->
+<div class="col-md-3">
+<label class="form-label">
+<i class="fa fa-clock"></i>
+Start Time
+</label>
+<div class="input-icon-wrapper">
+<input type="time" class="form-control" formControlName="startTime">
+</div>
+</div>
+
+<!-- End Time Input -->
+<div class="col-md-3">
+<label class="form-label">
+<i class="fa fa-clock"></i>
+End Time
+</label>
+<div class="input-icon-wrapper">
+<input type="time" class="form-control" formControlName="endTime">
+</div>
+<small class="error-message" *ngIf="slot.errors?.['timeRange']">
+<i class="fa fa-exclamation-circle"></i>
+Start time must be before end time
+</small>
+</div>
+
+<!-- Remove Button -->
+<div class="col-md-2 d-flex align-items-end">
+<button type="button"
+class="btn-remove-slot"
+(click)="removeSlot(i)"
+[disabled]="slots.length === 1">
+<i class="fa fa-trash-alt"></i>
+Remove
+</button>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- Overlap Error -->
+<div class="overlap-error" *ngIf="slots.errors?.['overlap']">
+<i class="fa fa-exclamation-triangle"></i>
+<span>Overlapping slots on the same date are not allowed</span>
+</div>
+
+<!-- Submit Button -->
+<div class="submit-section">
+<button type="submit" class="btn-submit" [disabled]="form.invalid">
+<span class="btn-icon">
+<i class="fa fa-save"></i>
+</span>
+<span class="btn-text">Update Availability</span>
+<span class="btn-ripple"></span>
+</button>
+</div>
+
+</form>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

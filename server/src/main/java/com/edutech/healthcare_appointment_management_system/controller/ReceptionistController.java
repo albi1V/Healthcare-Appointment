@@ -129,5 +129,23 @@ public class ReceptionistController {
 
   }
 
+
+  // NEW DELETE ENDPOINT
+    @DeleteMapping("/api/receptionist/appointment/{appointmentId}")
+    public ResponseEntity<Map<String, String>> deleteAppointment(@PathVariable Long appointmentId) {
+        try {
+            appointmentService.deleteAppointment(appointmentId);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Appointment deleted successfully");
+            response.put("appointmentId", appointmentId.toString());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
+
  

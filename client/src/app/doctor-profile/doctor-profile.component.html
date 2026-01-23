@@ -1,0 +1,181 @@
+<div class="profile-container">
+<!-- ========================================
+ 
+       ⭐ LOADING SPINNER OVERLAY
+ 
+       ======================================== -->
+<div class="loading-overlay" *ngIf="loading">
+<div class="spinner"></div>
+<p>Loading your profile...</p>
+</div>
+<!-- ========================================
+ 
+       ⭐ ERROR ALERT MESSAGE
+ 
+       ======================================== -->
+<div class="alert-error" *ngIf="errorMessage && !loading">
+<i class="fas fa-exclamation-circle"></i>
+ 
+    {{ errorMessage }}
+</div>
+<!-- ========================================
+ 
+       HEADER SECTION
+ 
+       ======================================== -->
+<div class="profile-header">
+<div class="header-content">
+<div class="profile-photo">
+<img [src]="doctor.photo || 'assets/img/doctor.jpg'" alt="Doctor Photo" />
+</div>
+<div class="header-info">
+<h1>Dr. {{ doctor.firstName || 'Doctor' }} {{ doctor.lastName || 'Profile' }}</h1>
+<!-- <p class="username">@{{ doctor.username }}</p> -->
+<span class="badge">Verified Doctor</span>
+</div>
+</div>
+<div class="header-actions">
+<button *ngIf="!isEditMode" class="btn-edit" (click)="enableEdit()" [disabled]="loading">
+<i class="fas fa-edit"></i> Edit Profile
+</button>
+<button *ngIf="isEditMode" class="btn-save" (click)="save()" [disabled]="loading">
+<i class="fas fa-check"></i> Save Changes
+</button>
+<button *ngIf="isEditMode" class="btn-cancel" (click)="cancel()" [disabled]="loading">
+<i class="fas fa-times"></i> Cancel
+</button>
+</div>
+</div>
+<!-- ========================================
+ 
+       PROFILE CONTENT (CARDS)
+ 
+       ======================================== -->
+<div class="profile-content">
+<!-- ========================================
+ 
+         PERSONAL INFORMATION CARD
+ 
+         ======================================== -->
+<div class="card">
+<div class="card-header">
+<i class="fas fa-user"></i>
+<h2>Personal Information</h2>
+</div>
+<div class="card-body">
+<div class="form-row">
+<div class="form-group">
+<label><i class="fas fa-id-badge"></i> First Name</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.firstName || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.firstName" placeholder="Enter first name">
+</div>
+<div class="form-group">
+<label><i class="fas fa-id-badge"></i> Middle Name</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.middleName || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.middleName" placeholder="Enter middle name">
+</div>
+<div class="form-group">
+<label><i class="fas fa-id-badge"></i> Last Name</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.lastName || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.lastName" placeholder="Enter last name">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.dob | date:'mediumDate' || '—' }}</span>
+<input *ngIf="isEditMode" type="date" [(ngModel)]="doctor.dob">
+</div>
+<div class="form-group">
+<label><i class="fas fa-venus-mars"></i> Gender</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.gender || '—' }}</span>
+<select *ngIf="isEditMode" [(ngModel)]="doctor.gender">
+<option value="">Select Gender</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div class="form-group">
+<label><i class="fas fa-phone"></i> Phone</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.phone || '—' }}</span>
+<input *ngIf="isEditMode" type="tel" [(ngModel)]="doctor.phone" placeholder="+1 234 567 8900">
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================
+ 
+         CONTACT INFORMATION CARD
+ 
+         ======================================== -->
+<div class="card">
+<div class="card-header">
+<i class="fas fa-envelope"></i>
+<h2>Contact Information</h2>
+</div>
+<div class="card-body">
+<div class="form-row">
+<div class="form-group full-width">
+<label><i class="fas fa-at"></i> Email Address</label>
+<span class="value email-readonly">{{ doctor.email || '—' }}</span>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label><i class="fas fa-globe"></i> Country</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.country || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.country" placeholder="USA">
+</div>
+<div class="form-group">
+<label><i class="fas fa-map-marker-alt"></i> State</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.state || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.state" placeholder="California">
+</div>
+<div class="form-group">
+<label><i class="fas fa-city"></i> City</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.city || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.city" placeholder="Los Angeles">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label><i class="fas fa-mail-bulk"></i> Zip Code</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.zipCode || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.zipCode" placeholder="90001">
+</div>
+<div class="form-group full-width">
+<label><i class="fas fa-home"></i> Address</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.address || '—' }}</span>
+<textarea *ngIf="isEditMode" [(ngModel)]="doctor.address" rows="2" placeholder="Street address"></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================
+ 
+         PROFESSIONAL INFORMATION CARD
+ 
+         ======================================== -->
+<div class="card">
+<div class="card-header">
+<i class="fas fa-stethoscope"></i>
+<h2>Professional Information</h2>
+</div>
+<div class="card-body">
+<div class="form-row">
+<div class="form-group">
+<label><i class="fas fa-graduation-cap"></i> Qualification</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.qualification || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.qualification" placeholder="MBBS, MD">
+</div>
+<div class="form-group">
+<label><i class="fas fa-heartbeat"></i> Specialty</label>
+<span *ngIf="!isEditMode" class="value">{{ doctor.specialty || '—' }}</span>
+<input *ngIf="isEditMode" type="text" [(ngModel)]="doctor.specialty" placeholder="Cardiology">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

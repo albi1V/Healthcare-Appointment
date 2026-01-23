@@ -1,0 +1,76 @@
+<!-- Chat container -->
+<section class="chat-container" *ngIf="isOpen" aria-label="Healthcare Assistant Chat">
+  <!-- Header -->
+  <header class="chat-header">
+    <div class="header-left">
+      <div class="avatar bot">HC</div>
+      <div class="titles">
+        <h3>Healthcare Assistant</h3>
+        <span class="status">
+          <span class="dot online"></span> Online
+        </span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="ghost" (click)="clearChat()" title="Clear chat">Clear</button>
+    </div>
+  </header>
+
+  <!-- Messages -->
+  <div #messagesPane class="messages" role="log" aria-live="polite">
+    <div
+      *ngFor="let msg of messages; trackBy: trackById"
+      class="message-row"
+      [ngClass]="msg.sender"
+    >
+      <div class="avatar" [ngClass]="msg.sender">{{ initials(msg.sender) }}</div>
+      <div class="bubble" [ngClass]="msg.sender">
+        <div class="text">{{ msg.text }}</div>
+        <div class="meta">
+          <span class="time">{{ formattedTime(msg.time) }}</span>
+          <span class="badge error" *ngIf="msg.status==='error'">Error</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div class="message-row bot" *ngIf="isBotTyping">
+      <div class="avatar bot">Bot</div>
+      <div class="bubble bot">
+        <div class="typing">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick replies -->
+  <div class="quick-replies" *ngIf="messageCount > 0">
+    <button class="chip" *ngFor="let q of quickReplies" (click)="chooseQuickReply(q)">
+      {{ q }}
+    </button>
+  </div>
+
+  <!-- Input -->
+  <footer class="input-box">
+    <textarea
+      [(ngModel)]="userMessage"
+      rows="1"
+    
+      (keydown)="onKeydown($event)"
+      [disabled]="isSending"
+      aria-label="Type your message"
+    ></textarea>
+
+    <button class="primary" (click)="send()" [disabled]="!userMessage.trim() || isSending">
+      Send
+    </button>
+
+    <button class="secondary" (click)="retryLast()" [disabled]="isSending">Retry</button>
+  </footer>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+   
+  </div>
+</section>
