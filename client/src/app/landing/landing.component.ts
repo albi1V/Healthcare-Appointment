@@ -1,4 +1,3 @@
-
 import { ViewportScroller } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -92,4 +91,5 @@ export class LandingComponent implements OnInit, AfterViewInit {
     });
   }
 }
-``
+
+

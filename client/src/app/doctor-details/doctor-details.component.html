@@ -4,15 +4,15 @@
 <div class="spinner"></div>
 <p>Loading doctor profile...</p>
 </div>
- 
-  <!-- Error State -->
+
+<!-- Error State -->
 <div *ngIf="error && !loading" class="error-state">
 <div class="error-icon">⚠️</div>
 <h3>No Doctor Selected</h3>
 <p>Redirecting you back to dashboard...</p>
 </div>
- 
-  <!-- Doctor Profile -->
+
+<!-- Doctor Profile -->
 <div *ngIf="doctor && !loading" class="doctor-profile">
 <!-- Header Section -->
 <div class="profile-header">
@@ -21,33 +21,27 @@
 </button>
 <div class="header-content">
 <div class="doctor-avatar-hero">
-
-          {{ (doctor.firstName || doctor.username)?.charAt(0) | uppercase }}
+<!-- Profile Photo - Static Path -->
+<img src="assets/img/doctor.jpg" alt="Doctor Photo" class="profile-photo">
 </div>
 <div class="doctor-title-section">
 <h1 class="doctor-name">
-
-            Dr. {{ doctor.firstName && doctor.lastName 
-
-              ? (doctor.firstName + ' ' + (doctor.middleName ? doctor.middleName + ' ' : '') + doctor.lastName)
-
-              : doctor.username }}
+Dr. {{ doctor.firstName && doctor.lastName
+? (doctor.firstName + ' ' + (doctor.middleName ? doctor.middleName + ' ' : '') + doctor.lastName)
+: doctor.username }}
 </h1>
 <p class="doctor-qualification" *ngIf="doctor.qualification">
-
-            {{ doctor.qualification }}
+{{ doctor.qualification }}
 </p>
 <div class="specialty-badge" *ngIf="doctor.specialty">
 <i class="fa fa-stethoscope"></i>
+{{ doctor.specialty }}
+</div>
+</div>
+</div>
+</div>
 
-            {{ doctor.specialty }}
-</div>
-</div>
-</div>
-<!-- Removed Book Appointment button as requested -->
-</div>
- 
-    <!-- Main Content -->
+<!-- Main Content -->
 <div class="profile-content">
 <div class="content-grid">
 <!-- Personal Information Card -->
@@ -83,8 +77,8 @@
 </div>
 </div>
 </div>
- 
-        <!-- Contact Information Card -->
+
+<!-- Contact Information Card -->
 <div class="info-card">
 <div class="card-header">
 <i class="fa fa-phone"></i>
@@ -121,8 +115,8 @@
 </div>
 </div>
 </div>
- 
-        <!-- Professional Information Card -->
+
+<!-- Professional Information Card -->
 <div class="info-card">
 <div class="card-header">
 <i class="fa fa-id-card"></i>
@@ -147,8 +141,8 @@
 </div>
 </div>
 </div>
- 
-        <!-- Account Information Card -->
+
+<!-- Account Information Card -->
 <div class="info-card">
 <div class="card-header">
 <i class="fa fa-user-circle"></i>
@@ -166,8 +160,8 @@
 </div>
 </div>
 </div>
- 
-      <!-- Availability Section -->
+
+<!-- Availability Section -->
 <div class="availability-section" *ngIf="availabilitySegments.length > 0">
 <div class="section-header">
 <i class="fa fa-clock"></i>
@@ -186,12 +180,7 @@
 </div>
 </div>
 </div>
- 
-      <!-- No Availability Message -->
-<!-- <div class="no-availability" *ngIf="availabilitySegments.length === 0">
-<i class="fa fa-calendar-times"></i>
-<p>No availability schedule set by the doctor yet.</p>
-</div> -->
+
 <!-- Action Footer -->
 <div class="profile-footer">
 <button class="btn-back-footer" (click)="goBack()">
@@ -201,4 +190,20 @@
 </div>
 </div>
 </div>
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

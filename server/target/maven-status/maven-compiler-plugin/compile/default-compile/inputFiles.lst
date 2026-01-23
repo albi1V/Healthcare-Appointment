@@ -55,4 +55,5 @@
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/dto/PatientBrief.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/controller/PatientController.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/AppointmentRepository.java
+/home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/service/GroqSummaryService.java
 /home/coder/app/server/src/main/java/com/edutech/healthcare_appointment_management_system/repository/UserRepository.java

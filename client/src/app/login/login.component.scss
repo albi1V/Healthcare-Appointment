@@ -1,274 +1,250 @@
-/* ------------------------------
-   Theme tokens (easy to tweak)
-------------------------------- */
-:root {
-  --primary: #0d6efd;
-  --primary-600: #0b5ed7;
-  --text: #.chatbot-float {
-  position: fixed;
-  right: 25px;
-  bottom: 30px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2196f3, #0d47a1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 9999;
- 
-  box-shadow:
-    0 10px 25px rgba(33, 150, 243, 0.45),
-    0 4px 10px rgba(0, 0, 0, 0.15);
- 
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
- 
-.chatbot-float span {
-  font-size: 30px;
-  color: #ffffff;
-}
- 
-.chatbot-float:hover {
-  transform: translateY(-6px) scale(1.05);
-  box-shadow:
-    0 16px 35px rgba(33, 150, 243, 0.6),
-    0 6px 15px rgba(0, 0, 0, 0.2);
-}827;       /* dark gray */
-  --muted: #6b7280;      /* medium gray */
-  --card-bg: rgba(255, 255, 255, 0.18);
-  --card-border: rgba(255, 255, 255, 0.35);
-  --shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
- 
-  /* Background image: change this to your own */
-  --bg-url: url('https://images.unsplash.com/photo-1586773860418-d37227b3a8bf?q=80&w=1600&auto=format&fit=crop%27'); 
-}
- 
-/* Full page layout */
 .login-page {
+
+  position: relative;
+
   min-height: 100vh;
-  position: relative;
-  display: grid;
-  place-items: center;
+
+  font-family: "Segoe UI", sans-serif;
+
   overflow: hidden;
+
 }
  
-/* Background image + overlay */
-.bg-image {
+/* Background */
+
+.bg-photo {
+
   position: absolute;
+
   inset: 0;
-  background-image: var(--bg-url);
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.02);
-  filter: brightness(0.85);
-  z-index: 0;
-}
- 
-.bg-overlay {
-  position: absolute;
-  inset: 0;
-  /* soft blue gradient overlay for readability */
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.35), rgba(17, 24, 39, 0.55));
-  backdrop-filter: blur(1.5px);
+
   z-index: 1;
+
 }
  
-/* Centered form section */
+.bg-photo img {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+}
+ 
+/* Dark overlay to hide watermark */
+
+.photo-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.75);
+
+}
+ 
+/* Login section */
+
 .login-form-section {
+
   position: relative;
+
   z-index: 2;
-  width: min(520px, calc(100% - 32px));
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  padding-right: 120px;
+
 }
  
-/* Glassmorphism card */
+/* Bigger, sky-blue themed card */
+
 .login-card {
-  border-radius: 16px;
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
-  box-shadow: var(--shadow);
-  padding: 20px 22px;
-  color: #fff;
-  backdrop-filter: blur(10px) saturate(120%);
+
+  width: 480px;
+
+  background: linear-gradient(135deg, #f0f8ff, #e3f2fd);
+
+  border-radius: 22px;
+
+  padding: 45px;
+
+  box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+
+  border: 1px solid #cfe7ff;
+
 }
  
 /* Header */
+
 .header-section {
+
   text-align: center;
-  margin-bottom: 8px;
+
+  margin-bottom: 30px;
+
 }
  
-.logo {
-  color: #fff;
-  opacity: 0.95;
-  display: inline-block;
-  margin-bottom: 8px;
+.logo-circle {
+
+  width: 58px;
+
+  height: 58px;
+
+  background: linear-gradient(135deg, #1e88e5, #0d47a1);
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin: 0 auto 12px;
+
 }
  
 .project-title {
-  margin: 4px 0 6px 0;
-  font-size: 22px;
+
+  color: #0d47a1;
+
+  font-size: 24px;
+
   font-weight: 800;
-  letter-spacing: 0.2px;
+
 }
  
 .subtitle {
-  margin: 0;
-  color: #e5e7eb;
-  font-size: 14px;
+
+  color: #1565c0;
+
+  font-size: 15px;
+
 }
  
-/* Form */
-.login-form {
-  margin-top: 10px;
-}
- 
-.form-field {
-  position: relative;
-  margin-bottom: 16px;
-}
- 
+/* Inputs */
+
 .form-field input {
+
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 12px;
-  padding: 12px 12px 10px;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.18);
-  color: #000 !important;   /* ⬅⬅ ONLY CHANGE → Black credentials text */
-  outline: none;
-  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+
+  padding: 14px 16px;
+
+  margin-bottom: 18px;
+
+  border-radius: 10px;
+
+  border: 1px solid #bcdcff;
+
+  background: #f7fbff;
+
+  font-size: 15px;
+
 }
  
-.form-field input::placeholder {
-  color: transparent; /* for floating label */
-}
- 
-.form-field label {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0 6px;
-  color: #e5e7eb;
-  background: transparent;
-  transition: all 0.15s ease;
-  pointer-events: none;
-}
- 
-/* Focus + floating */
-.form-field input:focus {
-  border-color: rgba(13, 110, 253, 0.8);
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.35);
-  background-color: rgba(255, 255, 255, 0.24);
-}
- 
-.form-field input:focus + label,
-.form-field input:not(:placeholder-shown) + label {
-  top: 0;
-  transform: translateY(-50%) scale(0.92);
-  color: #cfe3ff;
-}
- 
-/* Error messages */
-.error-message {
-  display: block;
-  margin-top: 6px;
-  font-size: 12px;
-  color: #ffb4b4;
-}
- 
-.has-error input {
-  border-color: rgba(255, 82, 82, 0.95);
-  box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.25);
-}
- 
-/* Submit button */
+/* Button */
+
 .login-button {
+
   width: 100%;
-  border: 1px solid #ffffff;
-  color: #0d1b2a;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 140ms ease, background-color 140ms ease;
-}
- 
-.login-button:hover:enabled {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-  background-color: #f8fafc;
-}
- 
-.login-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
- 
-/* Server error */
-.server-error {
-  margin-top: 10px;
-  background: rgba(255, 82, 82, 0.18);
-  border: 1px solid rgba(255, 82, 82, 0.55);
+
+  padding: 14px;
+
+  background: linear-gradient(135deg, #1e88e5, #0d47a1);
+
   color: #fff;
+
+  border: none;
+
   border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 14px;
-}
- 
-/* Footer link */
-.signup-link-section {
-  margin-top: 14px;
-  text-align: center;
-  color: #e5e7eb;
-}
- 
-.register-link {
-  color: #ffffff;
+
   font-weight: 700;
+
+  font-size: 16px;
+
   cursor: pointer;
-  text-decoration: underline;
-  margin-left: 4px;
+
+  box-shadow: 0 10px 25px rgba(13, 71, 161, 0.4);
+
 }
  
-/* Mobile tweaks */
-@media (max-width: 480px) {
-  .project-title { font-size: 20px; }
-  .login-card { padding: 18px; }
+.login-button:hover {
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 14px 30px rgba(13, 71, 161, 0.5);
+
 }
+ 
+/* Links */
+
+.links {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 20px;
+
+}
+ 
+.links a {
+
+  color: #0d47a1;
+
+  font-weight: 600;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+}
+ 
+/* Chatbot */
 
 .chatbot-float {
+
   position: fixed;
-  right: 25px;
-  bottom: 30px;
-  width: 64px;
-  height: 64px;
+
+  right: 20px;
+
+  bottom: 20px;
+
+  background: #0d47a1;
+
+  color: #fff;
+
   border-radius: 50%;
-  background: linear-gradient(135deg, #2196f3, #0d47a1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  border: none;
+
+  font-size: 26px;
+
+  padding: 14px 16px;
+
   cursor: pointer;
-  z-index: 9999;
- 
-  box-shadow:
-    0 10px 25px rgba(33, 150, 243, 0.45),
-    0 4px 10px rgba(0, 0, 0, 0.15);
- 
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+
+  z-index: 3;
+
 }
+
  
-.chatbot-float span {
-  font-size: 30px;
-  color: #ffffff;
-}
- 
-.chatbot-float:hover {
-  transform: translateY(-6px) scale(1.05);
-  box-shadow:
-    0 16px 35px rgba(33, 150, 243, 0.6),
-    0 6px 15px rgba(0, 0, 0, 0.2);
-}
+
+
+
+
+
+
+
+
+

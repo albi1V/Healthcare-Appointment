@@ -26,11 +26,11 @@ export class DashbaordComponent implements OnInit {
   roleType: Role = null;
   username: string | null = null;
  
-  // ⭐ Available Doctors
+  // Available Doctors
   availableDoctors: any[] = [];
   loadingDoctors = false;
 
-  // ⭐ Booking System
+  // Booking System
   isBookingAppointment = false;
   selectedDoctor: any = null;
   itemForm: FormGroup;
@@ -59,12 +59,14 @@ export class DashbaordComponent implements OnInit {
       time: ['', Validators.required]
     });
 
+    // Get patient ID from localStorage
     const uid = localStorage.getItem('userId');
     this.patientId = uid ? parseInt(uid, 10) : null;
     if (this.patientId !== null) {
       this.itemForm.controls['patientId'].setValue(this.patientId);
     }
 
+    // Set today's date
     const now = new Date();
     this.selectedDate = this.datePipe.transform(now, 'yyyy-MM-dd') || '';
     this.today = this.selectedDate;
@@ -72,23 +74,58 @@ export class DashbaordComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Get user role and username from localStorage
     const storedRole = localStorage.getItem('role');
     const storedUsername = localStorage.getItem('username');
     this.roleType = storedRole ? storedRole.toUpperCase() as Role : null;
     this.username = storedUsername;
 
-    // ⭐ Load doctors only for patient
+    // Load doctors only for patient
     if (this.isPatient()) {
       this.loadAvailableDoctors();
-     
-      // ⭐ Check if we need to trigger booking (from doctor-details page)
       this.checkBookingTrigger();
     }
   }
 
-  // ======================
-  // Check Booking Trigger
-  // ======================
+  /* ========================================
+     ROLE METHODS
+     ======================================== */
+  
+  isPatient(): boolean {
+    return this.roleType === 'PATIENT';
+  }
+
+  isDoctor(): boolean {
+    return this.roleType === 'DOCTOR';
+  }
+
+  isReceptionist(): boolean {
+    return this.roleType === 'RECEPTIONIST';
+  }
+
+  isAdmin(): boolean {
+    return this.roleType === 'ADMIN';
+  }
+
+  getRoleIcon(): string {
+    switch (this.roleType) {
+      case 'PATIENT':
+        return 'fa fa-user-injured';
+      case 'DOCTOR':
+        return 'fa fa-user-md';
+      case 'RECEPTIONIST':
+        return 'fa fa-user-tie';
+      case 'ADMIN':
+        return 'fa fa-users-cog';
+      default:
+        return 'fa fa-user';
+    }
+  }
+
+  /* ========================================
+     BOOKING TRIGGER
+     ======================================== */
+  
   checkBookingTrigger(): void {
     const triggerBooking = localStorage.getItem('triggerBooking');
     const selectedDoctor = localStorage.getItem('selectedDoctor');
@@ -97,60 +134,49 @@ export class DashbaordComponent implements OnInit {
       localStorage.removeItem('triggerBooking');
       const doctor = JSON.parse(selectedDoctor);
      
-      // Wait for doctors to load
       setTimeout(() => {
         this.bookAppointment(doctor);
       }, 500);
     }
   }
 
-  // ======================
-  // Role Helpers
-  // ======================
-  isPatient(): boolean { return this.roleType === 'PATIENT'; }
-  isDoctor(): boolean { return this.roleType === 'DOCTOR'; }
-  isReceptionist(): boolean { return this.roleType === 'RECEPTIONIST'; }
-  isAdmin(): boolean { return this.roleType === 'ADMIN'; }
-
-  // ======================
-  // Load Doctors
-  // ======================
+  /* ========================================
+     DOCTORS MANAGEMENT
+     ======================================== */
+  
   loadAvailableDoctors(): void {
     this.loadingDoctors = true;
     this.httpService.getDoctors().subscribe({
       next: (response: any) => {
         const doctors = Array.isArray(response) ? response : [];
         this.availableDoctors = doctors.filter(
-          d => d.availability && d.availability.trim() !== ''
+          (d: any) => d.availability && d.availability.trim() !== ''
         );
         this.loadingDoctors = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error loading doctors:', err);
         this.loadingDoctors = false;
       }
     });
   }
 
-  // ======================
-  // View Doctor Details
-  // ======================
   viewDoctor(doctor: any): void {
     localStorage.setItem('selectedDoctor', JSON.stringify(doctor));
     this.router.navigate(['/doctor-details']);
   }
 
-  // ======================
-  // Book Appointment - Show Booking Form
-  // ======================
+  /* ========================================
+     BOOKING MANAGEMENT
+     ======================================== */
+  
   bookAppointment(doctor: any): void {
-    console.log('📋 Booking for doctor:', doctor);
-    console.log('📋 Doctor availability string:', doctor.availability);
-   
-    // Set selected doctor and show booking form
+    console.log('Booking appointment with doctor:', doctor);
+    
     this.selectedDoctor = doctor;
     this.isBookingAppointment = true;
 
-    // Populate form with doctor details
+    // Set form values
     this.itemForm.controls['doctorId'].setValue(doctor.id);
     this.itemForm.controls['doctorName'].setValue(doctor.username);
    
@@ -158,34 +184,35 @@ export class DashbaordComponent implements OnInit {
     this.itemForm.controls['time'].reset();
     this.takenSlotKeys.clear();
 
-    // Build slots for selected date
+    // Build slots
     this.buildSlotsForSelectedDate();
     this.fetchTakenSlotsForSelectedDate();
 
     // Scroll to booking section
     setTimeout(() => {
-      document.querySelector('.booking-section')?.scrollIntoView({ behavior: 'smooth' });
+      const bookingSection = document.querySelector('.booking-section-premium');
+      if (bookingSection) {
+        bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, 100);
   }
 
-  // ======================
-  // Cancel Booking
-  // ======================
   cancelBooking(): void {
     this.isBookingAppointment = false;
     this.selectedDoctor = null;
     this.itemForm.reset();
    
+    // Restore default values
     if (this.patientId !== null) {
       this.itemForm.controls['patientId'].setValue(this.patientId);
     }
     this.itemForm.controls['date'].setValue(this.today);
     this.selectedDate = this.today;
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ======================
-  // Date Change Handler
-  // ======================
   onDateChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.selectedDate = input.value;
@@ -198,20 +225,17 @@ export class DashbaordComponent implements OnInit {
     this.fetchTakenSlotsForSelectedDate();
   }
 
-  // ======================
-  // Select Time Slot
-  // ======================
   selectSlot(slot: Slot): void {
-    if (!slot.disabled) {
+    if (!slot.disabled && !slot.taken) {
       this.itemForm.controls['time'].setValue(slot.isoForControl);
     }
   }
 
-  // ======================
-  // Submit Booking
-  // ======================
   onSubmit(): void {
-    if (this.itemForm.invalid) return;
+    if (this.itemForm.invalid) {
+      console.warn('Form is invalid');
+      return;
+    }
 
     const isoLocal = this.itemForm.controls['time'].value;
     const formattedTime = this.datePipe.transform(isoLocal, 'yyyy-MM-dd HH:mm:ss');
@@ -221,19 +245,26 @@ export class DashbaordComponent implements OnInit {
       time: formattedTime
     };
 
+    console.log('Submitting appointment:', payload);
+
     this.httpService.ScheduleAppointment(payload).subscribe({
-      next: () => {
-        this.bookingAlert = '✅ Slot booked successfully!';
+      next: (response) => {
+        console.log('Appointment booked successfully:', response);
+        
+        this.bookingAlert = '✅ Appointment booked successfully!';
         this.showBookingAlert = true;
 
         setTimeout(() => {
           this.showBookingAlert = false;
           this.cancelBooking();
-        }, 2000);
+        }, 3000);
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error booking appointment:', error);
+        
         this.bookingAlert = '❌ Slot already booked. Please try another.';
         this.showBookingAlert = true;
+        
         setTimeout(() => {
           this.showBookingAlert = false;
         }, 3000);
@@ -241,32 +272,35 @@ export class DashbaordComponent implements OnInit {
     });
   }
 
-  // ======================
-  // SLOT LOGIC (Private Methods)
-  // ======================
+  /* ========================================
+     SLOT GENERATION LOGIC
+     ======================================== */
+  
   private buildSlotsForSelectedDate(): void {
     this.slots = [];
+    
     if (!this.selectedDoctor || !this.selectedDate) {
-      console.log('❌ No doctor or date selected');
+      console.warn('No doctor or date selected');
       return;
     }
 
     this.loadingSlots = true;
+    
     try {
       const availabilityString = this.selectedDoctor.availability || '';
-      console.log('📅 Processing availability for date:', this.selectedDate);
-      console.log('📅 Availability string:', availabilityString);
+      console.log('Building slots for date:', this.selectedDate);
+      console.log('Availability string:', availabilityString);
 
       // Parse availability
       const segments = this.parseAvailability(availabilityString);
-      console.log('📅 All parsed segments:', segments);
+      console.log('All segments:', segments);
 
-      // Filter for selected date only
+      // Filter for selected date
       const todaysSegments = segments.filter(s => s.date === this.selectedDate);
-      console.log('📅 Segments for selected date:', todaysSegments);
+      console.log('Segments for selected date:', todaysSegments);
 
       if (todaysSegments.length === 0) {
-        console.log('⚠️ No availability found for', this.selectedDate);
+        console.warn('No availability found for', this.selectedDate);
         this.loadingSlots = false;
         return;
       }
@@ -275,77 +309,82 @@ export class DashbaordComponent implements OnInit {
       for (const seg of todaysSegments) {
         const start = this.makeDateFromHM(this.selectedDate, seg.startHM);
         const end = this.makeDateFromHM(this.selectedDate, seg.endHM);
-        console.log(`⏰ Generating slots from ${seg.startHM} to ${seg.endHM}`);
+        console.log('Generating slots from', seg.startHM, 'to', seg.endHM);
        
         const generatedSlots = this.generateQuarterHourSlots(start, end);
         this.slots.push(...generatedSlots);
       }
 
-      console.log('✅ Total slots generated:', this.slots.length);
+      console.log('Total slots generated:', this.slots.length);
 
       // Disable past slots for today
       if (this.selectedDate === this.today) {
         const now = new Date();
         this.slots.forEach(s => {
-          if (s.end <= now) s.disabled = true;
+          if (s.end <= now) {
+            s.disabled = true;
+          }
         });
       }
     } catch (error) {
-      console.error('❌ Error building slots:', error);
+      console.error('Error building slots:', error);
     } finally {
       this.loadingSlots = false;
     }
   }
 
   private fetchTakenSlotsForSelectedDate(): void {
-    if (!this.selectedDoctor) return;
+    if (!this.selectedDoctor) {
+      return;
+    }
 
-    console.log('🔍 Fetching taken slots for doctor:', this.selectedDoctor.id);
+    console.log('Fetching taken slots for doctor:', this.selectedDoctor.id);
 
     this.httpService.getAppointmentByDoctor(this.selectedDoctor.id).subscribe({
-      next: (appts: any[]) => {
+      next: (appointments: any[]) => {
         this.takenSlotKeys.clear();
 
-        console.log('📋 Appointments for doctor:', appts);
+        console.log('Appointments for doctor:', appointments);
 
-        for (const a of appts || []) {
-          // Normalize 'yyyy-MM-dd HH:mm:ss' → 'yyyy-MM-ddTHH:mm'
-          const raw = String(a.appointmentTime || '').replace(' ', 'T');
-          if (raw.startsWith(this.selectedDate)) {
-            const slotKey = raw.slice(0, 16);
+        for (const appointment of appointments || []) {
+          // Normalize 'yyyy-MM-dd HH:mm:ss' to 'yyyy-MM-ddTHH:mm'
+          const rawTime = String(appointment.appointmentTime || '').replace(' ', 'T');
+          
+          if (rawTime.startsWith(this.selectedDate)) {
+            const slotKey = rawTime.slice(0, 16); // yyyy-MM-ddTHH:mm
             this.takenSlotKeys.add(slotKey);
-            console.log('🔒 Taken slot:', slotKey);
+            console.log('Taken slot:', slotKey);
           }
         }
 
-        console.log('🔒 Total taken slots for this date:', this.takenSlotKeys.size);
+        console.log('Total taken slots for this date:', this.takenSlotKeys.size);
 
         // Mark taken slots
-        this.slots = this.slots.map(s => ({
-          ...s,
-          taken: this.takenSlotKeys.has(s.isoForControl),
-          disabled: s.disabled || this.takenSlotKeys.has(s.isoForControl)
+        this.slots = this.slots.map(slot => ({
+          ...slot,
+          taken: this.takenSlotKeys.has(slot.isoForControl),
+          disabled: slot.disabled || this.takenSlotKeys.has(slot.isoForControl)
         }));
 
-        console.log('✅ Slots updated with taken status');
+        console.log('Slots updated with taken status');
       },
-      error: (err) => {
-        console.error('❌ Error fetching appointments:', err);
+      error: (error) => {
+        console.error('Error fetching appointments:', error);
       }
     });
   }
 
-  private parseAvailability(avail: string) {
-    if (!avail || avail.trim() === '') {
-      console.log('⚠️ Empty availability string');
+  private parseAvailability(availabilityString: string): Array<{date: string, startHM: string, endHM: string}> {
+    if (!availabilityString || availabilityString.trim() === '') {
+      console.warn('Empty availability string');
       return [];
     }
 
     // Split by semicolon for multiple date ranges
-    const parts = avail.split(';').map(p => p.trim()).filter(Boolean);
-    console.log('📅 Availability parts:', parts);
+    const parts = availabilityString.split(';').map(p => p.trim()).filter(Boolean);
+    console.log('Availability parts:', parts);
 
-    const segments: any[] = [];
+    const segments: Array<{date: string, startHM: string, endHM: string}> = [];
 
     for (const part of parts) {
       // Pattern: "2026-01-24 09:00-17:00"
@@ -358,42 +397,45 @@ export class DashbaordComponent implements OnInit {
           endHM: match[3]
         };
         segments.push(segment);
-        console.log('✅ Parsed segment:', segment);
+        console.log('Parsed segment:', segment);
       } else {
-        console.log('⚠️ Could not parse part:', part);
+        console.warn('Could not parse part:', part);
       }
     }
 
     return segments;
   }
 
-  private makeDateFromHM(d: string, hm: string): Date {
-    const [y, m, da] = d.split('-').map(Number);
-    const [H, M] = hm.split(':').map(Number);
-    return new Date(y, m - 1, da, H, M);
+  private makeDateFromHM(dateString: string, timeString: string): Date {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return new Date(year, month - 1, day, hours, minutes);
   }
 
-  private generateQuarterHourSlots(start: Date, end: Date): Slot[] {
-    const out: Slot[] = [];
-    const step = 15 * 60 * 1000;
+  private generateQuarterHourSlots(startDate: Date, endDate: Date): Slot[] {
+    const slots: Slot[] = [];
+    const stepMs = 15 * 60 * 1000; // 15 minutes in milliseconds
 
-    for (let t = start.getTime(); t < end.getTime(); t += step) {
-      const st = new Date(t);
-      const en = new Date(t + step);
+    for (let time = startDate.getTime(); time < endDate.getTime(); time += stepMs) {
+      const slotStart = new Date(time);
+      const slotEnd = new Date(time + stepMs);
 
-      out.push({
-        label: `${this.hhmm(st)} - ${this.hhmm(en)}`,
-        start: st,
-        end: en,
-        isoForControl: `${this.datePipe.transform(st, 'yyyy-MM-dd')}T${this.datePipe.transform(st, 'HH:mm')}`,
-        disabled: false
+      slots.push({
+        label: `${this.formatTimeHHMM(slotStart)} - ${this.formatTimeHHMM(slotEnd)}`,
+        start: slotStart,
+        end: slotEnd,
+        isoForControl: `${this.datePipe.transform(slotStart, 'yyyy-MM-dd')}T${this.datePipe.transform(slotStart, 'HH:mm')}`,
+        disabled: false,
+        taken: false
       });
     }
 
-    return out;
+    return slots;
   }
 
-  private hhmm(d: Date): string {
-    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  private formatTimeHHMM(date: Date): string {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }

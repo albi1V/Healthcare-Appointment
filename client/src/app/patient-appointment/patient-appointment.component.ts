@@ -37,3 +37,4 @@ export class PatientAppointmentComponent implements OnInit {
 }
 
 }
+

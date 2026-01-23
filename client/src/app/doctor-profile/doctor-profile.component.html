@@ -25,12 +25,12 @@
        ======================================== -->
 <div class="profile-header">
 <div class="header-content">
-<div class="avatar">
-<i class="fas fa-user-md"></i>
+<div class="profile-photo">
+<img [src]="doctor.photo || 'assets/img/doctor.jpg'" alt="Doctor Photo" />
 </div>
 <div class="header-info">
 <h1>Dr. {{ doctor.firstName || 'Doctor' }} {{ doctor.lastName || 'Profile' }}</h1>
-<p class="username">@{{ doctor.username }}</p>
+<!-- <p class="username">@{{ doctor.username }}</p> -->
 <span class="badge">Verified Doctor</span>
 </div>
 </div>
@@ -179,5 +179,3 @@
 </div>
 </div>
 </div>
-
- 

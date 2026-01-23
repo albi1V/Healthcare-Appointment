@@ -1,91 +1,182 @@
-<div class="receptionist-appointments-page">
-<!-- Feedback message -->
-<div *ngIf="responseMessage" class="alert mt-3" [ngClass]="{ 'alert-success': !responseMessage?.includes('Failed'), 'alert-danger': responseMessage?.includes('Failed') }" role="alert">
-    {{ responseMessage }}
-</div>
-<!-- Appointments list -->
-<div class="card mt-3">
-<div class="card-header d-flex align-items-center justify-content-between">
-<div>
-<h4 class="card-title mb-0">All Appointments</h4>
-<small class="text-muted">Select an appointment to reschedule or delete</small>
-</div>
-<button class="btn btn-outline-secondary btn-sm" (click)="getAppointments()">Refresh</button>
-</div>
-<div class="card-body">
-<!-- Empty state -->
-<div *ngIf="!appointmentList || appointmentList.length === 0" class="empty-state text-center py-4">
-<div class="empty-icon">🗓️</div>
-<p class="mb-0">No appointments found.</p>
-<small class="text-muted">Try refreshing or check back later.</small>
-</div>
-<!-- Table -->
-<div *ngIf="appointmentList && appointmentList.length > 0" class="table-responsive">
-<table class="table table-bordered align-middle">
-<thead>
-<tr>
-<th>Appointment ID</th>
-<th>Time</th>
-<th>Status</th>
-<th>Doctor</th>
-<th>Patient</th>
-<th class="text-center">Actions</th>
-</tr>
-</thead>
-<tbody>
-<tr *ngFor="let appt of appointmentList">
-<td class="text-muted">{{ appt.id }}</td>
-<!-- Prefer appointmentTime; fallback to appointmentDate if needed -->
-<td>
-                {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy HH:mm:ss' }}
-</td>
-<td>
-<span class="badge"
-                      [ngClass]="{
-                        'bg-primary': appt.status === 'Scheduled',
-                        'bg-warning text-dark': appt.status === 'Rescheduled',
-                        'bg-danger': appt.status === 'Cancelled',
-                        'bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Rescheduled' && appt.status !== 'Cancelled'
-                      }">
-                  {{ appt.status || '—' }}
-</span>
-</td>
-<td>
-<strong>{{ appt.doctor?.username || appt.doctor?.name || '—' }}</strong><br />
-<small class="text-muted">{{ appt.doctor?.email || '—' }}</small>
-</td>
-<td>
-<strong>{{ appt.patient?.username || appt.patient?.name || '—' }}</strong><br />
-<small class="text-muted">{{ appt.patient?.email || '—' }}</small>
-</td>
-<td class="text-center">
-<div class="d-flex justify-content-center gap-2">
-<button class="btn btn-sm btn-outline-primary" (click)="editAppointment(appt)">
-                    Edit
-</button>
-<button class="btn btn-sm btn-outline-danger" (click)="deleteAppointment(appt.id)">
-                    Delete
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<!-- Reschedule form -->
-<div class="card mt-4" *ngIf="isAdded">
-<div class="card-header">
-<h5 class="mb-0">Reschedule Appointment</h5>
-<small class="text-muted">Update the appointment time and submit</small>
-</div>
-<div class="card-body">
-<form [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
-<!-- Appointment ID (read-only while editing) -->
-<div class="mb-3">
-<label for="appointmentId" class="form-label">Appointment ID</label>
-<input
+<div class="page receptionist-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-inner">
+      <h1 class="title">
+        <!-- Use FA if added in index.html: <i class="fas fa-calendar-alt" aria-hidden="true"></i> -->
+        <span class="icon" aria-hidden="true">🗓️</span>
+        All Appointments
+      </h1>
+      <p class="subtitle">
+        Select an appointment to reschedule or delete.
+      </p>
+
+      <!-- Cache badge -->
+      <div *ngIf="appointmentsCache && cacheTimestamp" class="cache-info mt-1">
+        <span class="cache-badge" [ngClass]="{ 'cache-expiring': isCacheExpiringSoon() }">
+          📦 Cached {{ getCacheAge() }}
+        </span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        (click)="getAppointments(true)"
+        [disabled]="isLoading"
+        [attr.aria-busy]="isLoading ? true : null"
+      >
+        <span *ngIf="!isLoading">🔄 Refresh</span>
+        <span *ngIf="isLoading">
+          <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+          Loading...
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Feedback alert -->
+  <section *ngIf="responseMessage" class="card">
+    <div
+      class="server-alert"
+      [ngClass]="{ 'success': !responseMessage.includes('Failed'), 'error': responseMessage.includes('Failed') }"
+      role="status"
+      aria-live="polite"
+    >
+      {{ responseMessage }}
+    </div>
+  </section>
+
+  <!-- Appointments List -->
+  <section class="card">
+    <div class="card-title-row">
+      <h4 class="card-title">Appointments</h4>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="loading-state text-center py-4">
+      <div class="spinner-border text-primary mb-2" role="status" aria-hidden="true"></div>
+      <p class="mb-0 text-muted">Loading appointments...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && (!appointmentList || appointmentList.length === 0)" class="empty">
+      <div class="empty-card">
+        <div class="empty-icon">📭</div>
+        <h3>No appointments found</h3>
+        <p>Try refreshing or check back later.</p>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!isLoading && appointmentList && appointmentList.length > 0" class="table-wrap">
+      <table class="table table-hover" role="table">
+        <thead>
+          <tr>
+            <th scope="col">Appointment ID</th>
+            <th scope="col">Time</th>
+            <th scope="col">Status</th>
+            <th scope="col">Doctor</th>
+            <th scope="col">Patient</th>
+            <th scope="col" class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let appt of paginatedAppointments">
+            <td data-label="Appointment ID" class="text-muted">#{{ appt.id }}</td>
+            <td data-label="Time">
+              {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy HH:mm:ss' }}
+            </td>
+            <td data-label="Status">
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-primary': appt.status === 'Scheduled',
+                  'bg-warning text-dark': appt.status === 'Rescheduled',
+                  'bg-danger': appt.status === 'Cancelled',
+                  'bg-secondary': appt.status !== 'Scheduled' && appt.status !== 'Rescheduled' && appt.status !== 'Cancelled'
+                }"
+              >
+                {{ appt.status || '—' }}
+              </span>
+            </td>
+            <td data-label="Doctor">
+              <strong>{{ appt.doctor?.username || appt.doctor?.name || '—' }}</strong><br />
+              <small class="text-muted">{{ appt.doctor?.email || '—' }}</small>
+            </td>
+            <td data-label="Patient">
+              <strong>{{ appt.patient?.username || appt.patient?.name || '—' }}</strong><br />
+              <small class="text-muted">{{ appt.patient?.email || '—' }}</small>
+            </td>
+            <td data-label="Actions" class="actions">
+              <div class="actions-row">
+                <button class="btn btn-sm btn-outline-primary" type="button" (click)="editAppointment(appt)">
+                  ✏️ Edit
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  type="button"
+                  (click)="deleteAppointment(appt.id)"
+                  [disabled]="isDeletingId === appt.id"
+                  [attr.aria-busy]="isDeletingId === appt.id ? true : null"
+                >
+                  <span *ngIf="isDeletingId !== appt.id">🗑️ Delete</span>
+                  <span *ngIf="isDeletingId === appt.id">
+                    <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+                    Deleting…
+                  </span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Enhanced Pagination -->
+      <nav class="mt-3" *ngIf="totalPages > 1" aria-label="Appointments pagination">
+        <div class="pagination-info text-center mb-2">
+          <small class="text-muted">
+            Showing {{ (currentPage - 1) * pageSize + 1 }} -
+            {{ Math.min(currentPage * pageSize, appointmentList.length) }}
+            of {{ appointmentList.length }} appointments
+          </small>
+        </div>
+
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+          </li>
+
+          <li
+            class="page-item"
+            *ngFor="let page of getPageNumbers()"
+            [class.active]="currentPage === page"
+            [class.disabled]="page === -1"
+          >
+            <button class="page-link" (click)="page !== -1 && setPage(page)" [disabled]="page === -1">
+              {{ page === -1 ? '...' : page }}
+            </button>
+          </li>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="nextPage()" [disabled]="currentPage === totalPages">Next »</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Reschedule form -->
+  <section class="card mt-4" *ngIf="isAdded">
+    <div class="card-title-row">
+      <h4 class="card-title">📝 Reschedule Appointment</h4>
+      <small class="text-muted">Update the appointment time and submit</small>
+    </div>
+
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label for="appointmentId">Appointment ID</label>
+          <input
             id="appointmentId"
             type="number"
             class="form-control"
@@ -93,39 +184,71 @@
             placeholder="Appointment ID"
             readonly
           />
-<div *ngIf="itemForm.controls['id'].invalid && (itemForm.controls['id'].dirty || itemForm.controls['id'].touched)"
-               class="text-danger mt-1">
-<small>Appointment ID is required.</small>
-</div>
-</div>
-<!-- New time -->
-<div class="mb-3">
-<label for="newTime" class="form-label">New Time</label>
-<input
+          <div
+            *ngIf="itemForm.controls['id'].invalid && (itemForm.controls['id'].dirty || itemForm.controls['id'].touched)"
+            class="text-danger mt-1"
+          >
+            <small>Appointment ID is required.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="newTime">New Time</label>
+          <input
             id="newTime"
             type="datetime-local"
             class="form-control"
             formControlName="time"
             placeholder="Select new appointment time"
           />
-<div *ngIf="itemForm.controls['time'].invalid && (itemForm.controls['time'].dirty || itemForm.controls['time'].touched)"
-               class="text-danger mt-1">
-<small>Please choose a valid appointment time.</small>
-</div>
-<small class="text-muted d-block mt-1">
+          <div
+            *ngIf="itemForm.controls['time'].invalid && (itemForm.controls['time'].dirty || itemForm.controls['time'].touched)"
+            class="text-danger mt-1"
+          >
+            <small>Please choose a valid appointment time.</small>
+          </div>
+          <small class="text-muted d-block mt-1">
             The time will be formatted as <code>yyyy-MM-dd HH:mm:ss</code> before sending to the server.
-</small>
+          </small>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="itemForm.invalid || isSaving"
+          [attr.aria-busy]="isSaving ? true : null"
+        >
+          <span *ngIf="!isSaving">💾 Save Changes</span>
+          <span *ngIf="isSaving">
+            <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+            Saving…
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-outline-secondary" (click)="isAdded = false; itemForm.reset()">
+          ❌ Cancel
+        </button>
+      </div>
+    </form>
+  </section>
 </div>
-<!-- Actions -->
-<div class="d-flex gap-2">
-<button type="submit" class="btn btn-primary" [disabled]="itemForm.invalid">
-            Save Changes
-</button>
-<button type="button" class="btn btn-outline-secondary" (click)="isAdded = false; itemForm.reset()">
-            Cancel
-</button>
-</div>
-</form>
-</div>
-</div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

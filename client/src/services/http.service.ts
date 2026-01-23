@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,HttpParams, HttpResponse  } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -345,3 +346,13 @@ getPatientRecordsByReceptionist(patientId: string | number): Observable<any> {
 }
 
 }
+
+
+
+
+
+
+
+
+
+

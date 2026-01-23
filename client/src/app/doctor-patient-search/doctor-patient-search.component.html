@@ -1,73 +1,148 @@
-<div class="container mt-4">
-<h2>Patient Search</h2>
-<div class="row mt-4">
-<div class="col-md-8">
-<div class="input-group">
-<input 
-          type="text" 
-          class="form-control" 
+<div class="page">
+  <!-- Header bar with gradient -->
+  <header class="page-header">
+    <div class="header-inner">
+      <h1 class="title">
+        <i class="fas fa-user-md" aria-hidden="true"></i>
+        Patient Search
+      </h1>
+      <p class="subtitle">Find patients by name or ID, then view history or add records.</p>
+    </div>
+  </header>
+
+  <!-- Content card -->
+  <section class="card">
+    <!-- Search -->
+    <div class="search-row">
+      <div class="search-group" role="search" aria-label="Patient search">
+        <span class="sg-icon">
+          <i class="fas fa-search" aria-hidden="true"></i>
+        </span>
+
+        <input
+          type="text"
+          class="sg-input"
           placeholder="Search by patient name or ID..."
           [(ngModel)]="searchQuery"
           (input)="onSearchInput()"
           (keyup.enter)="onSearch()"
+          aria-label="Search patients"
         />
-<div class="input-group-append">
-<button class="btn btn-primary" type="button" (click)="onSearch()">
-<i class="fas fa-search"></i> Search
-</button>
-</div>
-</div>
-</div>
-</div>
- 
-  <div class="row mt-4" *ngIf="isSearching">
-<div class="col-12 text-center">
-<p>Loading patients...</p>
-</div>
-</div>
- 
-  <div class="row mt-4" *ngIf="!isSearching && searchQuery && patientList.length === 0">
-<div class="col-12">
-<div class="alert alert-info">
-        No patients found matching "{{ searchQuery }}". Try a different search term.
-</div>
-</div>
-</div>
- 
-  <div class="row mt-4" *ngIf="!isSearching && patientList.length > 0">
-<div class="col-12">
-<p class="text-muted mb-2">Found {{ patientList.length }} patient(s)</p>
-<table class="table table-bordered table-hover">
-<thead class="thead-dark">
-<tr>
-<th>Patient ID</th>
-<th>Name</th>
-<th>Email</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody>
-<tr *ngFor="let patient of patientList">
-<td>{{ patient.id }}</td>
-<td>{{ patient.username }}</td>
-<td>{{ patient.email }}</td>
-<td>
-<button 
-                class="btn btn-sm btn-info mr-2" 
+
+        <div class="sg-actions">
+          <button class="btn btn-primary" type="button" (click)="onSearch()">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Meta info -->
+      <div class="results-meta" *ngIf="!isSearching && patientList.length > 0">
+        <span class="badge-count" aria-live="polite">
+          {{ patientList.length }} result{{ patientList.length === 1 ? '' : 's' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Initial hint -->
+    <div class="hint" *ngIf="showInitialHint && !isSearching && patientList.length === 0">
+      <i class="fas fa-lightbulb"></i>
+      Tip: Start typing a name (e.g., “Albin”) or an ID (e.g., “102”).
+    </div>
+
+    <!-- Loading skeleton -->
+    <div class="table-wrap" *ngIf="isSearching">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Patient ID</th>
+            <th>Name</th>
+            <th class="hide-sm">Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let _ of skeletonRows">
+            <td><span class="skeleton w-60"></span></td>
+            <td><span class="skeleton w-80"></span></td>
+            <td class="hide-sm"><span class="skeleton w-90"></span></td>
+            <td><span class="skeleton w-70"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty" *ngIf="!isSearching && searchQuery && patientList.length === 0">
+      <div class="empty-card">
+        <i class="fas fa-user-slash"></i>
+        <h3>No patients found</h3>
+        <p>
+          Nothing matched “<strong>{{ searchQuery }}</strong>”.
+          Try a different name or ID.
+        </p>
+      </div>
+    </div>
+
+    <!-- Results table -->
+    <div class="table-wrap" *ngIf="!isSearching && patientList.length > 0">
+      <table class="table table-hover" role="table">
+        <thead>
+          <tr>
+            <th scope="col">Patient ID</th>
+            <th scope="col">Name</th>
+            <th scope="col" class="hide-sm">Email</th>
+            <th scope="col" class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patientList; trackBy: trackById">
+            <td data-label="Patient ID">#{{ patient.id }}</td>
+            <td data-label="Name">
+              <div class="cell-name">
+                <i class="fas fa-user-circle avatar" aria-hidden="true"></i>
+                <span>{{ patient.username }}</span>
+              </div>
+            </td>
+            <td class="hide-sm" data-label="Email">
+              <span class="email-text" title="{{ patient.email }}">{{ patient.email }}</span>
+            </td>
+            <td class="actions" data-label="Actions">
+              <button
+                class="btn chip chip-info"
+                type="button"
                 (click)="viewPatientHistory(patient.id)"
->
-                View History
-</button>
-<button 
-                class="btn btn-sm btn-success" 
+                [attr.aria-label]="'View history for ' + patient.username"
+              >
+                <i class="fas fa-folder-open"></i>
+                History
+              </button>
+              <button
+                class="btn chip chip-success"
+                type="button"
                 (click)="addRecord(patient.id)"
->
+                [attr.aria-label]="'Add record for ' + patient.username"
+              >
+                <i class="fas fa-plus-circle"></i>
                 Add Record
-</button>
-</td>
-</tr>
-</tbody>
-</table>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </div>
-</div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+

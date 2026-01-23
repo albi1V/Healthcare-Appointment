@@ -1,102 +1,60 @@
 <main class="login-page">
-<!-- Background layer -->
-<div class="bg-image"></div>
-<div class="bg-overlay"></div>
  
-  <section class="login-form-section">
+  <!-- Background Image -->
+<div class="bg-photo">
+<img src="assets/img/Docter3.jpg" alt="Doctor Background" />
+<div class="photo-overlay"></div>
+</div>
+ 
+  <!-- Login Card Section -->
+<section class="login-form-section">
 <div class="login-card">
-<!-- Header -->
+ 
+      <!-- Header -->
 <div class="header-section">
-<div class="logo" aria-hidden="true">
-<!-- ECG / Health icon -->
-<svg width="56" height="56" viewBox="0 0 56 56" fill="none" role="img" aria-label="Healthcare Logo">
-<circle cx="28" cy="28" r="26" stroke="currentColor" stroke-width="2" opacity="0.7"></circle>
-<path d="M10 28h8l3-6 5 14 4-8h10"
-                  stroke="currentColor" stroke-width="2.2"
-                  stroke-linecap="round" stroke-linejoin="round"></path>
-<circle cx="43" cy="28" r="2" fill="currentColor" opacity="0.9"></circle>
+<div class="logo-circle">
+<svg width="32" height="32" viewBox="0 0 56 56" fill="none">
+<circle cx="28" cy="28" r="26" stroke="white" stroke-width="2"></circle>
+<path
+              d="M10 28h8l3-6 5 14 4-8h10"
+              stroke="white"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+></path>
 </svg>
 </div>
-<h1 class="project-title">Healthcare Management Project</h1>
+ 
+        <h1 class="project-title">Care made simple</h1>
 <p class="subtitle">Sign in to continue</p>
 </div>
  
-      <!-- Login form (username + password) -->
-<form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form" novalidate>
-
-<!-- Email -->
-<div
-  class="form-field"
-  [ngClass]="{
-    'has-error':
-      itemForm.get('email')?.invalid &&
-      (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)
-  }"
->
-  <input
-    id="email"
-    type="email"
-    formControlName="email"
-    placeholder="Enter email"
-    autocomplete="email"
-  />
-  <label for="email">Email</label>
-
-  <!-- Required error -->
-  <span
-    *ngIf="
-      itemForm.get('email')?.hasError('required') &&
-      (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)
-    "
-    class="error-message"
-    >Email is required.</span
-  >
-
-  <!-- Invalid email format -->
-  <span
-    *ngIf="
-      itemForm.get('email')?.hasError('email') &&
-      !itemForm.get('email')?.hasError('required') &&
-      (itemForm.get('email')?.dirty || itemForm.get('email')?.touched)
-    "
-    class="error-message"
-    >Please enter a valid email address.</span
-  >
-</div>
-        <!-- Password -->
-<div class="form-field"
-             [ngClass]="{'has-error': itemForm.controls['password'].invalid && (itemForm.controls['password'].dirty || itemForm.controls['password'].touched)}">
-<input type="password" id="password" formControlName="password" placeholder=" " autocomplete="current-password" />
-<label for="password">Password</label>
-<span *ngIf="itemForm.controls['password'].invalid && (itemForm.controls['password'].dirty || itemForm.controls['password'].touched)"
-                class="error-message">Password is required.</span>
+      <!-- Login Form -->
+<form [formGroup]="itemForm" (ngSubmit)="onLogin()" class="login-form">
+ 
+        <div class="form-field">
+<input type="email" formControlName="email" placeholder="Enter email" />
 </div>
  
-        <!-- Submit -->
-<button type="submit" class="login-button" [disabled]="itemForm.invalid">
+        <div class="form-field">
+<input type="password" formControlName="password" placeholder="Enter password" />
+</div>
+ 
+        <button type="submit" class="login-button" [disabled]="itemForm.invalid">
           Login
 </button>
 </form>
  
-      <!-- Server error -->
-<div *ngIf="showError" class="server-error" role="alert">
-        {{ errorMessage }}
+      <!-- Links -->
+<div class="links">
+<a (click)="registration()">Create Account</a>
+<a (click)="forgotPassword()">Forgot Password?</a>
 </div>
  
-      <!-- Registration link -->
-<div class="signup-link-section">
-<span>Don’t have an account?</span>
-<a (click)="registration()" class="register-link">Register</a>
-</div>
-</div>
-
-<div class="signup-link-section">
-<span>Forgot Password</span>
-<a (click)="forgotPassword()" class="register-link">Forgot Password</a>
-</div>
+    </div>
 </section>
-<!-- 🤖 Floating Chatbot Button -->
-<div class="chatbot-float" (click)="chatbot()">
-<span>🤖</span>
-</div>
+ 
+  <!-- Chatbot -->
+<!-- <button class="chatbot-float" (click)="chatbot()">🤖</button> -->
+ 
 </main>

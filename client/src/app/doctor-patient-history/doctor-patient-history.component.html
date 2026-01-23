@@ -1,55 +1,119 @@
-<div class="container mt-4">
-<h2>Patient Medical History</h2>
- 
-  <p class="text-muted">
-    Patient ID: {{ patientId }}
-<span *ngIf="patientUsername"> | Name: {{ patientUsername }}</span>
-</p>
- 
-  <div class="mb-3">
-<button class="btn btn-success mr-2" (click)="addNewRecord()">
-      Add New Record
-</button>
-<button class="btn btn-secondary" (click)="backToSearch()">
-      Back to Search
-</button>
+<div class="page">
+  <!-- Header bar with gradient -->
+  <header class="page-header">
+    <div class="header-inner">
+      <h1 class="title">
+        <i class="fas fa-notes-medical" aria-hidden="true"></i>
+        Patient Medical History
+      </h1>
+      <p class="subtitle">Review past records for diagnosis and treatment details.</p>
+      <div class="header-actions">
+        <button class="btn btn-secondary ghost" type="button" (click)="backToSearch()">
+          <i class="fas fa-arrow-left"></i>
+          Back to Search
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content card -->
+  <section class="card">
+    <!-- Patient chip + actions -->
+    <div class="top-row">
+      <div class="patient-chip" aria-live="polite">
+        <span class="chip-id">#{{ patientId }}</span>
+        <span class="chip-name" *ngIf="patientUsername">• {{ patientUsername }}</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-success" type="button" (click)="addNewRecord()">
+          <i class="fas fa-plus-circle"></i>
+          Add New Record
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading state with skeleton table -->
+    <div *ngIf="isLoading" class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Record ID</th>
+            <th>Date</th>
+            <th>Doctor</th>
+            <th>Diagnosis</th>
+            <th>Treatment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let _ of skeletonRows">
+            <td><span class="skeleton w-60"></span></td>
+            <td><span class="skeleton w-90"></span></td>
+            <td><span class="skeleton w-100"></span></td>
+            <td><span class="skeleton w-160"></span></td>
+            <td><span class="skeleton w-140"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && medicalRecords.length === 0" class="empty">
+      <div class="empty-card">
+        <i class="fas fa-folder-open"></i>
+        <h3>No medical records</h3>
+        <p>This patient doesn’t have any records yet.</p>
+        <button class="btn btn-success mt-10" type="button" (click)="addNewRecord()">
+          <i class="fas fa-plus-circle"></i>
+          Add New Record
+        </button>
+      </div>
+    </div>
+
+    <!-- Records table -->
+    <div *ngIf="!isLoading && medicalRecords.length > 0" class="mt-8">
+      <div class="results-meta">
+        <span class="badge-count">
+          {{ medicalRecords.length }} record{{ medicalRecords.length === 1 ? '' : 's' }}
+        </span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table-hover" role="table">
+          <thead>
+            <tr>
+              <th scope="col">Record ID</th>
+              <th scope="col">Date</th>
+              <th scope="col" class="hide-sm">Doctor</th>
+              <th scope="col">Diagnosis</th>
+              <th scope="col">Treatment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of medicalRecords; trackBy: trackById">
+              <td data-label="Record ID">#{{ record.id }}</td>
+              <td data-label="Date">{{ formatDate(record.recordDate) }}</td>
+              <td class="hide-sm" data-label="Doctor">
+                <span class="doctor-name">
+                  Dr. {{ record?.doctor?.username || 'N/A' }}
+                </span>
+                <span class="doctor-id" *ngIf="record?.doctor?.id"> (ID {{ record.doctor.id }})</span>
+              </td>
+              <td data-label="Diagnosis">{{ record.diagnosis }}</td>
+              <td data-label="Treatment">{{ record.treatment }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 </div>
- 
-  <div *ngIf="isLoading" class="text-center mt-4">
-<div class="spinner-border text-primary" role="status">
-<span class="sr-only">Loading...</span>
-</div>
-<p class="mt-2">Loading medical records...</p>
-</div>
- 
-  <div *ngIf="!isLoading && medicalRecords.length === 0" class="alert alert-info mt-4">
-<i class="fas fa-info-circle"></i> No medical records found for this patient.
-</div>
- 
-  <div *ngIf="!isLoading && medicalRecords.length > 0" class="mt-4">
-<p class="text-muted mb-2">Total Records: {{ medicalRecords.length }}</p>
-<table class="table table-bordered table-hover">
-<thead class="thead-dark">
-<tr>
-<th>Record ID</th>
-<th>Date</th>
-<th>Doctor</th>
-<th>Diagnosis</th>
-<th>Treatment</th>
-</tr>
-</thead>
-<tbody>
-<tr *ngFor="let record of medicalRecords; trackBy: trackById">
-<td>{{ record.id }}</td>
-<td>{{ formatDate(record.recordDate) }}</td>
-<td>
-            Dr. {{ record?.doctor?.username || 'N/A' }}
-<span *ngIf="record?.doctor?.id"> (ID {{ record.doctor.id }})</span>
-</td>
-<td>{{ record.diagnosis }}</td>
-<td>{{ record.treatment }}</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+``
+
+
+
+
+
+
+
+

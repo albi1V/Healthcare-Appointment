@@ -1,70 +1,116 @@
 <div class="doctor-appointments-page">
- 
-  <div class="card mt-4">
-<div class="card-header">
-<h4 class="card-title">My Appointments</h4>
-<p class="subtitle">Today’s schedule and upcoming visits</p>
-</div>
- 
-    <div class="card-body">
-<!-- Empty state -->
-<div *ngIf="!appointmentList || appointmentList.length === 0" class="empty-state">
-<div class="empty-icon">🗓️</div>
-<p>No appointments found.</p>
-<small class="text-muted">Try refreshing or check back later.</small>
-</div>
- 
-      <!-- Table -->
-<div *ngIf="appointmentList && appointmentList.length > 0" class="table-responsive">
-<table class="table table-bordered align-middle doctor-appointments-table">
-<thead>
-<tr>
-<th>Appointment ID</th>
-<th>Time</th>
-<th>Status</th>
-<th>Patient</th>
-<th>Contact</th>
-</tr>
-</thead>
- 
-          <!-- Render rows -->
-<tbody>
-<tr *ngFor="let appt of appointmentList">
-<td class="col-id">{{ appt.id }}</td>
- 
-              <!-- Prefer appointmentTime, fallback to appointmentDate if present -->
-<td class="col-time">
-                {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy hh:mm a' }}
-</td>
- 
-              <td class="col-status">
-<span
-                  class="status-badge"
-                  [ngClass]="{
-                    'status-scheduled': appt.status === 'Scheduled',
-                    'status-cancelled': appt.status === 'Cancelled',
-                    'status-rescheduled': appt.status === 'Rescheduled',
-                    'status-default': appt.status !== 'Scheduled' && appt.status !== 'Cancelled' && appt.status !== 'Rescheduled'
-                  }"
->
-                  {{ appt.status || '—' }}
-</span>
-</td>
- 
-              <!-- Patient name (support either patient.name or patient.username) -->
-<td class="col-patient">
-<strong>{{ appt.patient?.name || appt.patient?.username || 'Unknown' }}</strong>
-</td>
- 
-              <!-- Patient email (optional) -->
-<td class="col-contact">
-<small class="text-muted">{{ appt.patient?.email || '—' }}</small>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
- 
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="title-wrap">
+      <h2 class="page-title">My Appointments</h2>
+      <p class="subtitle">Today’s schedule and upcoming visits</p>
     </div>
+
+    <div class="toolbar">
+      <!-- Search -->
+      <div class="search">
+        <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+        <input
+          #q
+          type="text"
+          class="search-input"
+          placeholder="Search by patient name, email, or ID…"
+          (input)="onSearch(q.value)"
+        />
+      </div>
+
+      <!-- Refresh -->
+      <button class="btn btn-refresh" (click)="refresh()" [disabled]="loading">
+        <span class="spinner" *ngIf="loading"></span>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="card-body">
+
+      <!-- Empty state when nothing today and nothing upcoming -->
+      <div
+        *ngIf="(todayList?.length || 0) === 0 && (upcomingList?.length || 0) === 0"
+        class="empty-state">
+        <div class="empty-graphic" aria-hidden="true">🗓️</div>
+        <h4>No appointments today or upcoming</h4>
+        <p class="muted">Try searching or check back later.</p>
+      </div>
+
+      <!-- Today Section -->
+      <section *ngIf="todayList && todayList.length > 0" class="table-wrap" aria-labelledby="today-title" style="margin-bottom:16px;">
+        <h3 id="today-title" class="page-title" style="padding: 12px 14px; margin: 0; font-size: 18px;">
+          Today ({{ todayList.length }})
+        </h3>
+        <table class="appointments-table">
+          <thead>
+            <tr>
+              <th>Appointment ID</th>
+              <th class="col-time">Time</th>
+              <th>Patient</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let appt of todayList; trackBy: trackById">
+              <td class="col-id">#{{ appt.id }}</td>
+              <td class="col-time">
+                {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy hh:mm a' }}
+              </td>
+              <td class="col-patient">
+                <strong>{{ appt.patient?.name || appt.patient?.username || 'Unknown' }}</strong>
+              </td>
+              <td class="col-contact">
+                <span class="muted">{{ appt.patient?.email || '—' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Upcoming Section -->
+      <section *ngIf="upcomingList && upcomingList.length > 0" class="table-wrap" aria-labelledby="upcoming-title">
+        <h3 id="upcoming-title" class="page-title" style="padding: 12px 14px; margin: 0; font-size: 18px;">
+          Upcoming ({{ upcomingList.length }})
+        </h3>
+        <table class="appointments-table">
+          <thead>
+            <tr>
+              <th>Appointment ID</th>
+              <th class="col-time">Time</th>
+              <th>Patient</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let appt of upcomingList; trackBy: trackById">
+              <td class="col-id">#{{ appt.id }}</td>
+              <td class="col-time">
+                {{ (appt.appointmentTime || appt.appointmentDate) | date:'dd-MMM-yyyy hh:mm a' }}
+              </td>
+              <td class="col-patient">
+                <strong>{{ appt.patient?.name || appt.patient?.username || 'Unknown' }}</strong>
+              </td>
+              <td class="col-contact">
+                <span class="muted">{{ appt.patient?.email || '—' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+  </div>
 </div>
-</div>
+
+
+
+
+
+
+
+

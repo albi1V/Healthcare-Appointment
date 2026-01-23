@@ -206,3 +206,6 @@ export class DoctorAvailabilityComponent implements OnInit {
     });
   }
 }
+
+
+

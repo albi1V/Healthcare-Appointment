@@ -1,8 +1,9 @@
-
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../services/http.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+
+declare const Swal: any; // Use SweetAlert2 from CDN
 
 interface Slot {
   label: string;        // "12:00 - 12:15"
@@ -30,6 +31,7 @@ export class ScheduleAppointmentComponent implements OnInit {
 
   responseMessage = '';
   isAdded = false;
+  isSubmitting = false; // submit UX
 
   patientId: number | null = null;
 
@@ -43,6 +45,20 @@ export class ScheduleAppointmentComponent implements OnInit {
   loadingSlots = false;
   takenSlotKeys = new Set<string>(); // yyyy-MM-ddTHH:mm keys
 
+  // Toast helper
+  private toast = () =>
+    Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+      didOpen: (t: any) => {
+        t.addEventListener('mouseenter', Swal.stopTimer);
+        t.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+
   constructor(
     public httpService: HttpService,
     private formBuilder: FormBuilder,
@@ -51,9 +67,9 @@ export class ScheduleAppointmentComponent implements OnInit {
     this.itemForm = this.formBuilder.group({
       patientId: ['', Validators.required],
       doctorId: ['', Validators.required],
-      doctorName: ['', Validators.required],   // ✅ NEW
-      date: ['', Validators.required],         // ✅ NEW
-      time: ['', Validators.required]          // selected 15-min slot
+      doctorName: ['', Validators.required],
+      date: ['', Validators.required],
+      time: ['', Validators.required] // selected 15-min slot
     });
   }
 
@@ -68,30 +84,30 @@ export class ScheduleAppointmentComponent implements OnInit {
     const now = new Date();
     this.selectedDate = this.datePipe.transform(now, 'yyyy-MM-dd') || '';
     this.today = this.selectedDate;
-    this.itemForm.controls['date'].setValue(this.selectedDate);   // ✅ keep form date in sync
+    this.itemForm.controls['date'].setValue(this.selectedDate);
 
     this.getDoctors();
   }
 
-getDoctors(): void {
-  this.httpService.getDoctors().subscribe(
-    (data: any) => {
-      this.doctorList = ((data as any[]) ?? []).map(d => ({
-        ...d,
-        name: d.username   // map backend field → UI field
-      }));
-    },
-    (err: any) => {
-      console.error('Error fetching doctors', err);
-    }
-  );
-}
-
+  getDoctors(): void {
+    this.httpService.getDoctors().subscribe(
+      (data: any) => {
+        this.doctorList = ((data as any[]) ?? []).map(d => ({
+          ...d,
+          name: d.username   // map backend field → UI field
+        }));
+      },
+      (err: any) => {
+        console.error('Error fetching doctors', err);
+        this.showErrorAlert('Failed to load doctors. Please try again.');
+      }
+    );
+  }
 
   /** Click “Appointment” on a row */
   addAppointment(doc: any): void {
     this.itemForm.controls['doctorId'].setValue(doc.id);
-    this.itemForm.controls['doctorName'].setValue(doc.name || 'Doctor');  // ✅ set name in form
+    this.itemForm.controls['doctorName'].setValue(doc.name || 'Doctor');
     this.selectedDoctor = {
       id: doc.id,
       name: doc.name,
@@ -114,9 +130,8 @@ getDoctors(): void {
   onDateChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.selectedDate = input.value;
-    this.itemForm.controls['date'].setValue(this.selectedDate); // ✅ keep in form
+    this.itemForm.controls['date'].setValue(this.selectedDate);
 
-    // Reset slot selection and rebuild
     this.itemForm.controls['time'].reset();
     this.takenSlotKeys.clear();
     this.buildSlotsForSelectedDate();
@@ -129,189 +144,130 @@ getDoctors(): void {
     this.itemForm.controls['time'].setValue(slot.isoForControl);
   }
 
- /** Submit with a fresh pre-flight check to prevent double booking */
+  /** Submit with a fresh pre-flight check to prevent double booking */
+  onSubmit(): void {
+    if (this.itemForm.invalid) return;
 
-onSubmit(): void {
+    const selectedIso = this.itemForm.controls['time'].value as string;
+    if (!selectedIso) return;
 
-  if (this.itemForm.invalid) return;
- 
-  const selectedIso = this.itemForm.controls['time'].value as string;
+    this.isSubmitting = true; // start spinner
 
-  if (!selectedIso) return;
- 
-  // Fresh check: re-fetch taken slots for the selected date and doctor, then decide
+    // Fresh check before submit
+    this.httpService.getAppointmentByDoctor(this.itemForm.controls['doctorId'].value).subscribe({
+      next: (appts: any) => {
+        const isTakenNow = this.isIsoTakenOnSelectedDate(selectedIso, appts);
+        if (isTakenNow) {
+          this.isSubmitting = false;
+          this.responseMessage = 'This slot has just been taken. Please choose another.';
+          this.toast().fire({ icon: 'warning', title: 'Slot already taken' });
+          return;
+        }
 
-  this.httpService.getAppointmentByDoctor(this.itemForm.controls['doctorId'].value).subscribe({
+        // Safe to submit
+        const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
+        const formRaw = this.itemForm.getRawValue();
+        const formValue = { ...formRaw, time: formattedTime };
 
-    next: (appts: any) => {
+        this.createAppointmentWithFallback(formValue, selectedIso);
+      },
+      error: () => {
+        // If we cannot check, proceed but server should still enforce uniqueness
+        const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
+        const formRaw = this.itemForm.getRawValue();
+        const formValue = { ...formRaw, time: formattedTime };
 
-      const isTakenNow = this.isIsoTakenOnSelectedDate(selectedIso, appts);
-
-      if (isTakenNow) {
-
-        this.responseMessage = 'This slot has just been taken. Please choose another.';
-
-        return;
-
+        this.createAppointmentWithFallback(formValue, selectedIso);
       }
- 
-      // Safe to submit
-
-      const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
-
-      const formRaw = this.itemForm.getRawValue();
-
-      const formValue = { ...formRaw, time: formattedTime };
- 
-      this.createAppointmentWithFallback(formValue);
-
-    },
-
-    error: () => {
-
-      // If we cannot check, proceed but server should still enforce uniqueness
-
-      const formattedTime = this.datePipe.transform(selectedIso, 'yyyy-MM-dd HH:mm:ss');
-
-      const formRaw = this.itemForm.getRawValue();
-
-      const formValue = { ...formRaw, time: formattedTime };
- 
-      this.createAppointmentWithFallback(formValue);
-
-    }
-
-  });
-
-}
- 
- 
- 
-/** Try new /appointments first; if 404 or method missing, fallback to existing endpoint */
-
-private createAppointmentWithFallback(formValue: any) {
-
-  // We’ll try to call HttpService.createAppointmentV2 if it exists (new endpoint)
-
-  const newCall = (this.httpService as any).createAppointmentV2;
- 
-  const onSuccess = (res: any) => {
-
-    const apptId = res?.id ?? res?.appointmentId ?? '';
-
-    this.responseMessage = apptId
-
-      ? `Appointment #${apptId} booked successfully. A confirmation email has been sent to your registered email.`
-
-      : `Appointment booked successfully. A confirmation email has been sent to your registered email.`;
- 
-    this.isAdded = false;
-
-    this.itemForm.reset();
-
-    this.selectedDoctor = null;
- 
-    // Restore patientId and today's date after reset
-
-    if (this.patientId !== null) {
-
-      this.itemForm.controls['patientId'].setValue(this.patientId);
-
-    }
-
-    this.itemForm.controls['date'].setValue(this.today);
-
-    this.selectedDate = this.today;
-
-  };
- 
-  const onError = (err: any) => {
-
-    if (err?.status === 409 && err?.error) {
-
-      this.responseMessage = String(err.error); // e.g., "Slot already booked"
-
-    } else {
-
-      this.responseMessage = 'Failed to save appointment';
-
-    }
-
-    console.error(err);
-
-  };
- 
-  // Use the new endpoint first if available
-
-  if (typeof newCall === 'function') {
-
-    newCall.call(this.httpService, {
-
-      patientId: this.itemForm.controls['patientId'].value,
-
-      doctorId: this.itemForm.controls['doctorId'].value,
-
-      time: formValue.time
-
-    }).subscribe(onSuccess, (err: any) => {
-
-      // Fallback to old endpoint if new returns 404
-
-      if (err?.status === 404) {
-
-        this.httpService.ScheduleAppointment(formValue).subscribe(onSuccess, onError);
-
-      } else {
-
-        onError(err);
-
-      }
-
     });
-
-  } else {
-
-    // If new method not present, fallback straight to old endpoint
-
-    this.httpService.ScheduleAppointment(formValue).subscribe(onSuccess, onError);
-
   }
 
-}
+  /** Try new /appointments first; if 404 or method missing, fallback to existing endpoint */
+  private createAppointmentWithFallback(formValue: any, selectedIso: string) {
+    const newCall = (this.httpService as any).createAppointmentV2;
 
- 
+    const onSuccess = (res: any) => {
+      const apptId = res?.id ?? res?.appointmentId ?? '';
+      const docName = this.itemForm.controls['doctorName'].value || 'Doctor';
+      const niceTime = this.datePipe.transform(selectedIso, 'MMM d, y, h:mm a');
 
+      this.responseMessage = apptId
+        ? `Appointment #${apptId} booked successfully. A confirmation email has been sent to your registered email.`
+        : `Appointment booked successfully. A confirmation email has been sent to your registered email.`;
 
-/** Check if selected ISO slot is taken on selected date from doctor’s appointments list */
-private isIsoTakenOnSelectedDate(selectedIso: string, appts: any[]): boolean {
-  // selectedIso looks like "yyyy-MM-ddTHH:mm"
-  for (const a of appts ?? []) {
-    const raw = String(a.appointmentTime || '').trim();
-    if (!raw) continue;
+      // SweetAlert2 success
+      this.showSuccessAlert(docName, niceTime, apptId);
 
-    const isoLike = raw.includes('T') ? raw : raw.replace(' ', 'T');
-    if (isoLike.slice(0, 16) === selectedIso) return true;
+      // Reset UI
+      this.isAdded = false;
+      this.itemForm.reset();
+      this.selectedDoctor = null;
+
+      if (this.patientId !== null) {
+        this.itemForm.controls['patientId'].setValue(this.patientId);
+      }
+      this.itemForm.controls['date'].setValue(this.today);
+      this.selectedDate = this.today;
+
+      this.isSubmitting = false;
+    };
+
+    const onError = (err: any) => {
+      if (err?.status === 409 && err?.error) {
+        this.responseMessage = String(err.error); // e.g., "Slot already booked"
+        this.showErrorAlert(this.responseMessage);
+      } else {
+        this.responseMessage = 'Failed to save appointment';
+        this.showErrorAlert('Booking failed. Please try another slot or try again later.');
+      }
+      console.error(err);
+      this.isSubmitting = false;
+    };
+
+    if (typeof newCall === 'function') {
+      newCall
+        .call(this.httpService, {
+          patientId: this.itemForm.controls['patientId'].value,
+          doctorId: this.itemForm.controls['doctorId'].value,
+          time: formValue.time
+        })
+        .subscribe(onSuccess, (err: any) => {
+          if (err?.status === 404) {
+            this.httpService.ScheduleAppointment(formValue).subscribe(onSuccess, onError);
+          } else {
+            onError(err);
+          }
+        });
+    } else {
+      this.httpService.ScheduleAppointment(formValue).subscribe(onSuccess, onError);
+    }
   }
-  return false;
-}
 
+  /** Check if selected ISO slot is taken on selected date from doctor’s appointments list */
+  private isIsoTakenOnSelectedDate(selectedIso: string, appts: any[]): boolean {
+    for (const a of appts ?? []) {
+      const raw = String(a.appointmentTime || '').trim();
+      if (!raw) continue;
+
+      const isoLike = raw.includes('T') ? raw : raw.replace(' ', 'T');
+      if (isoLike.slice(0, 16) === selectedIso) return true;
+    }
+    return false;
+  }
 
   /* -------------------------------
      Slot generation & helpers
   --------------------------------*/
-
   private buildSlotsForSelectedDate(): void {
     this.slots = [];
     if (!this.selectedDoctor || !this.selectedDate) return;
 
     this.loadingSlots = true;
     try {
-      const dayOfWeek = this.getDayOfWeek(this.selectedDate);
-const segments = this.parseAvailability(this.selectedDoctor.availability || '');
-const todays = segments.filter(s => s.date === this.selectedDate);
+      const segments = this.parseAvailability(this.selectedDoctor.availability || '');
+      const todays = segments.filter(s => s.date === this.selectedDate);
 
       const newSlots: Slot[] = [];
-
       for (const seg of todays) {
         const start = this.makeDateFromHM(this.selectedDate, seg.startHM);
         const end = this.makeDateFromHM(this.selectedDate, seg.endHM);
@@ -330,49 +286,40 @@ const todays = segments.filter(s => s.date === this.selectedDate);
     }
   }
 
+  private fetchTakenSlotsForSelectedDate(): void {
+    if (!this.selectedDoctor) return;
 
-/* Mark already-taken slots (UI) */
-private fetchTakenSlotsForSelectedDate(): void {
-  if (!this.selectedDoctor) return;
+    this.httpService.getAppointmentByDoctor(this.selectedDoctor.id).subscribe({
+      next: (appts: any) => {
+        this.takenSlotKeys.clear();
 
-  this.httpService.getAppointmentByDoctor(this.selectedDoctor.id).subscribe({
-    next: (appts: any) => {
-      this.takenSlotKeys.clear();
+        for (const a of appts ?? []) {
+          const raw = String(a.appointmentTime || '').trim();
+          if (!raw) continue;
 
-      for (const a of appts ?? []) {
-        const raw = String(a.appointmentTime || '').trim();
-        if (!raw) continue;
-
-        // Normalize to "yyyy-MM-ddTHH:mm[:ss]" and keep first 16 chars
         const isoLike = raw.includes('T') ? raw : raw.replace(' ', 'T');
-        // Must match the selected date
-        if (!isoLike.startsWith(this.selectedDate)) continue;
+          if (!isoLike.startsWith(this.selectedDate)) continue;
 
-        const key16 = isoLike.slice(0, 16); // yyyy-MM-ddTHH:mm
-        this.takenSlotKeys.add(key16);
+          const key16 = isoLike.slice(0, 16); // yyyy-MM-ddTHH:mm
+          this.takenSlotKeys.add(key16);
+        }
+
+        // Disable slots that are already taken
+        this.slots = this.slots.map(s => {
+          const isTaken = this.takenSlotKeys.has(s.isoForControl);
+          return {
+            ...s,
+            taken: isTaken,
+            disabled: s.disabled || isTaken
+          };
+        });
+      },
+      error: () => {
+        // Silent: if we can't fetch, UI remains as-is; server still enforces uniqueness
       }
+    });
+  }
 
-      // 🔒 Disable slots that are already taken
-      this.slots = this.slots.map(s => {
-        const isTaken = this.takenSlotKeys.has(s.isoForControl);
-        return {
-          ...s,
-          taken: isTaken,
-          disabled: s.disabled || isTaken
-        };
-      });
-    },
-    error: () => {
-      // Silent: if we can't fetch, UI remains as-is; server still enforces uniqueness
-    }
-  });
-}
-
-
-
-
-
-  
   private getDayOfWeek(yyyyMMdd: string): Day {
     const [y, m, d] = yyyyMMdd.split('-').map(n => parseInt(n, 10));
     const dt = new Date(y, m - 1, d);
@@ -387,66 +334,19 @@ private fetchTakenSlotsForSelectedDate(): void {
     return new Date(y, m - 1, d, H, M, 0, 0);
   }
 
-
-
-private parseAvailability(availText: string): {
-  date: string;
-  startHM: string;
-  endHM: string;
-}[] {
-  const parts = availText.split(';').map(p => p.trim()).filter(Boolean);
-  const results: { date: string; startHM: string; endHM: string }[] = [];
-  for (const p of parts) {
-    const m = p.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})-(\d{2}:\d{2})$/);
-    if (!m) continue;
-    results.push({
-      date: m[1],
-      startHM: m[2],
-      endHM: m[3]
-    });
-  }
-  return results;
-}
-
-
-
-  private normalizeDay(d: string): Day | null {
-    const map: Record<string, Day> = {
-      MONDAY: 'MONDAY', MON: 'MONDAY',
-      TUESDAY: 'TUESDAY', TUE: 'TUESDAY', TUES: 'TUESDAY',
-      WEDNESDAY: 'WEDNESDAY', WED: 'WEDNESDAY',
-      THURSDAY: 'THURSDAY', THU: 'THURSDAY', THURS: 'THURSDAY',
-      FRIDAY: 'FRIDAY', FRI: 'FRIDAY',
-      SATURDAY: 'SATURDAY', SAT: 'SATURDAY',
-      SUNDAY: 'SUNDAY', SUN: 'SUNDAY'
-    };
-    return map[d] || null;
-  }
-
-  /** Convert "10:00 AM" or "13:15" → "HH:mm" */
-  private to24h(s: string): string | null {
-    const t = s.toUpperCase().replace(/\s+/g, '').replace('.', '');
-    const ampm = t.match(/^(\d{1,2})(?::(\d{2}))?(AM|PM)$/);
-    if (ampm) {
-      let hh = parseInt(ampm[1], 10);
-      const mm = ampm[2] ? parseInt(ampm[2], 10) : 0;
-      const mer = ampm[3];
-      if (mer === 'AM') {
-        if (hh === 12) hh = 0;
-      } else {
-        if (hh < 12) hh += 12;
-      }
-      return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  private parseAvailability(availText: string): {
+    date: string;
+    startHM: string;
+    endHM: string;
+  }[] {
+    const parts = availText.split(';').map(p => p.trim()).filter(Boolean);
+    const results: { date: string; startHM: string; endHM: string }[] = [];
+    for (const p of parts) {
+      const m = p.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})-(\d{2}:\d{2})$/);
+      if (!m) continue;
+      results.push({ date: m[1], startHM: m[2], endHM: m[3] });
     }
-    const hhmm = t.match(/^(\d{1,2}):(\d{2})$/);
-    if (hhmm) {
-      const hh = parseInt(hhmm[1], 10);
-      const mm = parseInt(hhmm[2], 10);
-      if (hh >= 0 && hh < 24 && mm >= 0 && mm < 60) {
-        return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
-      }
-    }
-    return null;
+    return results;
   }
 
   /** Generate 15-min slots */
@@ -470,4 +370,44 @@ private parseAvailability(availText: string): {
     const m = String(dt.getMinutes()).padStart(2, '0');
     return `${h}:${m}`;
   }
+
+  /* SweetAlert2 helpers */
+  private showSuccessAlert(doctorName: string, niceTime: string | null, apptId: string | number | '') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Booking Confirmed',
+      html: `
+        <div style="text-align:left;margin:0 auto;max-width:420px">
+          <div><strong>Doctor:</strong> ${this.escapeHtml(doctorName)}</div>
+          <div><strong>Time:</strong> ${this.escapeHtml(niceTime || '')}</div>
+          ${apptId ? `<div><strong>Reference:</strong> ${this.escapeHtml(String(apptId))}</div>` : ''}
+          <div style="margin-top:8px;color:#6b7280">A confirmation email has been sent to your registered email.</div>
+        </div>
+      `,
+      confirmButtonText: 'Great',
+      confirmButtonColor: '#0d6efd',
+      customClass: { popup: 'swal2-rounded' }
+    });
+  }
+
+  private showErrorAlert(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Booking Failed',
+      text: message || 'Something went wrong. Please try again.',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#0d6efd',
+      customClass: { popup: 'swal2-rounded' }
+    });
+  }
+
+  private escapeHtml(s: string) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 }
+

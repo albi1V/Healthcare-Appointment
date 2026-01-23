@@ -1,108 +1,295 @@
 <div class="page-container">
- 
   <!-- Left Image Section -->
-<div class="image-section">
-<img src="assets/img/doctor.png" alt="Doctor" />
-</div>
- 
-  <!-- Right Form Section -->
-<div class="form-section">
- 
+  <div class="image-section">
+    <!-- ✅ Fixed closing quote + slash -->
+  <img src="assets/img/yy.jpg"/>
+  </div>
+
+  <div class="form-section">
     <div class="registration-container">
-<h2>HEALTHCARE APPOINTMENT<br />MANAGEMENT SYSTEM</h2>
-<p class="subtitle">Please enter your details here</p>
- 
+      <h2>Healthcare Management</h2>
+      <p class="subtitle">Please enter your details here</p>
+
       <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
- 
+        <!-- USERNAME -->
         <div class="form-group">
-<label>Username</label>
-<input type="text" formControlName="username" placeholder="Enter username" />
-</div>
- 
-<div class="form-group">
-<label>Email address</label>
-<input
-    type="email"
-    formControlName="email"
-    placeholder="Enter email"
-    [disabled]="emailVerified"
-  />
- 
-  <!-- Verify Email Button -->
-<button
-    type="button"
-    class="verify-btn"
-    *ngIf="!showOtpSection"
-    (click)="onVerifyEmail()"
-    [disabled]="itemForm.get('email')?.invalid"
->
-    Verify Email
-</button>
-</div>
- 
-<!-- OTP SECTION -->
-<div class="form-group" *ngIf="showOtpSection && !emailVerified">
-<label>Enter OTP</label>
-<input
-    type="text"
-    placeholder="Enter OTP"
-    formControlName="otp"
-    name="otp"
-  />
- 
-  <button type="button" class="verify-btn" (click)="verifyOtp()">
-    Verify OTP
-</button>
-</div>
- 
-<p class="success-msg" *ngIf="emailVerified">
-  ✅ Email verified successfully
-</p>
- 
-        <div class="form-group">
-<label>Password</label>
-<input type="password" formControlName="password" placeholder="Enter password" />
-</div>
- 
-        <div class="form-group">
-<label>Role</label>
-<select formControlName="role">
-<option value="">Select Role</option>
-<option value="PATIENT">PATIENT</option>
-<option value="DOCTOR">DOCTOR</option>
-<option value="RECEPTIONIST">RECEPTIONIST</option>
-</select>
-</div>
- 
-        <!-- Doctor-only fields -->
-<div *ngIf="itemForm.value.role === 'DOCTOR'">
- 
-          <div class="form-group">
-<label>Availability</label>
-<select formControlName="availability">
-<option value="">Select</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
-</select>
-</div>
- 
-          <div class="form-group">
-<label>Specialty</label>
-<input type="text" formControlName="specialty" placeholder="Enter specialty" />
-</div>
- 
+          <label>Username</label>
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="Enter username"
+            [ngClass]="{
+              'is-invalid': f['username'].invalid && (f['username'].dirty || f['username'].touched),
+              'is-valid': f['username'].valid && (f['username'].dirty || f['username'].touched)
+            }"
+          />
+          <div class="field-messages">
+            <small
+              class="error"
+              *ngIf="f['username'].errors?.['required'] && (f['username'].dirty || f['username'].touched)"
+            >
+              Username is required
+            </small>
+            <small class="success" *ngIf="f['username'].valid && (f['username'].dirty || f['username'].touched)">
+              Looks good!
+            </small>
+          </div>
         </div>
- 
-        <button type="submit" [disabled]="itemForm.invalid">Submit</button>
- 
+
+        <!-- EMAIL + VERIFY -->
+        <div class="form-group">
+          <label>Email address</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter email"
+            [disabled]="emailVerified"
+            [ngClass]="{
+              'is-invalid': f['email'].invalid && (f['email'].dirty || f['email'].touched) && !emailVerified,
+              'is-valid': f['email'].valid && (f['email'].dirty || f['email'].touched) && !emailVerified
+            }"
+          />
+          <div class="field-messages" *ngIf="!emailVerified">
+            <small
+              class="error"
+              *ngIf="f['email'].errors?.['required'] && (f['email'].dirty || f['email'].touched)"
+            >
+              Email is required
+            </small>
+            <small class="error" *ngIf="f['email'].errors?.['email'] && (f['email'].dirty || f['email'].touched)">
+              Please enter a valid email address
+            </small>
+            <small class="success" *ngIf="f['email'].valid && (f['email'].dirty || f['email'].touched)">
+              Looks good!
+            </small>
+          </div>
+
+          <!-- Verify Email Button -->
+          <button
+            type="button"
+            class="verify-btn"
+            *ngIf="!showOtpSection && !emailVerified"
+            (click)="onVerifyEmail()"
+            [disabled]="itemForm.get('email')?.invalid"
+          >
+            Verify Email
+          </button>
+        </div>
+
+        <!-- OTP SECTION -->
+        <div class="form-group" *ngIf="showOtpSection && !emailVerified">
+          <label>Enter OTP</label>
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            formControlName="otp"
+            name="otp"
+            [ngClass]="{
+              'is-invalid': f['otp'].invalid && (f['otp'].dirty || f['otp'].touched),
+              'is-valid': f['otp'].valid && (f['otp'].dirty || f['otp'].touched)
+            }"
+          />
+          <div class="field-messages">
+            <small class="error" *ngIf="f['otp'].errors?.['required'] && (f['otp'].dirty || f['otp'].touched)">
+              OTP is required
+            </small>
+            <small class="success" *ngIf="f['otp'].valid && (f['otp'].dirty || f['otp'].touched)">
+              Looks good!
+            </small>
+          </div>
+
+          <button type="button" class="verify-btn" (click)="verifyOtp()">
+            Verify OTP
+          </button>
+        </div>
+
+        <p class="success-msg" *ngIf="emailVerified">✅ Email verified successfully</p>
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Enter password"
+            [ngClass]="{
+              'is-invalid': f['password'].invalid && (f['password'].dirty || f['password'].touched),
+              'is-valid': f['password'].valid && (f['password'].dirty || f['password'].touched)
+            }"
+          />
+          <div class="field-messages">
+            <small
+              class="error"
+              *ngIf="f['password'].errors?.['required'] && (f['password'].dirty || f['password'].touched)"
+            >
+              Password is required
+            </small>
+
+            <!-- Strong password message -->
+            <small
+              class="error"
+              *ngIf="f['password'].errors?.['strongPassword'] && (f['password'].dirty || f['password'].touched)"
+            >
+              {{ f['password'].errors?.['strongPassword']?.message }}
+            </small>
+
+            <small class="success" *ngIf="f['password'].valid && (f['password'].dirty || f['password'].touched)">
+              Looks good!
+            </small>
+          </div>
+
+          <!-- Live green/red checklist while typing -->
+          <ul class="password-hints" *ngIf="f['password'].dirty || f['password'].touched">
+            <li [class.ok]="passwordChecks.length" [class.bad]="!passwordChecks.length">
+              <span class="dot" aria-hidden="true"></span>
+              At least 8 characters
+            </li>
+            <li [class.ok]="passwordChecks.lower" [class.bad]="!passwordChecks.lower">
+              <span class="dot" aria-hidden="true"></span>
+              Contains a lowercase letter (a–z)
+            </li>
+            <li [class.ok]="passwordChecks.upper" [class.bad]="!passwordChecks.upper">
+              <span class="dot" aria-hidden="true"></span>
+              Contains an uppercase letter (A–Z)
+            </li>
+            <li [class.ok]="passwordChecks.number" [class.bad]="!passwordChecks.number">
+              <span class="dot" aria-hidden="true"></span>
+              Contains a number (0–9)
+            </li>
+            <li [class.ok]="passwordChecks.special" [class.bad]="!passwordChecks.special">
+              <span class="dot" aria-hidden="true"></span>
+              Contains a special character (!@#$…)
+            </li>
+          </ul>
+        </div>
+
+        <!-- ROLE -->
+        <div class="form-group">
+          <label>Role</label>
+          <select
+            formControlName="role"
+            [ngClass]="{
+              'is-invalid': f['role'].invalid && (f['role'].dirty || f['role'].touched),
+              'is-valid': f['role'].valid && (f['role'].dirty || f['role'].touched)
+            }"
+          >
+            <option value="">Select Role</option>
+            <option value="PATIENT">PATIENT</option>
+            <option value="DOCTOR">DOCTOR</option>
+            <option value="RECEPTIONIST">RECEPTIONIST</option>
+          </select>
+          <div class="field-messages">
+            <small class="error" *ngIf="f['role'].errors?.['required'] && (f['role'].dirty || f['role'].touched)">
+              Role is required
+            </small>
+            <small class="success" *ngIf="f['role'].valid && (f['role'].dirty || f['role'].touched)">
+              Looks good!
+            </small>
+          </div>
+        </div>
+
+        <!-- Doctor-only fields -->
+        <div *ngIf="itemForm.value.role === 'DOCTOR'">
+          <div class="form-group">
+            <label>Availability</label>
+            <select
+              formControlName="availability"
+              [ngClass]="{
+                'is-invalid': f['availability'].invalid && (f['availability'].dirty || f['availability'].touched),
+                'is-valid': f['availability'].valid && (f['availability'].dirty || f['availability'].touched)
+              }"
+            >
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+            <div class="field-messages">
+              <small
+                class="error"
+                *ngIf="f['availability'].errors?.['required'] && (f['availability'].dirty || f['availability'].touched)"
+              >
+                Availability is required
+              </small>
+              <small
+                class="success"
+                *ngIf="f['availability'].valid && (f['availability'].dirty || f['availability'].touched)"
+              >
+                Looks good!
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Specialty</label>
+            <input
+              type="text"
+              formControlName="specialty"
+              placeholder="Enter specialty"
+              [ngClass]="{
+                'is-invalid': f['specialty'].invalid && (f['specialty'].dirty || f['specialty'].touched),
+                'is-valid': f['specialty'].valid && (f['specialty'].dirty || f['specialty'].touched)
+              }"
+            />
+            <div class="field-messages">
+              <small
+                class="error"
+                *ngIf="f['specialty'].errors?.['required'] && (f['specialty'].dirty || f['specialty'].touched)"
+              >
+                Specialty is required
+              </small>
+              <small
+                class="success"
+                *ngIf="f['specialty'].valid && (f['specialty'].dirty || f['specialty'].touched)"
+              >
+                Looks good!
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="itemForm.invalid || !emailVerified">Submit</button>
+
         <a class="login-link" routerLink="/login">Go to Login</a>
- 
+
         <div *ngIf="showMessage" class="success-msg">
           {{ responseMessage }}
-</div>
- 
+        </div>
       </form>
-</div>
- 
+    </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,762 +1,496 @@
-$greenblue: #2c7be5;
+$primary-blue: #4A90E2;
+$secondary-blue: #5C9FE8;
+$light-blue: #E3F2FD;
+$dark-blue: #2563A8;
+$white: #FFFFFF;
+$off-white: #F8FBFF;
+$text-dark: #1E3A5F;
+$text-muted: #6B7280;
+$border-color: #D1E3F8;
 
-$greenblue-dark: #1b62c6;
-
-$dark-bg: #101820;
-
-$text-muted: #6c757d;
-
-$border-color: #e8e8e8;
- 
 .doctor-details-container {
-
-  min-height: 100vh;
-
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-
-  padding: 40px 20px;
-
+min-height: 100vh;
+background: linear-gradient(135deg, #FFFFFF 0%, #E3F2FD 50%, #BBDEFB 100%);
+padding: 40px 20px;
 }
- 
-// ==================
 
+// ==================
 // Loading & Error States
-
 // ==================
-
 .loading-state,
+.error-state {
+max-width: 600px;
+margin: 100px auto;
+text-align: center;
+background: $white;
+padding: 60px 40px;
+border-radius: 16px;
+box-shadow: 0 10px 40px rgba(74, 144, 226, 0.15);
+
+.spinner {
+width: 60px;
+height: 60px;
+margin: 0 auto 20px;
+border: 4px solid #E3F2FD;
+border-top: 4px solid $primary-blue;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+p {
+color: $text-muted;
+font-size: 16px;
+}
+}
 
 .error-state {
-
-  max-width: 600px;
-
-  margin: 100px auto;
-
-  text-align: center;
-
-  background: #fff;
-
-  padding: 60px 40px;
-
-  border-radius: 16px;
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
- 
-  .spinner {
-
-    width: 60px;
-
-    height: 60px;
-
-    margin: 0 auto 20px;
-
-    border: 4px solid #f3f3f3;
-
-    border-top: 4px solid $greenblue;
-
-    border-radius: 50%;
-
-    animation: spin 1s linear infinite;
-
-  }
- 
-  p {
-
-    color: $text-muted;
-
-    font-size: 16px;
-
-  }
-
+.error-icon {
+font-size: 60px;
+margin-bottom: 20px;
 }
- 
-.error-state {
 
-  .error-icon {
-
-    font-size: 60px;
-
-    margin-bottom: 20px;
-
-  }
- 
-  h3 {
-
-    color: #dc3545;
-
-    margin-bottom: 10px;
-
-  }
-
+h3 {
+color: #dc3545;
+margin-bottom: 10px;
 }
- 
+}
+
 @keyframes spin {
-
-  0% { transform: rotate(0deg); }
-
-  100% { transform: rotate(360deg); }
-
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
 }
- 
-// ==================
 
+// ==================
 // Doctor Profile
-
 // ==================
-
 .doctor-profile {
-
-  max-width: 1200px;
-
-  margin: 0 auto;
-
+max-width: 1200px;
+margin: 0 auto;
 }
- 
-// ==================
 
+// ==================
 // Profile Header
+// ==================
+.profile-header {
+background: linear-gradient(135deg, $primary-blue 0%, $secondary-blue 50%, #64B5F6 100%);
+border-radius: 20px;
+padding: 40px;
+margin-bottom: 30px;
+box-shadow: 0 10px 40px rgba(74, 144, 226, 0.25);
+position: relative;
+
+.btn-back {
+background: rgba(255, 255, 255, 0.2);
+border: 1px solid rgba(255, 255, 255, 0.4);
+color: $white;
+padding: 10px 20px;
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-bottom: 30px;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+
+&:hover {
+background: rgba(255, 255, 255, 0.35);
+transform: translateX(-4px);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+i {
+font-size: 14px;
+}
+}
+
+.header-content {
+display: flex;
+align-items: center;
+gap: 30px;
+
+.doctor-avatar-hero {
+flex-shrink: 0;
+
+.profile-photo {
+width: 140px;
+height: 140px;
+border-radius: 50%;
+object-fit: cover;
+border: 4px solid $white;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-placeholder {
+width: 140px;
+height: 140px;
+border-radius: 50%;
+background: linear-gradient(135deg, $white, #F0F7FF);
+display: grid;
+place-items: center;
+font-size: 56px;
+font-weight: 800;
+color: $primary-blue;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+border: 4px solid $white;
+}
+}
+
+.doctor-title-section {
+flex: 1;
+color: $white;
+
+.doctor-name {
+font-size: 36px;
+font-weight: 800;
+margin: 0 0 8px 0;
+text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.doctor-qualification {
+font-size: 18px;
+margin: 0 0 12px 0;
+opacity: 0.95;
+font-weight: 500;
+}
+
+.specialty-badge {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: rgba(255, 255, 255, 0.25);
+border: 1px solid rgba(255, 255, 255, 0.4);
+padding: 8px 16px;
+border-radius: 20px;
+font-weight: 600;
+font-size: 14px;
+backdrop-filter: blur(10px);
+
+i {
+font-size: 16px;
+}
+}
+}
+}
+}
 
 // ==================
+// Profile Content
+// ==================
+.profile-content {
+background: linear-gradient(to bottom, $white, $off-white);
+border-radius: 20px;
+padding: 40px;
+box-shadow: 0 10px 40px rgba(74, 144, 226, 0.1);
+}
+
+.content-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 24px;
+margin-bottom: 40px;
+}
+
+// ==================
+// Info Cards
+// ==================
+.info-card {
+background: $white;
+border: 1px solid $border-color;
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 4px 12px rgba(74, 144, 226, 0.08);
+transition: all 0.3s ease;
+
+&:hover {
+transform: translateY(-4px);
+box-shadow: 0 8px 24px rgba(74, 144, 226, 0.15);
+}
+
+.card-header {
+background: linear-gradient(135deg, $primary-blue 0%, $secondary-blue 100%);
+color: $white;
+padding: 16px 20px;
+display: flex;
+align-items: center;
+gap: 12px;
+
+i {
+font-size: 20px;
+}
+
+h3 {
+margin: 0;
+font-size: 18px;
+font-weight: 700;
+}
+}
+
+.card-body {
+padding: 20px;
+background: linear-gradient(to bottom, $white, #FAFCFF);
+
+.info-row {
+display: grid;
+grid-template-columns: 140px 1fr;
+gap: 12px;
+padding: 12px 0;
+border-bottom: 1px solid #E8F2FC;
+
+&:last-child {
+border-bottom: none;
+}
+
+.info-label {
+font-weight: 600;
+color: $text-dark;
+font-size: 14px;
+}
+
+.info-value {
+color: $text-muted;
+font-size: 14px;
+word-break: break-word;
+
+a {
+color: $primary-blue;
+text-decoration: none;
+transition: color 0.2s ease;
+
+&:hover {
+color: $dark-blue;
+text-decoration: underline;
+}
+}
+}
+}
+}
+}
+
+// ==================
+// Availability Section
+// ==================
+.availability-section {
+margin-bottom: 40px;
+
+.section-header {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 20px;
+padding-bottom: 12px;
+border-bottom: 2px solid $border-color;
+
+i {
+font-size: 24px;
+color: $primary-blue;
+}
+
+h3 {
+margin: 0;
+font-size: 22px;
+font-weight: 700;
+color: $text-dark;
+}
+}
+
+.availability-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 16px;
+}
+
+.availability-card {
+background: linear-gradient(135deg, $white 0%, $light-blue 100%);
+border: 1px solid $border-color;
+border-radius: 10px;
+padding: 20px;
+transition: all 0.3s ease;
+box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
+
+&:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(74, 144, 226, 0.15);
+}
+
+.availability-day {
+display: flex;
+flex-direction: column;
+margin-bottom: 12px;
+
+.day-name {
+font-weight: 700;
+font-size: 16px;
+color: $primary-blue;
+}
+
+.day-date {
+font-size: 14px;
+color: $text-muted;
+margin-top: 4px;
+}
+}
+
+.availability-time {
+display: flex;
+align-items: center;
+gap: 8px;
+color: $text-dark;
+font-weight: 600;
+font-size: 15px;
+
+i {
+color: $primary-blue;
+font-size: 16px;
+}
+}
+}
+}
+
+.no-availability {
+text-align: center;
+padding: 60px 20px;
+color: $text-muted;
+
+i {
+font-size: 64px;
+margin-bottom: 16px;
+opacity: 0.5;
+}
+
+p {
+font-size: 16px;
+margin: 0;
+}
+}
+
+// ==================
+// Profile Footer
+// ==================
+.profile-footer {
+display: flex;
+justify-content: flex-start;
+align-items: center;
+padding-top: 30px;
+border-top: 2px solid $border-color;
+
+button {
+padding: 12px 24px;
+border-radius: 10px;
+font-weight: 700;
+font-size: 15px;
+cursor: pointer;
+transition: all 0.3s ease;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+border: none;
+
+i {
+font-size: 16px;
+}
+}
+
+.btn-back-footer {
+background: linear-gradient(135deg, $white, $light-blue);
+color: $primary-blue;
+border: 1px solid $border-color;
+box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+
+&:hover {
+background: linear-gradient(135deg, $light-blue, $white);
+transform: translateX(-4px);
+box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+}
+}
+
+// ==================
+// Responsive Design
+// ==================
+@media (max-width: 992px) {
+.content-grid {
+grid-template-columns: 1fr;
+}
 
 .profile-header {
-
-  background: linear-gradient(135deg, rgba(#0a3d62, 0.95), rgba($greenblue, 0.9));
-
-  border-radius: 20px;
-
-  padding: 40px;
-
-  margin-bottom: 30px;
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-
-  position: relative;
- 
-  .btn-back {
-
-    background: rgba(255, 255, 255, 0.15);
-
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-    color: #fff;
-
-    padding: 10px 20px;
-
-    border-radius: 8px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-
-    margin-bottom: 30px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 8px;
- 
-    &:hover {
-
-      background: rgba(255, 255, 255, 0.25);
-
-      transform: translateX(-4px);
-
-    }
- 
-    i {
-
-      font-size: 14px;
-
-    }
-
-  }
- 
-  .header-content {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 30px;
- 
-    .doctor-avatar-hero {
-
-      width: 140px;
-
-      height: 140px;
-
-      border-radius: 50%;
-
-      background: linear-gradient(135deg, #fff, #f0f0f0);
-
-      display: grid;
-
-      place-items: center;
-
-      font-size: 56px;
-
-      font-weight: 800;
-
-      color: $greenblue;
-
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-
-      flex-shrink: 0;
-
-    }
- 
-    .doctor-title-section {
-
-      flex: 1;
-
-      color: #fff;
- 
-      .doctor-name {
-
-        font-size: 36px;
-
-        font-weight: 800;
-
-        margin: 0 0 8px 0;
-
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-
-      }
- 
-      .doctor-qualification {
-
-        font-size: 18px;
-
-        margin: 0 0 12px 0;
-
-        opacity: 0.95;
-
-        font-weight: 500;
-
-      }
- 
-      .specialty-badge {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        gap: 8px;
-
-        background: rgba(255, 255, 255, 0.2);
-
-        border: 1px solid rgba(255, 255, 255, 0.3);
-
-        padding: 8px 16px;
-
-        border-radius: 20px;
-
-        font-weight: 600;
-
-        font-size: 14px;
- 
-        i {
-
-          font-size: 16px;
-
-        }
-
-      }
-
-    }
-
-  }
-
+.header-content {
+flex-direction: column;
+text-align: center;
+
+.doctor-title-section {
+.doctor-name {
+font-size: 28px;
 }
- 
-// ==================
+}
+}
 
-// Profile Content
+.header-actions {
+text-align: center;
+}
+}
 
-// ==================
+.availability-section .availability-grid {
+grid-template-columns: 1fr;
+}
+}
+
+@media (max-width: 576px) {
+.doctor-details-container {
+padding: 20px 10px;
+}
+
+.profile-header {
+padding: 30px 20px;
+
+.header-content {
+.doctor-avatar-hero {
+.profile-photo,
+.avatar-placeholder {
+width: 100px;
+height: 100px;
+font-size: 40px;
+}
+}
+
+.doctor-title-section .doctor-name {
+font-size: 24px;
+}
+}
+}
 
 .profile-content {
-
-  background: #fff;
-
-  border-radius: 20px;
-
-  padding: 40px;
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-
+padding: 20px;
 }
- 
-.content-grid {
 
-  display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 24px;
-
-  margin-bottom: 40px;
-
+.info-card .card-body .info-row {
+grid-template-columns: 1fr;
+gap: 4px;
 }
- 
-// ==================
-
-// Info Cards
-
-// ==================
-
-.info-card {
-
-  background: #f8f9fa;
-
-  border: 1px solid $border-color;
-
-  border-radius: 12px;
-
-  overflow: hidden;
- 
-  .card-header {
-
-    background: linear-gradient(135deg, $greenblue, $greenblue-dark);
-
-    color: #fff;
-
-    padding: 16px 20px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
- 
-    i {
-
-      font-size: 20px;
-
-    }
- 
-    h3 {
-
-      margin: 0;
-
-      font-size: 18px;
-
-      font-weight: 700;
-
-    }
-
-  }
- 
-  .card-body {
-
-    padding: 20px;
- 
-    .info-row {
-
-      display: grid;
-
-      grid-template-columns: 140px 1fr;
-
-      gap: 12px;
-
-      padding: 12px 0;
-
-      border-bottom: 1px solid #e9ecef;
- 
-      &:last-child {
-
-        border-bottom: none;
-
-      }
- 
-      .info-label {
-
-        font-weight: 600;
-
-        color: #495057;
-
-        font-size: 14px;
-
-      }
- 
-      .info-value {
-
-        color: #212529;
-
-        font-size: 14px;
-
-        word-break: break-word;
- 
-        a {
-
-          color: $greenblue;
-
-          text-decoration: none;
-
-          transition: color 0.2s ease;
- 
-          &:hover {
-
-            color: $greenblue-dark;
-
-            text-decoration: underline;
-
-          }
-
-        }
-
-      }
-
-    }
-
-  }
-
-}
- 
-// ==================
-
-// Availability Section
-
-// ==================
-
-.availability-section {
-
-  margin-bottom: 40px;
- 
-  .section-header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    margin-bottom: 20px;
-
-    padding-bottom: 12px;
-
-    border-bottom: 2px solid $border-color;
- 
-    i {
-
-      font-size: 24px;
-
-      color: $greenblue;
-
-    }
- 
-    h3 {
-
-      margin: 0;
-
-      font-size: 22px;
-
-      font-weight: 700;
-
-      color: #1f2d3d;
-
-    }
-
-  }
- 
-  .availability-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-
-    gap: 16px;
-
-  }
- 
-  .availability-card {
-
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-
-    border: 1px solid $border-color;
-
-    border-radius: 10px;
-
-    padding: 20px;
-
-    transition: all 0.2s ease;
- 
-    &:hover {
-
-      transform: translateY(-2px);
-
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-    }
- 
-    .availability-day {
-
-      display: flex;
-
-      flex-direction: column;
-
-      margin-bottom: 12px;
- 
-      .day-name {
-
-        font-weight: 700;
-
-        font-size: 16px;
-
-        color: $greenblue;
-
-      }
- 
-      .day-date {
-
-        font-size: 14px;
-
-        color: $text-muted;
-
-        margin-top: 4px;
-
-      }
-
-    }
- 
-    .availability-time {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 8px;
-
-      color: #495057;
-
-      font-weight: 600;
-
-      font-size: 15px;
- 
-      i {
-
-        color: $greenblue;
-
-        font-size: 16px;
-
-      }
-
-    }
-
-  }
-
-}
- 
-.no-availability {
-
-  text-align: center;
-
-  padding: 60px 20px;
-
-  color: $text-muted;
- 
-  i {
-
-    font-size: 64px;
-
-    margin-bottom: 16px;
-
-    opacity: 0.5;
-
-  }
- 
-  p {
-
-    font-size: 16px;
-
-    margin: 0;
-
-  }
-
-}
- 
-// ==================
-
-// Profile Footer
-
-// ==================
 
 .profile-footer {
+flex-direction: column;
 
-  display: flex;
-
-  justify-content: flex-start;
-
-  align-items: center;
-
-  padding-top: 30px;
-
-  border-top: 2px solid $border-color;
- 
-  button {
-
-    padding: 12px 24px;
-
-    border-radius: 10px;
-
-    font-weight: 700;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    border: none;
- 
-    i {
-
-      font-size: 16px;
-
-    }
-
-  }
- 
-  .btn-back-footer {
-
-    background: #f8f9fa;
-
-    color: #495057;
-
-    border: 1px solid $border-color;
- 
-    &:hover {
-
-      background: #e9ecef;
-
-      transform: translateX(-4px);
-
-    }
-
-  }
+button {
+width: 100%;
+justify-content: center;
+}
 
 }
- 
-// ==================
-
-// Responsive Design
-
-// ==================
-
-@media (max-width: 992px) {
-
-  .content-grid {
-
-    grid-template-columns: 1fr;
-
-  }
- 
-  .profile-header {
-
-    .header-content {
-
-      flex-direction: column;
-
-      text-align: center;
- 
-      .doctor-title-section {
-
-        .doctor-name {
-
-          font-size: 28px;
-
-        }
-
-      }
-
-    }
- 
-    .header-actions {
-
-      text-align: center;
-
-    }
-
-  }
- 
-  .availability-section .availability-grid {
-
-    grid-template-columns: 1fr;
-
-  }
-
 }
- 
-@media (max-width: 576px) {
 
-  .doctor-details-container {
 
-    padding: 20px 10px;
 
-  }
- 
-  .profile-header {
 
-    padding: 30px 20px;
- 
-    .header-content {
 
-      .doctor-avatar-hero {
 
-        width: 100px;
 
-        height: 100px;
 
-        font-size: 40px;
 
-      }
- 
-      .doctor-title-section .doctor-name {
 
-        font-size: 24px;
 
-      }
 
-    }
 
-  }
- 
-  .profile-content {
 
-    padding: 20px;
 
-  }
- 
-  .info-card .card-body .info-row {
 
-    grid-template-columns: 1fr;
-
-    gap: 4px;
-
-  }
- 
-  .profile-footer {
-
-    flex-direction: column;
- 
-    button {
-
-      width: 100%;
-
-      justify-content: center;
-
-    }
-
-  }
-
-}
- 
